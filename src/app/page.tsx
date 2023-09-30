@@ -1,4 +1,5 @@
 import Image from 'next/image'
+
 import { Button } from '@/components/ui/button'
 
 export default function Home() {
@@ -40,7 +41,7 @@ export default function Home() {
         />
       </div>
 
-      <Button>I'm from shadcn</Button>
+      <Button>I&apos;m from shadcn</Button>
 
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
         <a
