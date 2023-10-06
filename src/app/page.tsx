@@ -1,22 +1,31 @@
 import { AddCircleIcon } from '@/assets/svg/AddCircleIcon'
 import { ArrowUpOutlineIcon } from '@/assets/svg/ArrowUpOutlineIcon'
+import { CrownIcon } from '@/assets/svg/CrownIcon'
 import { AppLogo } from '@/components/entities/logo/AppLogo'
 import { UserOptions } from '@/components/features/user-options'
 import { Button } from '@/components/ui/button'
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col p-24">
+    <main className="flex min-h-screen flex-col px-24">
       <header className="h-54 flex flex-shrink-0 flex-grow-0 items-center justify-between">
-        <div className="mt-auto basis-[120px]">
+        <div className="mt-auto basis-[170px]">
           <AppLogo />
         </div>
-        <div>Holder mode</div>
-        <div className="basis-[120px]">
+        <div className="py-6">
+          <Button
+            variant="default"
+            className="bg-blue h-25 group flex items-center rounded-[7px] px-12 py-6 text-[12px] text-secondary-foreground shadow-[0px_1px_0px_0px_#2F4AAB] hover:bg-white/90 hover:text-secondary"
+          >
+            <CrownIcon className="mr-4 h-16 w-16 text-secondary-foreground transition duration-200 group-hover:text-secondary" />
+            Holder mode
+          </Button>
+        </div>
+        <div className="mt-auto basis-[170px]">
           <UserOptions />
         </div>
       </header>
-      <div className="mx-auto flex w-full max-w-[500px] flex-grow flex-col pt-20">
+      <div className="mx-auto flex w-full max-w-[500px] flex-grow flex-col border-t-[1px] border-border pt-20">
         <section className="mb-30">
           <div className="mb-13">
             <h1 className="typo-label text-center">Estimate balance</h1>
@@ -34,6 +43,10 @@ export default function Home() {
           <Button variant="secondary">
             <ArrowUpOutlineIcon className="mr-4 h-16 w-16" />
             Send
+          </Button>
+          <Button variant="outline">
+            <CrownIcon className="mr-4 h-16 w-16" />
+            Get CTUS Token
           </Button>
         </div>
 
