@@ -1,4 +1,18 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin')
+
+const toPX = values => Object.fromEntries(values.map(v => [+v, `${v}px`]))
+const object0to100px = toPX(Array.from({ length: 101 }).map((_, i) => +i))
+
+const fallbackSansSerifFonts = [
+  '-apple-system',
+  'BlinkMacSystemFont',
+  'Helvetica',
+  'Segoe UI',
+  'Arial',
+  'sans-serif'
+]
+
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -10,11 +24,21 @@ module.exports = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+
       screens: {
-        "2xl": "1400px",
+        xl: { max: '1399.99px' },
+        lg: { max: '1199.99px' },
+        md: { max: '991.99px' },
+        sm: { max: '767.99px' },
+        xs: { max: '575.99px' }
+      },
+
+      fontFamily: {
+        sans: ['Montserrat', ...fallbackSansSerifFonts],
+        hnd: ['"Helvetica Now Display"', ...fallbackSansSerifFonts]
       },
     },
+    spacing: object0to100px,
     extend: {
       colors: {
         border: "hsl(var(--border))",
