@@ -1,6 +1,7 @@
 import { AddCircleIcon } from '@/assets/svg/AddCircleIcon'
 import { ArrowUpOutlineIcon } from '@/assets/svg/ArrowUpOutlineIcon'
 import { AppLogo } from '@/components/entities/logo/AppLogo'
+import { UserOptions } from '@/components/features/user-options'
 import { Button } from '@/components/ui/button'
 
 export default function Home() {
@@ -11,19 +12,19 @@ export default function Home() {
           <AppLogo />
         </div>
         <div>Holder mode</div>
-        <div className="basis-[120px]">54fg***42ss</div>
+        <div className="basis-[120px]">
+          <UserOptions />
+        </div>
       </header>
       <div className="mx-auto flex w-full max-w-[500px] flex-grow flex-col pt-20">
-        <div className="mb-30">
+        <section className="mb-30">
           <div className="mb-13">
-            <h1 className="text-center text-[15px] font-semibold uppercase leading-none text-muted-foreground">
-              Estimate balance
-            </h1>
+            <h1 className="typo-label text-center">Estimate balance</h1>
           </div>
-          <h3 className="text-center text-[52px] leading-none text-primary">
+          <h2 className="text-center text-[52px] leading-none text-primary">
             $54.00
-          </h3>
-        </div>
+          </h2>
+        </section>
 
         <div className="mb-30 mx-auto flex gap-x-[13px]">
           <Button variant="secondary">
@@ -36,7 +37,11 @@ export default function Home() {
           </Button>
         </div>
 
-        <div className="w-full">
+        <section className="w-full border-t-[1px] border-border">
+          <div className="py-13 px-15 mb-6 flex items-center justify-between">
+            <h2 className="typo-label">TOKENS</h2>
+          </div>
+
           <div className="py-18 mb-8 rounded-[16px] bg-secondary">
             <div className="border-b-[1.5px] border-solid border-border px-16 py-11 first-line:pt-0 first:pt-0 last:border-0 last:pb-0 only:py-0">
               <div className="flex items-center justify-between">
@@ -87,7 +92,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </main>
   )
