@@ -7,9 +7,11 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col p-24">
       <header className="h-54 flex flex-shrink-0 flex-grow-0 items-center justify-between">
-        <AppLogo />
-        <div></div>
-        <div></div>
+        <div className="mt-auto basis-[120px]">
+          <AppLogo />
+        </div>
+        <div>Holder mode</div>
+        <div className="basis-[120px]">54fg***42ss</div>
       </header>
       <div className="mx-auto flex w-full max-w-[500px] flex-grow flex-col pt-20">
         <div className="mb-30">
