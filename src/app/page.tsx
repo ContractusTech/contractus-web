@@ -1,9 +1,11 @@
 import { AddCircleIcon } from '@/assets/svg/AddCircleIcon'
 import { ArrowUpOutlineIcon } from '@/assets/svg/ArrowUpOutlineIcon'
 import { CrownIcon } from '@/assets/svg/CrownIcon'
+import { SwapArrowIcon } from '@/assets/svg/SwapArrowIcon'
 import { AppLogo } from '@/components/entities/logo/AppLogo'
 import { UserOptions } from '@/components/features/user-options'
 import { Button } from '@/components/ui/button'
+import { SelectTokens } from '@/components/widgets/tokens'
 
 export default function Home() {
   return (
@@ -44,10 +46,12 @@ export default function Home() {
             <ArrowUpOutlineIcon className="mr-4 h-16 w-16" />
             Send
           </Button>
-          <Button variant="outline">
-            <CrownIcon className="mr-4 h-16 w-16" />
-            Get CTUS Token
-          </Button>
+          <SelectTokens>
+            <span className="h-38 flex items-center gap-x-8 rounded-[12px] border border-input bg-background px-20 py-10 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+              <CrownIcon className="mr-4 h-16 w-16" />
+              Get CTUS Token
+            </span>
+          </SelectTokens>
         </div>
 
         <section className="w-full border-t-[1px] border-border">
@@ -55,36 +59,43 @@ export default function Home() {
             <h2 className="typo-label">TOKENS</h2>
           </div>
 
-          <div className="py-18 mb-8 rounded-[16px] bg-secondary">
-            <div className="border-b-[1.5px] border-solid border-border px-16 py-11 first-line:pt-0 first:pt-0 last:border-0 last:pb-0 only:py-0">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-x-12">
-                  <span className="leading-none">SOL</span>
-                  <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
-                    $19.00
-                  </span>
+          <div className="py-18 relative mb-8 rounded-[16px] bg-secondary">
+            <div>
+              <div className="border-b-[1.5px] border-solid border-border px-16 py-11 first-line:pt-0 first:pt-0 last:border-0 last:pb-0 only:py-0">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-x-12">
+                    <span className="leading-none">SOL</span>
+                    <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
+                      $19.00
+                    </span>
+                  </div>
+                  <div>
+                    <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
+                      310.422
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
-                    310.422
-                  </span>
+              </div>
+              <div className="border-b-[1.5px] border-solid border-border px-16 py-11 first-line:pt-0 first:pt-0 last:border-0 last:pb-0 only:py-0">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-x-12">
+                    <span className="leading-none">wSOL</span>
+                    <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
+                      $19.00
+                    </span>
+                  </div>
+                  <div>
+                    <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
+                      310.422
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="border-b-[1.5px] border-solid border-border px-16 py-11 first-line:pt-0 first:pt-0 last:border-0 last:pb-0 only:py-0">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-x-12">
-                  <span className="leading-none">wSOL</span>
-                  <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
-                    $19.00
-                  </span>
-                </div>
-                <div>
-                  <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
-                    310.422
-                  </span>
-                </div>
-              </div>
+            <div className="absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 translate-y-[calc(-50%_+_1.5px)]">
+              <Button variant="outline" size="icon">
+                <SwapArrowIcon />
+              </Button>
             </div>
           </div>
 
