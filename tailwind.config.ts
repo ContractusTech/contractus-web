@@ -53,6 +53,8 @@ module.exports = {
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+
+          text: "hsl(var(--secondary-text))"
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -74,7 +76,8 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        blue: "hsl(var(--blue))"
+        blue: "hsl(var(--blue))",
+        'dark-base-green': 'hsl(var(--dark-base-green))'
       },
       borderRadius: {
         lg: "var(--radius)",

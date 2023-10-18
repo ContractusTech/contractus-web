@@ -34,7 +34,9 @@
  
     --radius: 0.5rem;
 
-    --blue: 227, 72%, 62%
+    --blue: 227, 72%, 62%;
+    --secondary-text: 225, 7%, 43%;
+    --dark-base-green: 108, 47%, 41%, 1;
   }
  
   .dark {
@@ -82,4 +84,17 @@
   .typo-label {
     @apply text-[15px] font-semibold uppercase leading-none text-muted-foreground;
   }
+  
+  .default-border-divider {
+    @apply 
+  }
+}
+
+.scroll-x-hidden {
+  scrollbar-width: none;
+}
+
+.scroll-x-hidden::-webkit-scrollbar {
+  display: none;
+  height: 0 !important;
 }
