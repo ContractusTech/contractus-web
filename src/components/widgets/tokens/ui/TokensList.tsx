@@ -89,54 +89,43 @@ export const TokensList: FC = () => {
           <div>
             <div className="space-y-4">
               {FORM_DATA &&
-                FORM_DATA.map((formData, idx) => (
-                  <>
-                    <FormField
-                      key={idx}
-                      control={form.control}
-                      name={
-                        formData.slug as
-                          | 'CTUS'
-                          | 'USDC'
-                          | 'SOL'
-                          | 'FTMet'
-                          | 'GCT'
-                      }
-                      render={({ field }) => (
-                        <FormItem
-                          key={formData.slug}
-                          className="py-15 flex flex-row items-center justify-between border-b-[1.5px] border-border"
-                        >
-                          <div className="flex items-center gap-x-24">
-                            <div className="flex h-32 w-32 items-center justify-center">
-                              <Image
-                                src={formData.icon}
-                                width={32}
-                                height={32}
-                                alt={formData.slug}
-                              ></Image>
-                            </div>
-                            <div className="space-y-0.5">
-                              <FormLabel className="text-base">
-                                {formData.name}
-                              </FormLabel>
-                              <FormDescription className="text-[12px]">
-                                {formData.slug}
-                              </FormDescription>
-                            </div>
+                FORM_DATA.map(formData => (
+                  <FormField
+                    key={formData.slug}
+                    control={form.control}
+                    name={
+                      formData.slug as 'CTUS' | 'USDC' | 'SOL' | 'FTMet' | 'GCT'
+                    }
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between border-b-[1.5px] border-border py-15">
+                        <div className="flex items-center gap-x-24">
+                          <div className="flex h-32 w-32 items-center justify-center">
+                            <Image
+                              src={formData.icon}
+                              width={32}
+                              height={32}
+                              alt={formData.slug}
+                            ></Image>
                           </div>
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">
+                              {formData.name}
+                            </FormLabel>
+                            <FormDescription className="text-[12px]">
+                              {formData.slug}
+                            </FormDescription>
+                          </div>
+                        </div>
 
-                          <FormControl>
-                            <Switch
-                              key={idx + formData.slug}
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
                 ))}
             </div>
           </div>

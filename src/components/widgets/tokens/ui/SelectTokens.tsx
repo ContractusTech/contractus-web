@@ -24,7 +24,7 @@ export const SelectTokens: FC<Props> = ({ children }) => {
         <SelectTokensHeader title="Select tokens" />
         <SelectTokensList />
         <DialogFooter>
-          <div className="pb-30 flex justify-end px-32">
+          <div className="flex justify-end px-32 pb-30">
             <Button variant="default" size={'lg'}>
               Apply
             </Button>

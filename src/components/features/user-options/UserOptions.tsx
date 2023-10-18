@@ -19,7 +19,7 @@ export const UserOptions: FC = () => {
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem className="">
-          <NavigationMenuTrigger className="h-45 pl-15 rounded-[14px] bg-secondary py-14 pr-8 text-secondary-foreground hover:bg-secondary/80">
+          <NavigationMenuTrigger className="h-45 rounded-[14px] bg-secondary py-14 pl-15 pr-8 text-secondary-foreground hover:bg-secondary/80">
             <span className="flex items-center gap-x-8">
               <BalanceWalletIcon className="mr-4 h-16 w-16" />
               54fg***42ss
