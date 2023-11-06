@@ -34,3 +34,19 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+```typescript
+import clsx from 'clsx'
+import { FC, ReactElement } from 'react'
+
+type Props = {
+  children?: string | ReactElement | JSX.Element | JSX.Element[]
+  className?: string
+}
+const ElementName: FC<Props> = ({ children, className }) => {
+  return <div className={clsx('', className)}>{children}</div>
+}
+
+export default ElementName
+```
