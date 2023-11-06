@@ -1,7 +1,12 @@
-import './globals.css'
-
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+
+import { ConnectorContextProvider } from '@/components/features/connector'
+import { Header } from '@/components/widgets/header'
+
+require('@solana/wallet-adapter-ant-design/styles.css')
+require('@solana/wallet-adapter-react-ui/styles.css')
+require('./globals.css')
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,9 +21,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-      <body className={`dark ${inter.className}`}>{children}</body>
-    </html>
+    <ConnectorContextProvider>
+      <html lang="en">
+        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+        <body className={`dark ${inter.className}`}>
+          <main className="flex min-h-screen flex-col px-24 pb-35">
+            <Header />
+
+            <div className="mx-auto flex w-full max-w-[500px] flex-grow flex-col border-t-[1px] border-border pt-20">
+              {children}
+            </div>
+          </main>
+        </body>
+      </html>
+    </ConnectorContextProvider>
   )
 }

@@ -13,7 +13,7 @@ type Props = {
   clientID: string
 }
 
-export const DealHistoryCard: FC<Props> = ({
+const DealCard: FC<Props> = ({
   status,
   time,
   amount,
@@ -63,3 +63,5 @@ export const DealHistoryCard: FC<Props> = ({
     </div>
   )
 }
+
+export default DealCard
