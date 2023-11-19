@@ -1,1 +1,1 @@
-export { default as SignMessage } from './ui/SignMessage'
+export { default as WalletSignButtonDefault } from './ui/WalletSignButtonDefault'

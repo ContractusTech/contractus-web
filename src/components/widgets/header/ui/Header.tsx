@@ -1,9 +1,9 @@
 import clsx from 'clsx'
-import { FC, ReactElement } from 'react'
+import { FC, ReactElement, useEffect, useState } from 'react'
 
 import { CrownIcon } from '@/assets/svg/CrownIcon'
-import { AppLogo } from '@/components/entities/logo/AppLogo'
-import { UserOptions } from '@/components/features/user-options'
+import { Logo } from '@/components/entities/logo'
+import { WalletSignButtonDefault } from '@/components/features/wallet'
 import { Button } from '@/components/ui/button'
 
 type Props = {
@@ -11,6 +11,11 @@ type Props = {
   className?: string
 }
 const Header: FC<Props> = ({ className }) => {
+  const [isSSR, setIsSSR] = useState(true)
+
+  useEffect(() => {
+    setIsSSR(false)
+  }, [])
   return (
     <header
       className={clsx(
@@ -18,8 +23,8 @@ const Header: FC<Props> = ({ className }) => {
         className
       )}
     >
-      <div className="mt-auto basis-[170px]">
-        <AppLogo />
+      <div className="mt-auto basis-[200px]">
+        <Logo />
       </div>
       <div className="py-6">
         <Button
@@ -30,8 +35,8 @@ const Header: FC<Props> = ({ className }) => {
           Holder mode
         </Button>
       </div>
-      <div className="mt-auto basis-[170px]">
-        <UserOptions />
+      <div className="mt-auto basis-[200px]">
+        {!isSSR && <WalletSignButtonDefault />}
       </div>
     </header>
   )
