@@ -1,4 +1,3 @@
-'use client'
 import { FC } from 'react'
 
 import { BalanceWalletIcon } from '@/assets/svg/BalanceWalletIcon'

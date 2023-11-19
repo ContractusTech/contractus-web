@@ -1,5 +1,3 @@
-'use client'
-
 import {
   type Adapter,
   WalletAdapterNetwork,
@@ -9,7 +7,7 @@ import {
   ConnectionProvider,
   WalletProvider
 } from '@solana/wallet-adapter-react'
-import { WalletModalProvider as ReactUIWalletModalProvider } from '@solana/wallet-adapter-react-ui'
+import { WalletModalProvider as WalletModalProviderWithReactUI } from '@solana/wallet-adapter-react-ui'
 import {
   PhantomWalletAdapter,
   SolflareWalletAdapter
@@ -56,7 +54,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const input: SolanaSignInInput = {
       domain: window.location.host,
       address: adapter.publicKey ? adapter.publicKey.toBase58() : undefined,
-      statement: 'Please sign in.'
+      statement: 'Sign In to the Contractus App'
     }
     const output = await adapter.signIn(input)
 
@@ -74,7 +72,9 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
         onError={onError}
         autoConnect={autoConnect && autoSignIn}
       >
-        <ReactUIWalletModalProvider>{children}</ReactUIWalletModalProvider>
+        <WalletModalProviderWithReactUI>
+          {children}
+        </WalletModalProviderWithReactUI>
       </WalletProvider>
     </ConnectionProvider>
   )
