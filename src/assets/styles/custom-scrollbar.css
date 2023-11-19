@@ -1,0 +1,24 @@
+::-webkit-scrollbar {
+  @apply h-8 w-8;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-white;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-white/90;
+}
+
+::-webkit-scrollbar-corner {
+  @apply bg-white;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}

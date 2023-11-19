@@ -34,8 +34,8 @@ module.exports = {
       },
 
       fontFamily: {
-        sans: ['Montserrat', ...fallbackSansSerifFonts],
-        hnd: ['"Helvetica Now Display"', ...fallbackSansSerifFonts]
+        sans: ['var(--family-sans)', ...fallbackSansSerifFonts],
+        second: ['var(--family-second', ...fallbackSansSerifFonts]
       },
     },
     spacing: object0to100px,
@@ -100,5 +100,15 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    plugin(({ addUtilities }: { addUtilities: any }) => {
+      const typographyWithOnlySizes = {} as Record<string, any>
+      for (let i = 8; i <= 100; i += 2) {
+        typographyWithOnlySizes[`.text-${i}`] = { fontSize: `${i}px` }
+      }
+
+      addUtilities(typographyWithOnlySizes)
+    })
+  ],
 }
