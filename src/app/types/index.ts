@@ -7,3 +7,15 @@ export type NextPageWithLayout<P = NonNullable<unknown>, IP = P> = NextPage<
 > & {
   getLayout?: (page: ReactElement) => ReactNode
 }
+
+type DeviceType = 'BROWSER'
+
+type Blockchain = 'solana' | 'bsc'
+
+export type PreparedToken = {
+  type: DeviceType
+  blockchain: Blockchain
+  pubKey: string
+  signature: string
+  identifier: string
+}

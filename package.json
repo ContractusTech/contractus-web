@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "api:codegen": "swagger-typescript-api --unwrap-response-data --axios -p https://dev.contractus.tech/api/swagger-ui/swagger.json -o ./src/api -n generated-api.ts --api-class-name ContractusAPI"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
@@ -35,7 +36,7 @@
     "@solana/wallet-standard-util": "^1.1.0",
     "@solana/web3.js": "^1.87.4",
     "antd": "^5.11.0",
-    "axios": "^1.5.1",
+    "axios": "^1.6.2",
     "bs58": "^5.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
@@ -57,8 +58,10 @@
     "ufo": "^1.3.1",
     "use-breakpoint": "^3.1.1",
     "uuid": "^9.0.1",
+    "viem": "^1.19.6",
+    "wagmi": "^1.4.7",
     "zod": "^3.22.4",
-    "zustand": "^4.4.1"
+    "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@types/node": "latest",
@@ -81,6 +84,7 @@
     "postcss": "latest",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.4",
+    "swagger-typescript-api": "^13.0.3",
     "tailwindcss": "latest",
     "typescript": "latest"
   }

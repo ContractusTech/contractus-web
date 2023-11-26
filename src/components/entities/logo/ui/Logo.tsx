@@ -5,7 +5,10 @@ import { LogoHeaderIcon } from '@/assets/svg/LogoHeaderIcon'
 
 const Logo: FC = () => {
   return (
-    <Link href="/" className="flex w-fit items-center justify-center">
+    <Link
+      href="/"
+      className="relative z-[3] flex w-fit items-center justify-center"
+    >
       <LogoHeaderIcon className="h-33 w-33" />
     </Link>
   )

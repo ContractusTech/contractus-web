@@ -1,21 +1,21 @@
 import clsx from 'clsx'
-import { FC, ReactElement, useEffect, useState } from 'react'
+import { ChevronDown } from 'lucide-react'
+import { FC, ReactElement } from 'react'
 
+import { useUserStore } from '@/app/store/user-store'
+import { BalanceWalletIcon } from '@/assets/svg/BalanceWalletIcon'
 import { CrownIcon } from '@/assets/svg/CrownIcon'
 import { Logo } from '@/components/entities/logo'
-import { WalletSignButtonDefault } from '@/components/features/wallet'
 import { Button } from '@/components/ui/button'
+import { transformString } from '@/lib/utils'
 
 type Props = {
   children?: string | ReactElement | JSX.Element | JSX.Element[]
   className?: string
 }
 const Header: FC<Props> = ({ className }) => {
-  const [isSSR, setIsSSR] = useState(true)
+  const { connectedUser } = useUserStore()
 
-  useEffect(() => {
-    setIsSSR(false)
-  }, [])
   return (
     <header
       className={clsx(
@@ -36,7 +36,13 @@ const Header: FC<Props> = ({ className }) => {
         </Button>
       </div>
       <div className="mt-auto basis-[200px]">
-        {!isSSR && <WalletSignButtonDefault />}
+        {connectedUser && (
+          <Button variant={'secondary'} className="items-center gap-[8px]">
+            <BalanceWalletIcon />
+            {transformString(connectedUser.publicKey)}
+            <ChevronDown />
+          </Button>
+        )}
       </div>
     </header>
   )
