@@ -12,8 +12,9 @@ import { useUserStore } from '@/app/store/user-store'
 import { generateBase64Token } from '@/lib/utils'
 
 export const useSolanaConnect = () => {
-  const { select, signMessage, publicKey, wallet, connected } = useWallet()
-  const { connectedUser, setConnectedUser } = useUserStore()
+  const { select, signMessage, publicKey, wallet, connected, disconnect } =
+    useWallet()
+  const { connectedUser, setConnectedUser, logout } = useUserStore()
 
   useEffect(() => {
     const connectAndSign = async () => {
@@ -60,5 +61,14 @@ export const useSolanaConnect = () => {
     }
   }
 
-  return { handleConnect }
+  const handleDisconnect = async () => {
+    try {
+      await disconnect()
+      logout()
+    } catch (error) {
+      console.log({ e: error })
+    }
+  }
+
+  return { handleConnect, handleDisconnect }
 }
