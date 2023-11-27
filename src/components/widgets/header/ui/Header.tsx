@@ -1,21 +1,16 @@
 import clsx from 'clsx'
-import { ChevronDown } from 'lucide-react'
 import { FC, ReactElement } from 'react'
 
-import { useUserStore } from '@/app/store/user-store'
-import { BalanceWalletIcon } from '@/assets/svg/BalanceWalletIcon'
 import { CrownIcon } from '@/assets/svg/CrownIcon'
 import { Logo } from '@/components/entities/logo'
+import { AccountButton } from '@/components/features/connect'
 import { Button } from '@/components/ui/button'
-import { transformString } from '@/lib/utils'
 
 type Props = {
   children?: string | ReactElement | JSX.Element | JSX.Element[]
   className?: string
 }
 const Header: FC<Props> = ({ className }) => {
-  const { connectedUser } = useUserStore()
-
   return (
     <header
       className={clsx(
@@ -36,13 +31,7 @@ const Header: FC<Props> = ({ className }) => {
         </Button>
       </div>
       <div className="mt-auto basis-[200px]">
-        {connectedUser && (
-          <Button variant={'secondary'} className="items-center gap-[8px]">
-            <BalanceWalletIcon />
-            {transformString(connectedUser.publicKey)}
-            <ChevronDown />
-          </Button>
-        )}
+        <AccountButton />
       </div>
     </header>
   )

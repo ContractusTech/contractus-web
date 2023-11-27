@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 import { bsc } from 'viem/chains'
-import { Connector, useConnect } from 'wagmi'
+import { Connector, useConnect, useDisconnect } from 'wagmi'
 import { getAccount, signMessage } from 'wagmi/actions'
 
 import { api } from '@/api/client'
@@ -12,7 +12,8 @@ import { generateBase64Token } from '@/lib/utils'
 
 export const useEvmConnect = () => {
   const { connectAsync } = useConnect()
-  const { setConnectedUser } = useUserStore()
+  const { disconnectAsync } = useDisconnect()
+  const { setConnectedUser, logout } = useUserStore()
 
   const handleConnect = async (connector: Connector) => {
     await connectAsync({ connector, chainId: bsc.id })
@@ -40,5 +41,14 @@ export const useEvmConnect = () => {
     setConnectedUser(accountFromApi)
   }
 
-  return { handleConnect }
+  const handleDisconnect = async () => {
+    try {
+      await disconnectAsync()
+      logout()
+    } catch (error) {
+      console.log({ error })
+    }
+  }
+
+  return { handleConnect, handleDisconnect }
 }
