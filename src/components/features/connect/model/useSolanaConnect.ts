@@ -1,7 +1,8 @@
 import { WalletName } from '@solana/wallet-adapter-base'
 import { useWallet } from '@solana/wallet-adapter-react'
 import bs58 from 'bs58'
-import Cookies from 'js-cookie'
+import { getCookie } from 'cookies-next'
+// import Cookies from 'js-cookie'
 import { useEffect } from 'react'
 
 import { api } from '@/api/client'
@@ -44,7 +45,7 @@ export const useSolanaConnect = () => {
         identifier: deviceId
       })
 
-      const token = Cookies.get(COOKIES.AUTH_TOKEN)
+      const token = getCookie(COOKIES.AUTH_TOKEN)
 
       const account = await api.accounts.getAccounts({
         headers: { 'X-Authorization': token }

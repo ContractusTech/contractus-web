@@ -1,4 +1,5 @@
-import Cookies from 'js-cookie'
+import { getCookie } from 'cookies-next'
+// import Cookies from 'js-cookie'
 import { bsc } from 'viem/chains'
 import { Connector, useConnect, useDisconnect } from 'wagmi'
 import { getAccount, signMessage } from 'wagmi/actions'
@@ -33,7 +34,7 @@ export const useEvmConnect = () => {
       identifier: deviceId
     })
 
-    const token = Cookies.get(COOKIES.AUTH_TOKEN)
+    const token = getCookie(COOKIES.AUTH_TOKEN)
 
     const accountFromApi = await api.accounts.getAccounts({
       headers: { 'X-Authorization': token }

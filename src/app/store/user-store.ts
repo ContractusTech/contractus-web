@@ -1,6 +1,7 @@
-import Cookies from 'js-cookie'
+import { deleteCookie } from 'cookies-next'
 import { create } from 'zustand'
 
+// import Cookies from 'js-cookie'
 import { Account } from '@/api/generated-api'
 
 import { COOKIES } from '../constants/cookies'
@@ -20,6 +21,6 @@ export const useUserStore = create<UserStore>(set => ({
 
   logout() {
     set({ connectedUser: null })
-    Cookies.remove(COOKIES.AUTH_TOKEN)
+    deleteCookie(COOKIES.AUTH_TOKEN)
   }
 }))
