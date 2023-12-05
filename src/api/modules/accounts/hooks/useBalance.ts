@@ -11,10 +11,7 @@ export const BALANCE_UQ_KEY = 'balance'
 const getStatisticsQuery = (
   dto: BalanceRequestType
 ): UseQueryOptions<BalanceType> => ({
-  queryKey: [
-    BALANCE_UQ_KEY,
-    dto.tokens.reduce((acc, item) => `${acc}-${item}`, '')
-  ],
+  queryKey: [BALANCE_UQ_KEY],
   queryFn: () => AccountsService.getBalance(dto)
 })
 
