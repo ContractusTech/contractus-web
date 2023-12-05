@@ -9,7 +9,7 @@ import { useUserStore } from '@/app/store/user-store'
 import { ConnectOverflow } from './ConnectOverflow'
 
 export const ConnectProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [overflowOpened, setOverflowOpened] = useState(true)
+  const [overflowOpened, setOverflowOpened] = useState(false)
   const { setConnectedUser, connectedUser } = useUserStore()
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export const ConnectProvider: FC<PropsWithChildren> = ({ children }) => {
           .then(data => setConnectedUser(data))
       }
     }
-  }, [connectedUser])
+  }, [connectedUser, setConnectedUser])
 
   return (
     <>

@@ -5,27 +5,25 @@ import {
 } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import dayjs from 'dayjs'
-import { FC, ReactNode, useState } from 'react'
+import { FC, ReactNode } from 'react'
 
 type Props = {
   dehydratedState: unknown
   children: ReactNode
 }
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: dayjs.duration(5, 'minutes').asMilliseconds()
+    }
+  }
+})
+
 export const ReactQueryProvider: FC<Props> = ({
   dehydratedState,
   children
 }) => {
-  const [queryClient] = useState(
-    new QueryClient({
-      defaultOptions: {
-        queries: {
-          staleTime: dayjs.duration(5, 'minutes').asMilliseconds()
-        }
-      }
-    })
-  )
-
   return (
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={dehydratedState}>

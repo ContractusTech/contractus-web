@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 
 import { pageTitle } from '@/app/core'
 import { NextPageWithLayout } from '@/app/types'
+import { ModulesContainer } from '@/components/features/modules-container'
 import { ReactQueryProvider } from '@/components/features/react-query-provider'
 
 // require('@solana/wallet-adapter-ant-design/styles.css')
@@ -52,23 +53,29 @@ export default function CustomApp({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return getLayout(
-    <>
-      <Head>
-        <title>{pageTitle()}</title>
-        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-      </Head>
+  return (
+    <ReactQueryProvider dehydratedState={pageProps.ssrState}>
+      <ModulesContainer>
+        {getLayout(
+          <>
+            <Head>
+              <title>{pageTitle()}</title>
+              <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+            </Head>
 
-      <ReactQueryProvider dehydratedState={pageProps.ssrState}>
-        <Component {...pageProps} />
-      </ReactQueryProvider>
+            <ReactQueryProvider dehydratedState={pageProps.ssrState}>
+              <Component {...pageProps} />
+            </ReactQueryProvider>
 
-      <style jsx global>{`
-        html {
-          --family-sans: ${inter.style.fontFamily};
-          --family-second: ${workSans.style.fontFamily};
-        }
-      `}</style>
-    </>
+            <style jsx global>{`
+              html {
+                --family-sans: ${inter.style.fontFamily};
+                --family-second: ${workSans.style.fontFamily};
+              }
+            `}</style>
+          </>
+        )}
+      </ModulesContainer>
+    </ReactQueryProvider>
   )
 }
