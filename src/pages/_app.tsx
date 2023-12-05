@@ -1,3 +1,5 @@
+import '@/app/plugins'
+
 import type { Metadata } from 'next'
 import type { AppProps } from 'next/app'
 import { Inter, Work_Sans } from 'next/font/google'
@@ -7,6 +9,7 @@ import { useEffect } from 'react'
 
 import { pageTitle } from '@/app/core'
 import { NextPageWithLayout } from '@/app/types'
+import { ReactQueryProvider } from '@/components/features/react-query-provider'
 
 // require('@solana/wallet-adapter-ant-design/styles.css')
 require('@/assets/styles/tailwind.css')
@@ -55,7 +58,10 @@ export default function CustomApp({
         <title>{pageTitle()}</title>
         <link rel="icon" type="image/svg+xml" href="/logo.svg" />
       </Head>
-      <Component {...pageProps} />
+
+      <ReactQueryProvider dehydratedState={pageProps.ssrState}>
+        <Component {...pageProps} />
+      </ReactQueryProvider>
 
       <style jsx global>{`
         html {
