@@ -1,3 +1,8 @@
+import { useEffect } from 'react'
+
+import { useStatistics } from '@/api/modules/accounts/hooks/useStatistics'
+import { useDeals } from '@/api/modules/deals/hooks/useDeals'
+import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
 import { NextPageWithLayout } from '@/app/types'
 import { AddCircleIcon } from '@/assets/svg/AddCircleIcon'
 import { ArrowUpOutlineIcon } from '@/assets/svg/ArrowUpOutlineIcon'
@@ -16,6 +21,16 @@ import { SelectTokens } from '@/components/widgets/tokens'
 import LayoutDefault from '@/layouts/default'
 
 const IndexPage: NextPageWithLayout = () => {
+  const { tokens } = useTokens()
+  const { deals } = useDeals()
+  const { statistics } = useStatistics()
+
+  useEffect(() => {
+    console.log('tokens: \n', tokens)
+    console.log('deals: \n', deals)
+    console.log('statistics: \n', statistics)
+  }, [tokens, deals, statistics])
+
   return (
     <>
       <>

@@ -39,6 +39,7 @@ module.exports = {
     "unicorn/prefer-module": "off",
     "unicorn/no-null": "off",
     "unicorn/no-useless-undefined": "off",
+    "unicorn/no-array-reduce": "off",
 
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [

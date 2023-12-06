@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
-import Cookies from 'js-cookie'
+import { setCookie } from 'cookies-next'
+// import Cookies from 'js-cookie'
 import { twMerge } from 'tailwind-merge'
 
 import { COOKIES } from '@/app/constants/cookies'
@@ -12,7 +13,7 @@ export function cn(...inputs: ClassValue[]) {
 export function generateBase64Token(prepared: PreparedToken) {
   const json = JSON.stringify(prepared)
   const base64String = Buffer.from(json).toString('base64')
-  Cookies.set(COOKIES.AUTH_TOKEN, base64String)
+  setCookie(COOKIES.AUTH_TOKEN, base64String)
 }
 
 export function transformString(input: string): string {

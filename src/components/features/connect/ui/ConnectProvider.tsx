@@ -1,4 +1,5 @@
-import Cookies from 'js-cookie'
+import { getCookie } from 'cookies-next'
+// import Cookies from 'js-cookie'
 import { FC, PropsWithChildren, useEffect, useState } from 'react'
 
 import { api } from '@/api/client'
@@ -8,7 +9,7 @@ import { useUserStore } from '@/app/store/user-store'
 import { ConnectOverflow } from './ConnectOverflow'
 
 export const ConnectProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [overflowOpened, setOverflowOpened] = useState(true)
+  const [overflowOpened, setOverflowOpened] = useState(false)
   const { setConnectedUser, connectedUser } = useUserStore()
 
   useEffect(() => {
@@ -16,7 +17,7 @@ export const ConnectProvider: FC<PropsWithChildren> = ({ children }) => {
       setOverflowOpened(false)
     } else {
       setOverflowOpened(true)
-      const token = Cookies.get(COOKIES.AUTH_TOKEN)
+      const token = getCookie(COOKIES.AUTH_TOKEN)
 
       if (token) {
         api.accounts
@@ -24,7 +25,7 @@ export const ConnectProvider: FC<PropsWithChildren> = ({ children }) => {
           .then(data => setConnectedUser(data))
       }
     }
-  }, [connectedUser])
+  }, [connectedUser, setConnectedUser])
 
   return (
     <>
