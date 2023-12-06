@@ -13,7 +13,7 @@ import WalletConnectIcon from '@/assets/svg/WalletConnect'
 import { Button } from '@/components/ui/button'
 
 import { useEvmConnect } from '../model/useEvmConnect'
-import { useSolanaConnect } from '../model/useSolanaConnect'
+import { useSolanaConnect } from './SolanaProvider'
 
 type Props = {
   open: boolean

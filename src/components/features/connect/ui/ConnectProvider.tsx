@@ -7,6 +7,7 @@ import { COOKIES } from '@/app/constants/cookies'
 import { useUserStore } from '@/app/store/user-store'
 
 import { ConnectOverflow } from './ConnectOverflow'
+import { SolanaConnectProvider } from './SolanaProvider'
 
 export const ConnectProvider: FC<PropsWithChildren> = ({ children }) => {
   const [overflowOpened, setOverflowOpened] = useState(false)
@@ -25,12 +26,12 @@ export const ConnectProvider: FC<PropsWithChildren> = ({ children }) => {
           .then(data => setConnectedUser(data))
       }
     }
-  }, [connectedUser, setConnectedUser])
+  }, [connectedUser])
 
   return (
-    <>
+    <SolanaConnectProvider>
       {children}
       <ConnectOverflow open={overflowOpened} />
-    </>
+    </SolanaConnectProvider>
   )
 }

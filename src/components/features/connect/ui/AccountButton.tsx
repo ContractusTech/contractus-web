@@ -12,7 +12,7 @@ import {
 import { transformString } from '@/lib/utils'
 
 import { useEvmConnect } from '../model/useEvmConnect'
-import { useSolanaConnect } from '../model/useSolanaConnect'
+import { useSolanaConnect } from './SolanaProvider'
 
 export const AccountButton = () => {
   const { connectedUser } = useUserStore()
