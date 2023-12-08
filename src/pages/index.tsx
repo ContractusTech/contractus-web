@@ -7,6 +7,7 @@ import { ArrowUpOutlineIcon } from '@/assets/svg/ArrowUpOutlineIcon'
 import { ChevronDownIcon } from '@/assets/svg/ChevronDownIcon'
 import { CrownIcon } from '@/assets/svg/CrownIcon'
 import { SwapArrowIcon } from '@/assets/svg/SwapArrowIcon'
+import { StatisticsList } from '@/components/entities/statistics'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -53,6 +54,7 @@ const IndexPage: NextPageWithLayout = () => {
         <section className="mb-16 w-full border-t-[1px] border-border">
           <div className="mb-6 flex items-center justify-between px-15 py-13">
             <h2 className="typo-label">TOKENS</h2>
+            <SelectTokens />
           </div>
 
           <div className="relative mb-8 rounded-[16px] bg-secondary py-18">
@@ -140,7 +142,7 @@ const IndexPage: NextPageWithLayout = () => {
               <Button>Create new</Button>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-3 gap-8 md:grid-cols-2">
             {DEALS &&
               DEALS.map(deal => (
                 <DealCard
