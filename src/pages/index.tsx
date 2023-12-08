@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 
-import { useStatistics } from '@/api/modules/accounts/hooks/useStatistics'
 import { useDeals } from '@/api/modules/deals/hooks/useDeals'
-import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
 import { NextPageWithLayout } from '@/app/types'
 import { AddCircleIcon } from '@/assets/svg/AddCircleIcon'
 import { ArrowUpOutlineIcon } from '@/assets/svg/ArrowUpOutlineIcon'
@@ -21,15 +19,11 @@ import { SelectTokens } from '@/components/widgets/tokens'
 import LayoutDefault from '@/layouts/default'
 
 const IndexPage: NextPageWithLayout = () => {
-  const { tokens } = useTokens()
   const { deals } = useDeals()
-  const { statistics } = useStatistics()
 
   useEffect(() => {
-    console.log('tokens: \n', tokens)
     console.log('deals: \n', deals)
-    console.log('statistics: \n', statistics)
-  }, [tokens, deals, statistics])
+  }, [deals])
 
   return (
     <>
@@ -38,12 +32,10 @@ const IndexPage: NextPageWithLayout = () => {
           <div className="mb-13">
             <h1 className="typo-label text-center">Estimate balance</h1>
           </div>
-          <h2 className="text-center text-[52px] leading-none text-primary">
-            $54.00
-          </h2>
+          <h2 className="text-center text-[52px] leading-none">$54.00</h2>
         </section>
 
-        <section className="mx-auto mb-30 flex gap-x-[13px]">
+        <section className="mx-auto mb-30 flex gap-13 md:flex-wrap md:justify-center">
           <Button variant="secondary">
             <AddCircleIcon className="mr-4 h-16 w-16" />
             Buy
@@ -52,12 +44,10 @@ const IndexPage: NextPageWithLayout = () => {
             <ArrowUpOutlineIcon className="mr-4 h-16 w-16" />
             Send
           </Button>
-          <SelectTokens>
-            <span className="flex h-38 items-center gap-x-8 rounded-[12px] border border-input bg-background px-20 py-10 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-              <CrownIcon className="mr-4 h-16 w-16" />
-              Get CTUS Token
-            </span>
-          </SelectTokens>
+          <span className="flex h-38 items-center gap-x-8 rounded-[12px] border border-input bg-background px-20 py-10 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+            <CrownIcon className="mr-4 h-16 w-16" />
+            Get CTUS Token
+          </span>
         </section>
 
         <section className="mb-16 w-full border-t-[1px] border-border">
@@ -125,44 +115,7 @@ const IndexPage: NextPageWithLayout = () => {
         </section>
 
         <section className="mb-35">
-          <div className="scroll-x-hidden flex items-center gap-x-8 overflow-x-scroll">
-            <div className="flex min-w-[142px] flex-col gap-y-13 rounded-[15px] bg-secondary p-12">
-              <p className="text-[12px] leading-none text-secondary-text">
-                Revenue, 30d
-              </p>
-              <p className="text-[15px] leading-none text-dark-base-green">
-                +$24.45
-              </p>
-            </div>
-
-            <div className="flex min-w-[142px] flex-col gap-y-13 rounded-[15px] bg-secondary p-12">
-              <p className="text-[12px] leading-none text-secondary-text">
-                Locked
-              </p>
-              <p className="text-[15px] leading-none">$24.45</p>
-            </div>
-
-            <div className="flex min-w-[142px] flex-col gap-y-13 rounded-[15px] bg-secondary p-12">
-              <p className="text-[12px] leading-none text-secondary-text">
-                Paid
-              </p>
-              <p className="text-[15px] leading-none">$124.45</p>
-            </div>
-
-            <div className="flex min-w-[142px] flex-col gap-y-13 rounded-[15px] bg-secondary p-12">
-              <p className="text-[12px] leading-none text-secondary-text">
-                Paid, 30d
-              </p>
-              <p className="text-[15px] leading-none">$324.45</p>
-            </div>
-
-            <div className="flex min-w-[142px] flex-col gap-y-13 rounded-[15px] bg-secondary p-12">
-              <p className="text-[12px] leading-none text-secondary-text">
-                Paid
-              </p>
-              <p className="text-[15px] leading-none">$124.45</p>
-            </div>
-          </div>
+          <StatisticsList />
         </section>
 
         <section>
