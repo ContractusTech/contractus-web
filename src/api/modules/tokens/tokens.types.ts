@@ -5,6 +5,7 @@ export type TokenType = {
   decimals: number
   holderMode: boolean
   logoURL: string
+  symbol: string
 }
 
 export type TokenListType = TokenType[]
