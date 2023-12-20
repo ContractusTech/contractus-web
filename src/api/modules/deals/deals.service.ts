@@ -4,6 +4,7 @@ import { DealsListType } from './deals.types'
 class DealsServiceClass extends BaseService {
   async getDeals() {
     const response = await this.axios.get<DealsListType>(this.getPath())
+
     return response.data
   }
 }

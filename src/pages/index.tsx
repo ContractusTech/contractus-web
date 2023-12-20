@@ -1,5 +1,3 @@
-import { useEffect } from 'react'
-
 import { useDeals } from '@/api/modules/deals/hooks/useDeals'
 import { NextPageWithLayout } from '@/app/types'
 import { AddCircleIcon } from '@/assets/svg/AddCircleIcon'
@@ -15,16 +13,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { DealCard, DEALS } from '@/components/widgets/deals'
-import { SelectTokens } from '@/components/widgets/tokens'
+import { DealCard } from '@/components/widgets/deals'
+import { CreateDealButton, SelectTokens } from '@/components/widgets/tokens'
 import LayoutDefault from '@/layouts/default'
 
 const IndexPage: NextPageWithLayout = () => {
-  const { deals } = useDeals()
-
-  useEffect(() => {
-    console.log('deals: \n', deals)
-  }, [deals])
+  const { deals, refetch } = useDeals()
 
   return (
     <>
@@ -139,22 +133,11 @@ const IndexPage: NextPageWithLayout = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             <div>
-              <Button>Create new</Button>
+              <CreateDealButton onSuccess={refetch} />
             </div>
           </div>
           <div className="grid grid-cols-3 gap-8 md:grid-cols-2">
-            {DEALS &&
-              DEALS.map(deal => (
-                <DealCard
-                  key={deal.id}
-                  status={deal.status}
-                  time={deal.time}
-                  amount={deal.amount}
-                  currency={deal.currency}
-                  earningAmount={deal.earningAmount}
-                  clientID={deal.clientID}
-                />
-              ))}
+            {deals && deals.map(deal => <DealCard deal={deal} key={deal.id} />)}
           </div>
         </section>
       </>
