@@ -14,11 +14,11 @@ const Header: FC<Props> = ({ className }) => {
   return (
     <header
       className={clsx(
-        'flex h-54 flex-shrink-0 flex-grow-0 items-center justify-between',
+        'flex h-54 flex-shrink-0 flex-grow-0 items-center justify-between md:pb-5',
         className
       )}
     >
-      <div className="mt-auto basis-[200px]">
+      <div className="mt-auto basis-[200px] md:basis-60">
         <Logo />
       </div>
       <div className="py-6">
@@ -30,7 +30,7 @@ const Header: FC<Props> = ({ className }) => {
           Holder mode
         </Button>
       </div>
-      <div className="mt-auto basis-[200px]">
+      <div className="mt-auto basis-[200px] md:basis-60">
         <AccountButton />
       </div>
     </header>

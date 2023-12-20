@@ -24,21 +24,26 @@ module.exports = {
   theme: {
     container: {
       center: true,
+    },
 
-      screens: {
-        xl: { max: '1399.99px' },
-        lg: { max: '1199.99px' },
-        md: { max: '991.99px' },
-        sm: { max: '767.99px' },
-        xs: { max: '575.99px' }
-      },
+    fontFamily: {
+      sans: ['var(--family-sans)', ...fallbackSansSerifFonts],
+      second: ['var(--family-second', ...fallbackSansSerifFonts]
+    },
 
-      fontFamily: {
-        sans: ['var(--family-sans)', ...fallbackSansSerifFonts],
-        second: ['var(--family-second', ...fallbackSansSerifFonts]
-      },
+    screens: {
+      xl: { max: '1399.99px' },
+      lg: { max: '1199.99px' },
+      md: { max: '991.99px' },
+      sm: { max: '767.99px' },
+      xs: { max: '575.99px' }
     },
     spacing: object0to100px,
+    borderRadius: {
+      ...object0to100px,
+      full: '9999px'
+    },
+
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -77,7 +82,10 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         blue: "hsl(var(--blue))",
-        'dark-base-green': 'hsl(var(--dark-base-green))'
+        'dark-base-green': 'hsl(var(--dark-base-green))',
+
+        'textBase': 'rgb(213 217 224 / <alpha-value>)',
+        'textSecondary': 'rgb(101 105 117 / <alpha-value>)',
       },
       borderRadius: {
         lg: "var(--radius)",

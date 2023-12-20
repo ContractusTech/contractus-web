@@ -26,7 +26,7 @@ export const UserOptions: FC = () => {
           </NavigationMenuTrigger>
           <NavigationMenuContent className="bg-secondary">
             <NavigationMenuLink asChild>
-              <ul className="flex flex-col gap-y-5 p-[10px] md:w-[200px] lg:w-[250px]">
+              <ul className="flex flex-col gap-y-5 p-[10px] lg:w-[250px] md:w-[200px]">
                 <UserOptionsListItem href="/docs" title="Introduction">
                   Re-usable components built using Radix UI and Tailwind CSS.
                 </UserOptionsListItem>

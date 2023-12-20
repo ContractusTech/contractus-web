@@ -25,11 +25,16 @@ export const AccountButton = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button variant={'secondary'} className="items-center gap-[8px]">
-          <BalanceWalletIcon />
-          {transformString(connectedUser.publicKey)}
-          <ChevronDown />
+      <DropdownMenuTrigger asChild={true}>
+        <Button
+          variant={'secondary'}
+          className="h-42 items-center gap-[8px] md:gap-x-8 md:px-5 md:pl-8 md:pr-5"
+        >
+          <BalanceWalletIcon className="h-16 w-16" />
+          <span className="md:hidden">
+            {transformString(connectedUser.publicKey)}
+          </span>
+          <ChevronDown className="h-16 w-16 text-textSecondary" />
         </Button>
       </DropdownMenuTrigger>
 
