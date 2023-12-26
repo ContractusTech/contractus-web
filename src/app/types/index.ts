@@ -1,6 +1,8 @@
 import type { NextPage } from 'next'
 import type { ReactElement, ReactNode } from 'react'
 
+import { api } from '@/api/client'
+
 export type NextPageWithLayout<P = NonNullable<unknown>, IP = P> = NextPage<
   P,
   IP
@@ -19,3 +21,9 @@ export type PreparedToken = {
   signature: string
   identifier: string
 }
+
+export type PerformanceBondType = Parameters<
+  typeof api.deals.dealsCreate
+>['0']['performanceBondType']
+
+export type Role = 'CLIENT' | 'EXECUTOR'
