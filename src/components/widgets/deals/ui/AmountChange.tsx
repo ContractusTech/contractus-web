@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { api } from '@/api/client'
-import { Deal } from '@/api/generated-api'
-import { TokenType } from '@/api/modules/tokens/tokens.types'
+import { Deal, Tokens } from '@/api/generated-api'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -17,7 +16,7 @@ import { CreateDealHeader } from './CreateDealHeader'
 
 export const AmountChange = ({ deal }: { deal: Deal }) => {
   const [dialogOpened, setDialogOpened] = useState(false)
-  const [token, setToken] = useState<TokenType>()
+  const [token, setToken] = useState<Tokens[number]>()
 
   const { register, handleSubmit, watch, setValue } = useForm<Deal>({
     defaultValues: {
@@ -29,7 +28,7 @@ export const AmountChange = ({ deal }: { deal: Deal }) => {
   const amountValue = watch('amount')
   const tokenlabel = watch('token.code')
 
-  function handleTokenChange(token: TokenType) {
+  function handleTokenChange(token: Tokens[number]) {
     setToken(token)
     setValue('token', { address: token.address, code: token.code })
   }
