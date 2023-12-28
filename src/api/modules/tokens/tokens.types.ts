@@ -3,7 +3,7 @@ export type TokenType = {
   name: string
   address: string
   decimals: number
-  holderMode: boolean
+  holderMode: boolean | undefined
   logoURL: string
   symbol: string
 }

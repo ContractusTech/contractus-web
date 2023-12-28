@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { DealCard } from '@/components/widgets/deals'
+import { DealCard, EmptyPlaceholder } from '@/components/widgets/deals'
 import { CreateDealButton, SelectTokens } from '@/components/widgets/tokens'
 import LayoutDefault from '@/layouts/default'
 
@@ -138,6 +138,8 @@ const IndexPage: NextPageWithLayout = () => {
           </div>
           <div className="grid grid-cols-3 gap-8 md:grid-cols-2">
             {deals && deals.map(deal => <DealCard deal={deal} key={deal.id} />)}
+
+            {deals && deals.length === 0 && <EmptyPlaceholder />}
           </div>
         </section>
       </>

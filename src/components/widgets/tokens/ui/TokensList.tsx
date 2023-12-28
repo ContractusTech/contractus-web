@@ -4,23 +4,22 @@ import { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-import { TokenListType } from '@/api/modules/tokens/tokens.types'
+import { Tokens } from '@/api/generated-api'
 import {
   Form,
   FormControl,
   FormDescription,
-  FormField,
   FormItem,
   FormLabel
 } from '@/components/ui/form'
 import { Switch } from '@/components/ui/switch'
-// import { toast } from '@/components/ui/use-toast'
 
 type Props = {
-  tokens: TokenListType
+  tokens: Tokens
+  onSelect?: (token: Tokens[number]) => void
 }
 
-export const TokensList: FC<Props> = ({ tokens }) => {
+export const TokensList: FC<Props> = ({ tokens, onSelect }) => {
   const FormSchema = z.array(
     z.object({
       code: z.string(),
@@ -34,14 +33,12 @@ export const TokensList: FC<Props> = ({ tokens }) => {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data)
-    // toast({
-    //   title: 'You choose:',
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   )
-    // })
+  }
+
+  function handleChange(val: boolean, token: Tokens[number]) {
+    if (val) {
+      onSelect && onSelect(token)
+    }
   }
 
   return (
@@ -53,41 +50,34 @@ export const TokensList: FC<Props> = ({ tokens }) => {
         >
           <div>
             <div className="space-y-4">
-              {tokens.map((token, index) => (
-                <FormField
+              {tokens.map(token => (
+                <FormItem
+                  className="flex flex-row items-center justify-between border-b-[1.5px] border-border py-15"
                   key={token.code}
-                  control={form.control}
-                  name={`${index}`}
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between border-b-[1.5px] border-border py-15">
-                      <div className="flex items-center gap-x-24">
-                        <div className="flex h-32 w-32 items-center justify-center">
-                          <Image
-                            src={token.logoURL}
-                            width={32}
-                            height={32}
-                            alt={token.code}
-                          ></Image>
-                        </div>
-                        <div className="space-y-0.5">
-                          <FormLabel className="text-base">
-                            {token.name}
-                          </FormLabel>
-                          <FormDescription className="text-[12px]">
-                            {token.code}
-                          </FormDescription>
-                        </div>
-                      </div>
-
-                      <FormControl>
-                        <Switch
-                          checked={field.value as unknown as boolean}
-                          onCheckedChange={field.onChange}
+                >
+                  <div className="flex items-center gap-x-24">
+                    {token.logoURL && (
+                      <div className="flex h-32 w-32 items-center justify-center">
+                        <Image
+                          src={token.logoURL}
+                          width={32}
+                          height={32}
+                          alt={token.code}
                         />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+                      </div>
+                    )}
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">{token.name}</FormLabel>
+                      <FormDescription className="text-[12px]">
+                        {token.code}
+                      </FormDescription>
+                    </div>
+                  </div>
+
+                  <FormControl>
+                    <Switch onCheckedChange={val => handleChange(val, token)} />
+                  </FormControl>
+                </FormItem>
               ))}
             </div>
           </div>

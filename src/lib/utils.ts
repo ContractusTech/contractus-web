@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { setCookie } from 'cookies-next'
+import CryptoJS from 'crypto-js'
 import dayjs from 'dayjs'
 // import Cookies from 'js-cookie'
 import { twMerge } from 'tailwind-merge'
@@ -52,4 +53,20 @@ export function getTimeUnitFromNow(targetDate: string) {
   }
 
   return '0s'
+}
+
+export function calculateMD5(file: File): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.addEventListener('load', function (event) {
+      const data = event.target?.result
+      if (!data || typeof data !== 'string') {
+        return reject('No data')
+      }
+      const md5 = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(data)).toString()
+      resolve(md5)
+    })
+    reader.addEventListener('error', error => reject(error))
+    reader.readAsBinaryString(file)
+  })
 }

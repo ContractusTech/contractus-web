@@ -1,7 +1,9 @@
 import { clsx } from 'clsx'
+import { useRouter } from 'next/navigation'
 import { FC } from 'react'
 
 import { Deal } from '@/api/generated-api'
+import { PAGES } from '@/app/constants/pages'
 import { useUserStore } from '@/app/store/user-store'
 import { ArrowLeftBottomCorner } from '@/assets/svg/ArrowLeftBottomCorner'
 import { getTimeUnitFromNow, transformString } from '@/lib/utils'
@@ -12,6 +14,11 @@ type Props = {
 
 const DealCard: FC<Props> = ({ deal }) => {
   const { connectedUser } = useUserStore()
+  const router = useRouter()
+
+  const handleDealClick = () => {
+    router.push(PAGES.DEAL(deal.id))
+  }
 
   const isStatusNew = deal.status === 'NEW'
 
@@ -19,7 +26,10 @@ const DealCard: FC<Props> = ({ deal }) => {
     deal.ownerRole === 'CLIENT' ? deal.ownerPublicKey : deal.contractorPublicKey
 
   return (
-    <div className="flex min-h-[160px] flex-col rounded-[20px] bg-secondary p-12">
+    <div
+      className="flex min-h-[160px] cursor-pointer flex-col rounded-[20px] bg-secondary p-12"
+      onClick={handleDealClick}
+    >
       <div>
         <div className="mb-12 flex items-center justify-between">
           <p
