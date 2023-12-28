@@ -27,3 +27,11 @@ export type PerformanceBondType = Parameters<
 >['0']['performanceBondType']
 
 export type Role = 'CLIENT' | 'EXECUTOR'
+
+export type AppFile = {
+  url: string
+  md5: string
+  name: string
+  size: number
+  encrypted: boolean
+}
