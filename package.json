@@ -53,6 +53,7 @@
     "crypto-js": "^4.2.0",
     "date-fns": "^3.0.6",
     "dayjs": "^1.11.10",
+    "filesize": "^10.1.0",
     "framer-motion": "^10.16.4",
     "lodash-es": "^4.17.21",
     "lokijs": "^1.5.12",

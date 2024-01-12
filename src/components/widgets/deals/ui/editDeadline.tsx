@@ -28,7 +28,7 @@ export const EditDeadline = ({ deal }: EditDeadlineProps) => {
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
       <DialogTrigger asChild>
-        <Button size={'sm'}>Edit</Button>
+        <Button variant={'tertiary'}>Edit</Button>
       </DialogTrigger>
       <DialogContent className="w-[fit-content] max-w-[600px] rounded-[10px] bg-[#070708] px-[18px] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
         <CreateDealHeader title="Change deadline" />

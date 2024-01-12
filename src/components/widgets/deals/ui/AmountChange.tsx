@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 
 import { api } from '@/api/client'
 import { Deal, Tokens } from '@/api/generated-api'
+import { useDealStore } from '@/app/store/deal-store'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -14,14 +15,16 @@ import Tag from '@/components/ui/tag'
 import { SelectTokens } from '../../tokens'
 import { CreateDealHeader } from './CreateDealHeader'
 
-export const AmountChange = ({ deal }: { deal: Deal }) => {
+export const AmountChange = () => {
   const [dialogOpened, setDialogOpened] = useState(false)
   const [token, setToken] = useState<Tokens[number]>()
 
+  const { deal } = useDealStore()
+
   const { register, handleSubmit, watch, setValue } = useForm<Deal>({
     defaultValues: {
-      amount: deal.amount,
-      token: { address: deal.token?.address, code: deal.token?.code }
+      amount: deal?.amount,
+      token: { address: deal?.token?.address, code: deal?.token?.code }
     }
   })
 
@@ -34,13 +37,17 @@ export const AmountChange = ({ deal }: { deal: Deal }) => {
   }
 
   useEffect(() => {
-    if (deal.token) {
+    if (deal?.token) {
       setValue('token', { address: deal.token.address, code: deal.token.code })
     }
-  }, [deal.token, setValue])
+  }, [deal?.token, setValue])
 
   const handleAmountSettingsSave = handleSubmit(async data => {
     try {
+      if (!deal) {
+        throw new Error('No deal')
+      }
+
       if (!data.token?.address || !data.token?.code) {
         throw new Error('Invalid token')
       }
@@ -59,7 +66,7 @@ export const AmountChange = ({ deal }: { deal: Deal }) => {
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
       <DialogTrigger asChild>
-        <Button size={'sm'}>Change</Button>
+        <Button variant={'tertiary'}>Edit</Button>
       </DialogTrigger>
       <DialogContent className="w-full max-w-[600px] rounded-[10px] bg-[#070708] px-[18px] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
         <CreateDealHeader title="Change amount" />

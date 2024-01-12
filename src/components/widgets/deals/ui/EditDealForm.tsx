@@ -4,37 +4,44 @@ import 'dayjs/locale/en'
 import { Root } from '@radix-ui/react-form'
 import dayjs from 'dayjs'
 
-import { Deal } from '@/api/generated-api'
-
+import CancelDealButton from './CancelDealButton'
+import { CheckerEdit } from './CheckerEdit'
 import { CommentField } from './CommentField'
 import { DeadLineField } from './DeadLineField'
 import { DealInfo } from './DealInfo'
-import { EditDealHeader } from './EditDealHeader'
 import { FileList } from './FileList'
 import { PerformanceBond } from './performanceBond'
 import { RoleSignatureView } from './RoleSignatureView'
 import { StartDealBtn } from './StartDealBtn'
 
-type EditDealFormProps = Deal
-
 dayjs.locale('en')
 
-export const EditDealForm = (props: EditDealFormProps) => {
+export const EditDealForm = () => {
   return (
-    <div className="m-[0_auto] flex max-w-[600px] flex-col gap-[30px]">
-      <EditDealHeader />
-
+    <div className="m-[0_auto] flex max-w-[534px] flex-col gap-[30px]">
       <Root
-        className="flex flex-col gap-[13px]"
+        className="flex flex-col gap-[40px]"
         onSubmit={e => e.preventDefault()}
       >
-        <DealInfo deal={props} />
-        <PerformanceBond />
-        <CommentField deal={props} />
-        <FileList deal={props} />
-        <DeadLineField deal={props} />
+        <div className="flex flex-col gap-[13px]">
+          <DealInfo />
+          <CheckerEdit />
+          <DeadLineField />
+        </div>
+
+        <div className="flex flex-col gap-[13px]">
+          <PerformanceBond />
+        </div>
+
+        <div className="flex flex-col gap-[13px]">
+          <span className="text-[29px] text-[#D5D9E0]">Details</span>
+          <CommentField />
+          <FileList />
+        </div>
+
         <RoleSignatureView />
         <StartDealBtn />
+        <CancelDealButton />
       </Root>
     </div>
   )
