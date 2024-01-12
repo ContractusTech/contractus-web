@@ -1,15 +1,22 @@
-import { UploadFile } from '@mui/icons-material'
 import { useEffect, useRef, useState } from 'react'
 
 import { api } from '@/api/client'
 import { UploadedFile } from '@/api/generated-api'
 import { calculateMD5 } from '@/lib/utils'
 
+import { Button } from './button'
+
 type FileUploadProps = {
   onFileUploaded?: (file: UploadedFile & { name: string; size: number }) => void
+  children: React.ReactNode
+  className?: string
 }
 
-export const FileUpload = ({ onFileUploaded }: FileUploadProps) => {
+export const FileUpload = ({
+  onFileUploaded,
+  children,
+  className
+}: FileUploadProps) => {
   const fileInput = useRef<HTMLInputElement>(null)
   const [file, setFile] = useState<File | null>(null)
 
@@ -30,10 +37,14 @@ export const FileUpload = ({ onFileUploaded }: FileUploadProps) => {
   }
 
   return (
-    <button
-      onClick={handleFileInputClick}
-      className="flex aspect-square  flex-col items-center justify-center gap-[13px] rounded-[4px] bg-[#15151A] p-[12px] transition-all hover:bg-[#3a3a49]"
-    >
+    <>
+      <Button
+        onClick={handleFileInputClick}
+        className={className}
+        variant={'tertiary'}
+      >
+        {children}
+      </Button>
       <input
         ref={fileInput}
         type="file"
@@ -42,8 +53,6 @@ export const FileUpload = ({ onFileUploaded }: FileUploadProps) => {
           e.target.files && setFile(e.target.files[0])
         }}
       />
-      <span>Upload file</span>
-      <UploadFile />
-    </button>
+    </>
   )
 }

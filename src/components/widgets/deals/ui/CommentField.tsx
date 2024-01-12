@@ -1,17 +1,21 @@
-import { Deal } from '@/api/generated-api'
-
 import { EditCommentButton } from './EditCommentButton'
 
-export const CommentField = ({ deal }: { deal: Deal }) => {
+export const CommentField = () => {
   return (
-    <div className="relative">
-      <span className="ml-[8px] text-[24px]">Details</span>
-      <div className="flex min-h-[120px] flex-col gap-[13px] rounded-[13px] border-[1px] border-[#2A2E37] p-[8px]">
-        {deal.meta?.content?.text ?? 'Empty'}
+    <div className="relative flex h-full w-full justify-between  rounded-[13px] border-[1px] border-[#2A2E37] bg-[#15151A] p-[20px]">
+      <div className="flex flex-col">
+        <div className="flex items-center gap-[8px] text-[12px] text-[#8b8f97]">
+          <span className="text-[22px] text-[#fff]">Text</span>
+        </div>
+
+        <span className="max-w-[90%] text-[13px] font-[500] text-[#656975]">
+          This text will be encrypted and available for viewing only to contract
+          partners.
+        </span>
       </div>
 
-      <div className="absolute bottom-[13px] right-[13px]">
-        <EditCommentButton deal={deal} />
+      <div className="absolute right-[20px] top-[20px]">
+        <EditCommentButton />
       </div>
     </div>
   )
