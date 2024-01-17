@@ -1,3 +1,5 @@
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+
 import { api } from '@/api/client'
 import { UploadedFile } from '@/api/generated-api'
 import { useDealStore } from '@/app/store/deal-store'
@@ -7,24 +9,42 @@ import { FileUpload } from '@/components/ui/fileUpload'
 type FileWithName = UploadedFile & { name: string; size: number }
 
 export const FileList = () => {
-  const { deal } = useDealStore()
+  const { deal, setDeal } = useDealStore()
+  const [parent] = useAutoAnimate()
 
-  const handleFileUpload = (file: FileWithName) => {
+  const handleFileUpload = async (file: FileWithName) => {
     if (!deal) {
       throw new Error('No deal')
     }
 
     const oldFiles = deal.meta?.files ?? []
-    api.deals.metaCreate(deal.id, {
+    await api.deals.metaCreate(deal.id, {
       meta: {
         files: [...oldFiles, { ...file, encrypted: false }]
       },
       updatedAt: new Date().toISOString()
     })
+
+    api.deals.dealsDetail(deal.id).then(deal => setDeal(deal))
   }
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
-  const handleDelete = () => console.log(1)
+  const handleDelete = async (url: string) => {
+    if (!deal) {
+      throw new Error('No deal')
+    }
+
+    const oldFiles = deal.meta?.files ?? []
+
+    await api.deals.metaCreate(deal.id, {
+      meta: {
+        files: oldFiles.filter(file => file.url !== url)
+      },
+      updatedAt: new Date().toISOString()
+    })
+
+    api.deals.dealsDetail(deal.id).then(deal => setDeal(deal))
+  }
 
   return (
     <div className="relative flex h-full w-full flex-col justify-between overflow-hidden  rounded-[13px] border-[1px] border-[#2A2E37] bg-[#15151A] ">
@@ -34,7 +54,7 @@ export const FileList = () => {
         </div>
       </div>
 
-      <div className=" border-t-[1px] border-t-[#22222B]">
+      <div className=" border-t-[1px] border-t-[#22222B]" ref={parent}>
         {deal &&
           deal.meta?.files?.map(file => (
             <FileCard key={file.url} file={file} onDelete={handleDelete} />

@@ -15,7 +15,9 @@ export const EditCommentButton = () => {
   const { deal } = useDealStore()
   const [dialogOpened, setDialogOpened] = useState(false)
 
-  const { register, handleSubmit } = useForm<Deal>()
+  const { register, handleSubmit } = useForm<Deal>({
+    defaultValues: { meta: { content: { text: deal?.meta?.content?.text } } }
+  })
 
   const handleSaveComment = handleSubmit(data => {
     try {

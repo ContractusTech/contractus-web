@@ -22,7 +22,6 @@ const DealPage: NextPageWithLayout = () => {
     dealStore.setLoading(true)
 
     api.deals.dealsDetail(dealId).then(deal => {
-      console.log(deal)
       dealStore.setDeal(deal)
       dealStore.setLoading(false)
     })

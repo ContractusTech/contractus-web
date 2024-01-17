@@ -1,21 +1,68 @@
-import { Button } from '@/components/ui/button'
+import { Deal } from '@/api/generated-api'
+import httpClient from '@/api/httpClient'
+import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
+import { useDealStore } from '@/app/store/deal-store'
+import { transformString } from '@/lib/utils'
+
+import { CheckerAmountChange } from './CheckerAmountChange'
+import { EditAddressButton } from './EditAddressButton'
 
 export const CheckerEdit = () => {
+  const { deal, setDeal } = useDealStore()
+  const { tokens } = useTokens()
+
+  const handleCheckerEdit = async (address: string) => {
+    if (!deal) {
+      throw new Error('No deal')
+    }
+
+    const { data } = await httpClient<Deal>({
+      url: `deals/${deal.id}/participate`,
+      method: 'POST',
+      data: {
+        type: 'CHECKER',
+        publicKey: address,
+        blockchain: 'bsc'
+      }
+    })
+
+    setDeal(data)
+  }
+
   return (
     <div className="flex h-full w-full justify-between  rounded-[13px] border-[1px] border-[#2A2E37] bg-[#15151A] p-[20px]">
       <div className="flex flex-col">
         <div className="flex items-center gap-[8px] text-[12px] text-[#8b8f97]">
           <span className="text-[15px] font-[600] text-[#656975]">CHECKER</span>
         </div>
-        <span className="mt-[16px] text-[22px] font-[500]">Empty</span>
+        <span className="mt-[16px] text-[22px] font-[500]">
+          {deal?.checkerPublicKey
+            ? transformString(deal.checkerPublicKey)
+            : 'Empty'}
+        </span>
+        {deal?.checkerAmount && (
+          <div className="mt-[9px] flex items-end gap-[4px]">
+            <span className=" text-[22px] font-[500]">
+              {deal?.checkerAmount}
+            </span>
+            <span className=" mb-[2px] text-[15px] font-[600] text-[#656975]">
+              {
+                /* @ts-ignore */
+                tokens?.find(token => token.address === deal?.checkerToken)
+                  ?.code
+              }
+            </span>
+          </div>
+        )}
+
         <span className="text-[13px] font-[500] text-[#656975]">
           Perform the work specified in the contract
         </span>
       </div>
 
       <div className="flex gap-[8px]">
-        <Button variant={'tertiary'}>Edit</Button>
-        <Button variant={'tertiary'}>Fee</Button>
+        <EditAddressButton title="Edit checker" onSave={handleCheckerEdit} />
+        <CheckerAmountChange />
       </div>
     </div>
   )
