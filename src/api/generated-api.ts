@@ -34,6 +34,7 @@ export interface Balance {
     }
   }[]
   wrap?: string[]
+  tier: 'basic' | 'holder'
 }
 
 export interface Account {
@@ -342,7 +343,7 @@ export interface DealParticipate {
   /** Set contract partner */
   type: 'CONTRACTOR' | 'CHECKER'
   publicKey: string
-  blockchain?: 'solana'
+  blockchain?: 'solana' | 'bsc'
   secretKeyHash?: string
 }
 
@@ -1551,6 +1552,82 @@ export class ContractusAPI<
         type: ContentType.Json,
         format: 'json',
         ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Transactions
+     * @name ApprovalDetail
+     * @summary Get approval unsigned TX (only EVM)
+     * @request GET:/tx/approval/{address}
+     * @secure
+     */
+    approvalDetail: (address: string, params: RequestParams = {}) =>
+      this.request<
+        {
+          rawTransaction?: {
+            data: string
+            /** @format float */
+            gasLimit: number
+            /** @format float */
+            chainId: number
+            /** @format float */
+            type: number
+            /** @format float */
+            nonce: number
+            to: string
+            maxPriorityFeePerGas: string
+            maxFeePerGas: string
+          }
+          needApproval: boolean
+        },
+        Error
+      >({
+        path: `/tx/approval/${address}`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Transactions
+     * @name SendCreate
+     * @summary Send signed tx (only EVM)
+     * @request POST:/tx/send
+     * @secure
+     */
+    sendCreate: (
+      data: {
+        rawTransaction: {
+          data: string
+          /** @format float */
+          gasLimit: number
+          /** @format float */
+          chainId: number
+          /** @format float */
+          type: number
+          /** @format float */
+          nonce: number
+          to: string
+          maxPriorityFeePerGas: string
+          maxFeePerGas: string
+        }
+        signature: string
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<void, Error>({
+        path: `/tx/send`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
+        ...params
       })
   }
   files = {
@@ -1643,6 +1720,7 @@ export class ContractusAPI<
          * @default []
          */
         currencies?: (
+          | 'BNB'
           | 'SOL'
           | 'WSOL'
           | 'USDC'

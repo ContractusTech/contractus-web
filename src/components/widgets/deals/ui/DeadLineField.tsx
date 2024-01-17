@@ -32,7 +32,7 @@ export const DeadLineField = () => {
         </span>
       </div>
 
-      <EditDeadline deal={deal} />
+      <EditDeadline />
     </div>
   )
 }

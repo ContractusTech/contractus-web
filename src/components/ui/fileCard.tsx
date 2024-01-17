@@ -7,7 +7,7 @@ import { AppFile } from '@/app/types'
 
 type FileCardProps = {
   file: AppFile
-  onDelete?: () => void
+  onDelete?: (fileUrl: string) => void
 }
 
 const IMAGE_EXTENSIONS = new Set(['png', 'jpeg', 'jpg', 'gif', 'bmp', 'tiff'])
@@ -44,7 +44,10 @@ export const FileCard = ({ file, onDelete }: FileCardProps) => {
         <span className="text-[#656975] ">{fileSize}</span>
       </div>
 
-      <button className="ml-[auto] cursor-pointer" onClick={onDelete}>
+      <button
+        className="ml-[auto] cursor-pointer"
+        onClick={() => onDelete && onDelete(file.url)}
+      >
         <XCircle fill="#8D92A1" color="#15151b" />
       </button>
     </Link>

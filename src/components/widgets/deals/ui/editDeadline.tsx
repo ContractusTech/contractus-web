@@ -1,30 +1,34 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DayPicker } from 'react-day-picker'
 
 import { api } from '@/api/client'
-import { Deal } from '@/api/generated-api'
+import { useDealStore } from '@/app/store/deal-store'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 
 import { CreateDealHeader } from './CreateDealHeader'
 
-type EditDeadlineProps = {
-  deal: Deal
-}
+export const EditDeadline = () => {
+  const { setDeal, deal } = useDealStore()
 
-export const EditDeadline = ({ deal }: EditDeadlineProps) => {
   const [dialogOpened, setDialogOpened] = useState(false)
 
   const [selected, setSelected] = useState<Date>()
 
   const handleDeadlineChange = async (day: Date | undefined) => {
-    if (day) {
-      setSelected(day)
-      await api.deals.dealsCreate2(deal.id, {
-        deadline: selected?.toISOString()
-      })
-    }
+    setSelected(day)
   }
+
+  useEffect(() => {
+    if (selected && deal) {
+      api.deals
+        .dealsCreate2(deal.id, {
+          deadline: selected?.toISOString()
+        })
+        .then(updateDeal => setDeal(updateDeal))
+    }
+  }, [selected, deal])
+
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
       <DialogTrigger asChild>

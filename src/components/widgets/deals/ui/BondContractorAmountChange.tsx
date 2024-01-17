@@ -15,7 +15,7 @@ import Tag from '@/components/ui/tag'
 import { SelectTokens } from '../../tokens'
 import { CreateDealHeader } from './CreateDealHeader'
 
-export const AmountChange = () => {
+export const BondOwnerAmountChange = () => {
   const [dialogOpened, setDialogOpened] = useState(false)
   const [token, setToken] = useState<Tokens[number]>()
 
@@ -23,24 +23,30 @@ export const AmountChange = () => {
 
   const { register, handleSubmit, watch, setValue } = useForm<Deal>({
     defaultValues: {
-      amount: deal?.amount,
-      token: { address: deal?.token?.address, code: deal?.token?.code }
+      contractorBondAmount: deal?.contractorBondAmount,
+      contractorBondToken: deal?.contractorBondToken
     }
   })
 
-  const amountValue = watch('amount')
-  const tokenlabel = watch('token.code')
+  const amountValue = watch('contractorBondAmount')
+  const tokenlabel = watch('contractorBondToken.code')
 
   function handleTokenChange(token: Tokens[number]) {
     setToken(token)
-    setValue('token', { address: token.address, code: token.code })
+    setValue('contractorBondToken', {
+      address: token.address,
+      code: token.code
+    })
   }
 
   useEffect(() => {
-    if (deal?.token) {
-      setValue('token', { address: deal.token.address, code: deal.token.code })
+    if (deal?.checkerToken) {
+      setValue('contractorBondToken', {
+        address: deal.checkerToken.address,
+        code: deal.checkerToken.code
+      })
     }
-  }, [deal?.token, setValue])
+  }, [deal, setValue])
 
   const handleAmountSettingsSave = handleSubmit(async data => {
     try {
@@ -48,21 +54,26 @@ export const AmountChange = () => {
         throw new Error('No deal')
       }
 
-      if (!data.token?.address || !data.token?.code) {
+      if (!data.contractorBondAmount) {
         throw new Error('Invalid token')
       }
 
-      await api.deals.dealsCreate2(deal.id, {
-        amount: {
-          value: data.amount,
-          token: { address: data.token?.address, code: data.token?.code }
-        }
-      })
+      if (data.contractorBondAmount) {
+        await api.deals.dealsCreate2(deal.id, {
+          ownerBondAmount: {
+            value: data.contractorBondAmount,
+            token: data.contractorBondToken
+          }
+        })
+      }
+
       const updatedDeal = await api.deals.dealsDetail(deal.id)
       setDeal(updatedDeal)
 
       setDialogOpened(false)
-    } catch {}
+    } catch (error) {
+      console.log(error)
+    }
   })
 
   return (
@@ -75,7 +86,7 @@ export const AmountChange = () => {
 
         <Form.Root className="flex flex-col gap-[20px] py-[18px]">
           <Input
-            register={register('amount')}
+            register={register('ownerBondAmount')}
             type="number"
             name="amount"
             rightSlot={

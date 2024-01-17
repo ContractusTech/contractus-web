@@ -15,7 +15,7 @@ import Tag from '@/components/ui/tag'
 import { SelectTokens } from '../../tokens'
 import { CreateDealHeader } from './CreateDealHeader'
 
-export const AmountChange = () => {
+export const CheckerAmountChange = () => {
   const [dialogOpened, setDialogOpened] = useState(false)
   const [token, setToken] = useState<Tokens[number]>()
 
@@ -23,24 +23,27 @@ export const AmountChange = () => {
 
   const { register, handleSubmit, watch, setValue } = useForm<Deal>({
     defaultValues: {
-      amount: deal?.amount,
-      token: { address: deal?.token?.address, code: deal?.token?.code }
+      checkerAmount: deal?.checkerAmount,
+      checkerToken: deal?.checkerToken
     }
   })
 
-  const amountValue = watch('amount')
-  const tokenlabel = watch('token.code')
+  const amountValue = watch('checkerAmount')
+  const tokenlabel = watch('checkerToken.code')
 
   function handleTokenChange(token: Tokens[number]) {
     setToken(token)
-    setValue('token', { address: token.address, code: token.code })
+    setValue('checkerToken', { address: token.address, code: token.code })
   }
 
   useEffect(() => {
-    if (deal?.token) {
-      setValue('token', { address: deal.token.address, code: deal.token.code })
+    if (deal?.checkerToken) {
+      setValue('checkerToken', {
+        address: deal.checkerToken.address,
+        code: deal.checkerToken.code
+      })
     }
-  }, [deal?.token, setValue])
+  }, [deal, setValue])
 
   const handleAmountSettingsSave = handleSubmit(async data => {
     try {
@@ -48,34 +51,39 @@ export const AmountChange = () => {
         throw new Error('No deal')
       }
 
-      if (!data.token?.address || !data.token?.code) {
+      if (!data.checkerToken) {
         throw new Error('Invalid token')
       }
 
-      await api.deals.dealsCreate2(deal.id, {
-        amount: {
-          value: data.amount,
-          token: { address: data.token?.address, code: data.token?.code }
-        }
-      })
+      if (data.checkerAmount) {
+        await api.deals.dealsCreate2(deal.id, {
+          checkerAmount: {
+            value: data.checkerAmount,
+            token: data.checkerToken
+          }
+        })
+      }
+
       const updatedDeal = await api.deals.dealsDetail(deal.id)
       setDeal(updatedDeal)
 
       setDialogOpened(false)
-    } catch {}
+    } catch (error) {
+      console.log(error)
+    }
   })
 
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
       <DialogTrigger asChild>
-        <Button variant={'tertiary'}>Edit</Button>
+        <Button variant={'tertiary'}>Fee</Button>
       </DialogTrigger>
       <DialogContent className="w-full max-w-[600px] rounded-[10px] bg-[#070708] px-[18px] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
         <CreateDealHeader title="Change amount" />
 
         <Form.Root className="flex flex-col gap-[20px] py-[18px]">
           <Input
-            register={register('amount')}
+            register={register('checkerAmount')}
             type="number"
             name="amount"
             rightSlot={
