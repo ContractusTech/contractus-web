@@ -2,6 +2,7 @@ import * as Form from '@radix-ui/react-form'
 import { Menu } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { formatUnits, parseUnits } from 'viem'
 
 import { api } from '@/api/client'
 import { Deal, Tokens } from '@/api/generated-api'
@@ -17,13 +18,17 @@ import { CreateDealHeader } from './CreateDealHeader'
 
 export const AmountChange = () => {
   const [dialogOpened, setDialogOpened] = useState(false)
-  const [token, setToken] = useState<Tokens[number]>()
-
   const { deal, setDeal } = useDealStore()
+  // @ts-ignore
+  const [token, setToken] = useState<Tokens[number]>(deal?.token)
 
   const { register, handleSubmit, watch, setValue } = useForm<Deal>({
     defaultValues: {
-      amount: deal?.amount,
+      amount: formatUnits(
+        BigInt(deal?.amount ?? '0'),
+        // @ts-ignore
+        deal?.token?.decimals ?? 1
+      ),
       token: { address: deal?.token?.address, code: deal?.token?.code }
     }
   })
@@ -47,14 +52,18 @@ export const AmountChange = () => {
       if (!deal) {
         throw new Error('No deal')
       }
-
       if (!data.token?.address || !data.token?.code) {
         throw new Error('Invalid token')
       }
+      if (!token?.decimals) {
+        throw new Error("Can't get decimals of token")
+      }
+
+      const parsedAmountValue = parseUnits(data.amount, token?.decimals)
 
       await api.deals.dealsCreate2(deal.id, {
         amount: {
-          value: data.amount,
+          value: parsedAmountValue.toString(),
           token: { address: data.token?.address, code: data.token?.code }
         }
       })
@@ -62,7 +71,9 @@ export const AmountChange = () => {
       setDeal(updatedDeal)
 
       setDialogOpened(false)
-    } catch {}
+    } catch (error) {
+      console.error(error)
+    }
   })
 
   return (

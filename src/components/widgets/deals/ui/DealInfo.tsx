@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { formatUnits } from 'viem'
 
 import { Deal } from '@/api/generated-api'
 import httpClient from '@/api/httpClient'
@@ -59,11 +60,15 @@ export const DealInfo = () => {
           </div>
 
           <span className="mt-[9px] text-[22px] font-[500]">
-            {iClient
+            {deal.ownerRole === 'CLIENT'
+              ? transformString(deal.ownerPublicKey)
+              : transformString(deal.contractorPublicKey ?? '')}
+
+            {/* {iClient
               ? transformString(deal.ownerPublicKey)
               : deal.contractorPublicKey
               ? transformString(deal.contractorPublicKey)
-              : 'Empty'}
+              : 'Empty'} */}
           </span>
 
           {!iClient && (
@@ -81,7 +86,10 @@ export const DealInfo = () => {
               AMOUNT OF DEAL
             </span>
             <div className="mt-[9px] flex items-end gap-[4px]">
-              <span className=" text-[22px] font-[500]">{deal.amount}</span>
+              <span className=" text-[22px] font-[500]">
+                {/* @ts-ignore */}
+                {formatUnits(BigInt(deal.amount), deal.token?.decimals)}
+              </span>
               <span className=" mb-[2px] text-[15px] font-[600] text-[#656975]">
                 {deal.token?.code}
               </span>

@@ -1,24 +1,15 @@
 import { UserCog, UserIcon } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
-import { api } from '@/api/client'
-import { DealActions } from '@/api/generated-api'
 import { useDealStore } from '@/app/store/deal-store'
 
 export const RoleSignatureView = () => {
-  const { deal } = useDealStore()
-
-  const [dealActions, setDealActions] = useState<DealActions>()
+  const { deal, dealActions } = useDealStore()
 
   const withChecker = useMemo(
     () => deal?.completionCheckType === 'CHECKER',
     [deal]
   )
-
-  useEffect(() => {
-    deal?.id &&
-      api.deals.actionsDetail(deal.id).then(data => setDealActions(data))
-  }, [deal?.id])
 
   return (
     <div
@@ -34,12 +25,10 @@ export const RoleSignatureView = () => {
 
         <span className="text-[12px] text-[#8b8f97]">
           {deal?.ownerRole === 'CLIENT'
-            ? /* @ts-ignore */
-              dealActions?.signedByOwner
+            ? dealActions?.signedByOwner
               ? 'Signed'
               : 'No signature'
-            : /* @ts-ignore */
-            dealActions.signedByContractor
+            : dealActions?.signedByContractor
             ? 'Signed'
             : 'No signature'}
         </span>
@@ -52,12 +41,10 @@ export const RoleSignatureView = () => {
         <span>Executor</span>
         <span className="text-[12px] text-[#8b8f97]">
           {deal?.ownerRole === 'EXECUTOR'
-            ? /* @ts-ignore */
-              dealActions?.signedByOwner
+            ? dealActions?.signedByOwner
               ? 'Signed'
               : 'No signature'
-            : /* @ts-ignore */
-            dealActions?.signedByContractor
+            : dealActions?.signedByContractor
             ? 'Signed'
             : 'No signature'}
         </span>

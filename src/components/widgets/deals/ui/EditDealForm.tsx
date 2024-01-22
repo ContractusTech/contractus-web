@@ -46,8 +46,31 @@ export const EditDealForm = () => {
         </div>
 
         <RoleSignatureView />
-        <StartDealBtn />
-        <CancelDealButton />
+
+        {/* @ts-ignore */}
+        {dealStore.dealActions?.actions.map(action => {
+          switch (action) {
+            case 'SIGN': {
+              return <StartDealBtn />
+            }
+
+            case 'CANCEL': {
+              return <CancelDealButton />
+            }
+
+            case 'FINISH': {
+              return <span>Can finish</span>
+            }
+
+            case 'CANCEL_SIGN': {
+              return <span>Can cancel sign</span>
+            }
+
+            case 'REVOKE': {
+              return <span>Can revoke</span>
+            }
+          }
+        })}
       </Root>
     </div>
   )
