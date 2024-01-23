@@ -6,13 +6,16 @@ import dayjs from 'dayjs'
 
 import { useDealStore } from '@/app/store/deal-store'
 
-import CancelDealButton from './CancelDealButton'
+import { CancelButton } from './CancelButton'
+import { CancelSignButton } from './CancelSignButton'
 import { CheckerEdit } from './CheckerEdit'
 import { CommentField } from './CommentField'
 import { DeadLineField } from './DeadLineField'
 import { DealInfo } from './DealInfo'
 import { FileList } from './FileList'
+import { FinishDealButton } from './FinishDealButton'
 import { PerformanceBond } from './performanceBond'
+import { RevokeButton } from './RevokeButton'
 import { RoleSignatureView } from './RoleSignatureView'
 import { StartDealBtn } from './StartDealBtn'
 
@@ -39,15 +42,22 @@ export const EditDealForm = () => {
           </div>
         )}
 
-        <div className="flex flex-col gap-[13px]">
-          <span className="text-[29px] text-[#D5D9E0]">Details</span>
-          <CommentField />
-          <FileList />
-        </div>
+        {dealStore.deal?.status === 'STARTED' ? (
+          <div className="flex flex-col gap-[13px]">
+            <span className="text-[29px] text-[#D5D9E0]">Result</span>
+            <CommentField />
+            <FileList />
+          </div>
+        ) : (
+          <div className="flex flex-col gap-[13px]">
+            <span className="text-[29px] text-[#D5D9E0]">Details</span>
+            <CommentField />
+            <FileList />
+          </div>
+        )}
 
         <RoleSignatureView />
 
-        {/* @ts-ignore */}
         {dealStore.dealActions?.actions.map(action => {
           switch (action) {
             case 'SIGN': {
@@ -55,19 +65,19 @@ export const EditDealForm = () => {
             }
 
             case 'CANCEL': {
-              return <CancelDealButton />
+              return <CancelButton />
             }
 
             case 'FINISH': {
-              return <span>Can finish</span>
+              return <FinishDealButton />
             }
 
             case 'CANCEL_SIGN': {
-              return <span>Can cancel sign</span>
+              return <CancelSignButton />
             }
 
             case 'REVOKE': {
-              return <span>Can revoke</span>
+              return <RevokeButton />
             }
           }
         })}

@@ -9,7 +9,7 @@ import { FileUpload } from '@/components/ui/fileUpload'
 type FileWithName = UploadedFile & { name: string; size: number }
 
 export const FileList = () => {
-  const { deal, setDeal } = useDealStore()
+  const { deal, setDeal, updateDeal } = useDealStore()
   const [parent] = useAutoAnimate()
 
   const handleFileUpload = async (file: FileWithName) => {
@@ -25,7 +25,7 @@ export const FileList = () => {
       updatedAt: new Date().toISOString()
     })
 
-    api.deals.dealsDetail(deal.id).then(deal => setDeal(deal))
+    await updateDeal()
   }
 
   // eslint-disable-next-line unicorn/consistent-function-scoping

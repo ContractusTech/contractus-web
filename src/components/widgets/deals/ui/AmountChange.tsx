@@ -18,7 +18,7 @@ import { CreateDealHeader } from './CreateDealHeader'
 
 export const AmountChange = () => {
   const [dialogOpened, setDialogOpened] = useState(false)
-  const { deal, setDeal } = useDealStore()
+  const { deal, updateDeal } = useDealStore()
   // @ts-ignore
   const [token, setToken] = useState<Tokens[number]>(deal?.token)
 
@@ -67,8 +67,8 @@ export const AmountChange = () => {
           token: { address: data.token?.address, code: data.token?.code }
         }
       })
-      const updatedDeal = await api.deals.dealsDetail(deal.id)
-      setDeal(updatedDeal)
+
+      await updateDeal()
 
       setDialogOpened(false)
     } catch (error) {

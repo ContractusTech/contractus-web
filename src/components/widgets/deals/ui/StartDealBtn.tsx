@@ -1,37 +1,24 @@
 import { toBytes } from 'viem'
-import {
-  getWalletClient,
-  prepareWriteContract,
-  waitForTransaction,
-  writeContract
-} from 'wagmi/actions'
+import { getWalletClient } from 'wagmi/actions'
 
 import { api } from '@/api/client'
 import { Tx } from '@/api/generated-api'
 import httpClient from '@/api/httpClient'
-import wbnbAbi from '@/app/constants/wbnbAbi'
-import MESSAGES from '@/app/constants/web3'
+import { ERRORS } from '@/app/constants/errors'
 import { useDealStore } from '@/app/store/deal-store'
+import { useApprove } from '@/components/features/approve'
 import { Button } from '@/components/ui/button'
 
 export const StartDealBtn = () => {
-  const { deal } = useDealStore()
+  const { deal, updateDeal } = useDealStore()
+  const { approve } = useApprove()
 
   const handleSign = async () => {
     if (!deal) {
-      throw new Error('No deal')
+      throw new Error(ERRORS.DEAL_EXISTS)
     }
 
-    // const { request } = await prepareWriteContract({
-    //   abi: wbnbAbi,
-    //   address: MESSAGES.WBNB_ADDRESS,
-    //   functionName: 'approve',
-    //   args: [MESSAGES.CONTRACTOR_ADDRESS, BigInt(10_000_000)]
-    // })
-
-    // const { hash } = await writeContract(request)
-
-    // await waitForTransaction({ hash })
+    await approve()
 
     const { data: tx } = await httpClient<Tx>({
       url: `deals/${deal.id}/tx/DEAL_INIT?silent=0`,
@@ -55,6 +42,8 @@ export const StartDealBtn = () => {
         signature,
         transaction: tx.transaction
       })
+
+      await updateDeal()
     } else {
       throw new Error('Error on getting wallet client for sign transaction')
     }
