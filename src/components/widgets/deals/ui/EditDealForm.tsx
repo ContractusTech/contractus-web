@@ -12,11 +12,11 @@ import { CheckerEdit } from './CheckerEdit'
 import { CommentField } from './CommentField'
 import { DeadLineField } from './DeadLineField'
 import { DealInfo } from './DealInfo'
+import { DealStatusBadge } from './DealStatusBadge'
 import { FileList } from './FileList'
 import { FinishDealButton } from './FinishDealButton'
 import { PerformanceBond } from './performanceBond'
 import { RevokeButton } from './RevokeButton'
-import { RoleSignatureView } from './RoleSignatureView'
 import { StartDealBtn } from './StartDealBtn'
 
 dayjs.locale('en')
@@ -56,7 +56,7 @@ export const EditDealForm = () => {
           </div>
         )}
 
-        <RoleSignatureView />
+        <DealStatusBadge />
 
         {dealStore.dealActions?.actions.map(action => {
           switch (action) {

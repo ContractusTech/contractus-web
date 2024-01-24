@@ -1,4 +1,7 @@
+import { useEffect } from 'react'
+
 import { useDeals } from '@/api/modules/deals/hooks/useDeals'
+import { useUserStore } from '@/app/store/user-store'
 import { NextPageWithLayout } from '@/app/types'
 import { AddCircleIcon } from '@/assets/svg/AddCircleIcon'
 import { ArrowUpOutlineIcon } from '@/assets/svg/ArrowUpOutlineIcon'
@@ -18,7 +21,14 @@ import { CreateDealButton, SelectTokens } from '@/components/widgets/tokens'
 import LayoutDefault from '@/layouts/default'
 
 const IndexPage: NextPageWithLayout = () => {
+  const { connectedUser } = useUserStore()
   const { deals, refetch } = useDeals()
+
+  useEffect(() => {
+    if (connectedUser?.publicKey) {
+      refetch()
+    }
+  }, [connectedUser?.publicKey, refetch])
 
   return (
     <>
