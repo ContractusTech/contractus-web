@@ -62,10 +62,10 @@ export const CreateDealButton: FC<Props> = ({ onSuccess }) => {
       </DialogTrigger>
       <DialogContent className="w-full max-w-[600px] rounded-[10px] bg-[#070708] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
         <CreateDealHeader title="New deal" />
-        <div className="flex flex-col gap-[22px] px-[35px] pb-[30px] pt-[40px]">
+        <div className="flex flex-col gap-[22px] px-[35px] pb-[30px] pt-[40px] md:px-[15px] md:pb-[15px]">
           <h2 className="mb-4 text-lg font-semibold">Select your role</h2>
 
-          <div className="flex gap-[50px]">
+          <div className="flex space-x-[15px]">
             <RoleCard
               type="CLIENT"
               onClick={setCurrentRole}
@@ -78,13 +78,13 @@ export const CreateDealButton: FC<Props> = ({ onSuccess }) => {
             />
           </div>
 
-          <div className="flex items-center rounded-[13px] border-[1px] border-solid border-[#656975] px-[24px] py-[21px]">
+          <div className="flex items-center justify-between pb-24 pt-24">
             <div className="flex flex-col">
-              <span className="font-[600] text-[#fff]">
+              <span className="pb-4 font-[600] text-[#fff]">
                 Check by third party
               </span>
 
-              <span className="font-[500] text-[#656975]">
+              <span className="pr-16 text-sm font-[400] text-[#656975]">
                 The decision to complete the deal will be made by a third party.
               </span>
             </div>
@@ -97,10 +97,15 @@ export const CreateDealButton: FC<Props> = ({ onSuccess }) => {
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="font-[600] text-[#fff]">
-              Who will add the performance bond?
-            </span>
-
+            <div className="flex flex-col">
+              <span className="pb-4 text-base font-[500] text-[#fff]">
+                Who will add the performance bond?
+              </span>
+              <span className="pr-24 text-sm font-[400] text-[#656975]">
+                If you want to protect against unilateral termination <br />
+                of the deal, you can put up collateral.
+              </span>
+            </div>
             <Select
               list={PERFORMANCES_BOND}
               onChange={setPerformanceBondType}

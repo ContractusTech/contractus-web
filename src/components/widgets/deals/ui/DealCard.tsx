@@ -28,7 +28,7 @@ const DealCard: FC<Props> = ({ deal }) => {
 
   return (
     <div
-      className="flex min-h-[160px] cursor-pointer flex-col overflow-hidden rounded-[20px] bg-secondary p-12"
+      className="flex min-h-[160px] cursor-pointer flex-col overflow-hidden rounded-[20px] border border-solid border-[#262930] bg-secondary p-12 hover:bg-accent"
       onClick={handleDealClick}
     >
       <div>

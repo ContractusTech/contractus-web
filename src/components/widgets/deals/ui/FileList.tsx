@@ -47,10 +47,10 @@ export const FileList = () => {
   }
 
   return (
-    <div className="relative flex h-full w-full flex-col justify-between overflow-hidden  rounded-[13px] border-[1px] border-[#2A2E37] bg-[#15151A] ">
+    <div className="relative flex h-full w-full flex-col justify-between overflow-hidden  rounded-[19px] border-[1px] border-[#2A2E37] bg-secondary">
       <div className="flex flex-col p-[20px]">
         <div className="flex items-center gap-[8px] text-[12px] text-[#8b8f97]">
-          <span className="text-[22px] text-[#fff]">Files</span>
+          <span className="text-2xl text-[#fff]">Files</span>
         </div>
       </div>
 

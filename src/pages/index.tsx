@@ -27,7 +27,9 @@ const IndexPage: NextPageWithLayout = () => {
           <div className="mb-13">
             <h1 className="typo-label text-center">Estimate balance</h1>
           </div>
-          <h2 className="text-center text-[52px] leading-none">$54.00</h2>
+          <h2 className="text-center text-6xl font-light leading-none">
+            $54.00
+          </h2>
         </section>
 
         <section className="mx-auto mb-30 flex gap-13 md:flex-wrap md:justify-center">
@@ -45,24 +47,26 @@ const IndexPage: NextPageWithLayout = () => {
           </span>
         </section>
 
-        <section className="mb-16 w-full border-t-[1px] border-border">
+        <section className="mb-16 w-full border-t-[1px] border-[#262930] border-border">
           <div className="mb-6 flex items-center justify-between px-15 py-13">
             <h2 className="typo-label">TOKENS</h2>
             <SelectTokens />
           </div>
 
-          <div className="relative mb-8 rounded-[16px] bg-secondary py-18">
+          <div className="relative mb-8 rounded-[16px] border border-solid border-[#262930] py-18">
             <div>
-              <div className="border-b-[1.5px] border-solid border-border px-16 py-11 first-line:pt-0 first:pt-0 last:border-0 last:pb-0 only:py-0">
+              <div className="border-b-[1px] border-solid border-[#262930] border-border px-16 py-11 first-line:pt-0 first:pt-0 last:border-0 last:pb-0 only:py-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-x-12">
-                    <span className="leading-none">SOL</span>
-                    <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
+                    <span className="text-medium text-base leading-none">
+                      SOL
+                    </span>
+                    <span className="text-normal text-base leading-none text-muted-foreground ">
                       $19.00
                     </span>
                   </div>
                   <div>
-                    <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
+                    <span className="text-medium text-base leading-none text-muted-foreground ">
                       310.422
                     </span>
                   </div>
@@ -72,12 +76,12 @@ const IndexPage: NextPageWithLayout = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-x-12">
                     <span className="leading-none">wSOL</span>
-                    <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
+                    <span className=" text-medium text-base leading-none text-muted-foreground ">
                       $19.00
                     </span>
                   </div>
                   <div>
-                    <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
+                    <span className=" text-medium text-base leading-none text-muted-foreground ">
                       310.422
                     </span>
                   </div>
@@ -91,17 +95,17 @@ const IndexPage: NextPageWithLayout = () => {
             </div>
           </div>
 
-          <div className="rounded-[16px] bg-secondary py-18">
+          <div className="rounded-[16px] border border-[#262930] py-18 ">
             <div className="border-b-[1.5px] border-solid border-border px-16 py-11 first-line:pt-0 first:pt-0 last:border-0 last:pb-0 only:py-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-x-12">
-                  <span className="leading-none">CTUS</span>
-                  <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
+                  <span className="text-base leading-none">CTUS</span>
+                  <span className=" text-medium text-base leading-none text-muted-foreground ">
                     $19.00
                   </span>
                 </div>
                 <div>
-                  <span className=" text-medium text-[15px] leading-none text-muted-foreground ">
+                  <span className=" text-medium text-base leading-none text-muted-foreground ">
                     10 103
                   </span>
                 </div>
@@ -118,7 +122,7 @@ const IndexPage: NextPageWithLayout = () => {
           <div className="mb-20 flex items-center justify-between">
             <DropdownMenu>
               <DropdownMenuTrigger className="group">
-                <h2 className="flex items-center gap-x-8 text-[32px] font-medium leading-[1.2]">
+                <h2 className="flex items-center gap-x-8 text-2xl font-medium leading-[1.2]">
                   Latest
                   <ChevronDownIcon
                     className="relative top-[1px] h-16 w-16 transition duration-200 group-data-[state=open]:rotate-180"

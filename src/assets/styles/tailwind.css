@@ -82,7 +82,7 @@
 
 @layer components {
   .typo-label {
-    @apply text-[15px] font-semibold uppercase leading-none text-muted-foreground;
+    @apply text-base font-medium uppercase leading-none text-muted-foreground;
   }
 }
 

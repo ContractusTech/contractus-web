@@ -30,10 +30,10 @@ export const CheckerEdit = () => {
   }
 
   return (
-    <div className="flex h-full w-full justify-between  rounded-[13px] border-[1px] border-[#2A2E37] bg-[#15151A] p-[20px]">
+    <div className="flex h-full w-full justify-between  rounded-[19px] border-[1px] border-[#262930] bg-secondary p-[20px]">
       <div className="flex flex-col">
         <div className="flex items-center gap-[8px] text-[12px] text-[#8b8f97]">
-          <span className="text-[15px] font-[600] text-[#656975]">CHECKER</span>
+          <span className="text-sm font-medium text-[#656975]">CHECKER</span>
         </div>
         <span className="mt-[16px] text-[22px] font-[500]">
           {deal?.checkerPublicKey
@@ -42,10 +42,8 @@ export const CheckerEdit = () => {
         </span>
         {deal?.checkerAmount && (
           <div className="mt-[9px] flex items-end gap-[4px]">
-            <span className=" text-[22px] font-[500]">
-              {deal?.checkerAmount}
-            </span>
-            <span className=" mb-[2px] text-[15px] font-[600] text-[#656975]">
+            <span className="text-2xl font-[500]">{deal?.checkerAmount}</span>
+            <span className=" mb-[2px] text-base font-[600] text-[#656975]">
               {
                 /* @ts-ignore */
                 tokens?.find(token => token.address === deal?.checkerToken)
@@ -55,7 +53,7 @@ export const CheckerEdit = () => {
           </div>
         )}
 
-        <span className="text-[13px] font-[500] text-[#656975]">
+        <span className="mt-[16px] text-sm font-[400] text-[#656975]">
           Perform the work specified in the contract
         </span>
       </div>
