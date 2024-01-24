@@ -57,7 +57,7 @@ export const TokensList: FC<Props> = ({ tokens, onSelect }) => {
                 >
                   <div className="flex items-center gap-x-24">
                     {token.logoURL && (
-                      <div className="flex h-32 w-32 items-center justify-center">
+                      <div className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-[6px]">
                         <Image
                           src={token.logoURL}
                           width={32}

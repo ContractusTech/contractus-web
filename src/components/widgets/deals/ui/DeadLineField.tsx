@@ -12,21 +12,19 @@ export const DeadLineField = () => {
   }
 
   return (
-    <div className="relative flex h-full w-full justify-between  rounded-[13px] border-[1px] border-[#2A2E37] bg-[#15151A] p-[20px]">
+    <div className="relative flex h-full w-full justify-between  rounded-[19px] border-[1px] border-[#262930] bg-secondary p-[20px]">
       <div className="flex flex-col">
-        <div className="flex items-center gap-[8px] text-[12px] text-[#8b8f97]">
-          <span className="text-[15px] font-[600] text-[#656975]">
-            DEADLINE
-          </span>
+        <div className="flex items-center gap-[8px]">
+          <span className="text-sm font-medium text-[#656975]">DEADLINE</span>
         </div>
 
-        <div className="flex items-end gap-[8px]">
-          <span className="text-[29px] font-[500]">
+        <div className="mt-[16px] flex items-end gap-[8px] ">
+          <span className="text-2xl font-[500]">
             {dayjs(deal.deadline).format('DD MMMM YYYY')}
           </span>
         </div>
 
-        <span className="text-[13px] font-[500] text-[#656975]">
+        <span className="mt-[16px] text-sm font-[400] text-[#656975]">
           If the counter parties do not agree before the appointed date, the
           contract is terminated and the funds are returned to all parties.
         </span>

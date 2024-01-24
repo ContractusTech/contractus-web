@@ -20,13 +20,13 @@ const StatisticsListItem: FC<Props> = ({ amount, type }) => {
   const itemTitle = TITLES[type]
 
   return (
-    <div className="flex min-w-[142px] select-none flex-col gap-y-13 rounded-[15px] bg-secondary p-12">
-      <p className="cursor-default text-[12px] leading-none text-secondary-text">
+    <div className="flex min-w-[142px] select-none flex-col gap-y-13 rounded-[19px] border border-solid border-[#262930] p-12">
+      <p className="cursor-default text-sm leading-none text-secondary-text">
         {itemTitle}
       </p>
       <p
         className={cn(
-          'cursor-default text-[15px] leading-none',
+          'cursor-default text-2xl leading-none',
           amount > 0 && 'text-dark-base-green'
         )}
       >

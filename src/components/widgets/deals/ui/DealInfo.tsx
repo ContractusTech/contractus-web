@@ -49,17 +49,15 @@ export const DealInfo = () => {
 
   return (
     <div className="relative flex w-full flex-col items-center gap-[13px]">
-      <div className="lex h-full w-full flex-col items-center rounded-[13px] border-[1px] border-[#2A2E37] bg-[#15151A] ">
+      <div className="lex h-full w-full flex-col items-center rounded-[19px] border-[1px] border-[#262930] bg-secondary ">
         <div className=" flex h-full w-full flex-col p-[20px] ">
           <div className="flex items-center gap-[8px] ">
-            <span className="text-[15px] font-[600] text-[#656975]">
-              CLIENT
-            </span>
+            <span className="text-sm font-medium text-[#656975]">CLIENT</span>
             {iClient && <Tag>You</Tag>}
             {deal.ownerRole === 'CLIENT' && <Tag>Owner</Tag>}
           </div>
 
-          <span className="mt-[9px] text-[22px] font-[500]">
+          <span className="mt-[9px] text-2xl font-[500]">
             {deal.ownerRole === 'CLIENT'
               ? transformString(deal.ownerPublicKey)
               : transformString(deal.contractorPublicKey ?? '')}
@@ -80,17 +78,17 @@ export const DealInfo = () => {
           )}
         </div>
 
-        <div className="relative flex h-full w-full justify-between  border-t-[1px] border-t-[#2A2E37] p-[20px] ">
+        <div className="relative flex h-full w-full justify-between  border-t-[1px] border-t-[#262930] p-[20px] ">
           <div className="flex flex-col ">
-            <span className=" text-[15px] font-[600] text-[#656975]">
+            <span className="text-sm font-medium text-[#656975]">
               AMOUNT OF DEAL
             </span>
             <div className="mt-[9px] flex items-end gap-[4px]">
-              <span className=" text-[22px] font-[500]">
+              <span className="text-2xl font-[500]">
                 {/* @ts-ignore */}
                 {formatUnits(BigInt(deal.amount), deal.token?.decimals)}
               </span>
-              <span className=" mb-[2px] text-[15px] font-[600] text-[#656975]">
+              <span className=" mb-[2px] text-base font-[600] text-[#656975]">
                 {deal.token?.code}
               </span>
             </div>
@@ -102,24 +100,22 @@ export const DealInfo = () => {
         </div>
       </div>
 
-      <div className="relative flex h-full w-full justify-between  rounded-[13px] border-[1px] border-[#2A2E37] bg-[#15151A] p-[20px]">
+      <div className="relative flex h-full w-full justify-between  rounded-[19px] border-[1px] border-[#262930] bg-secondary p-[20px]">
         <div className="flex flex-col">
-          <div className="flex items-center gap-[8px] text-[12px] text-[#8b8f97]">
-            <span className="text-[15px] font-[600] text-[#656975]">
-              EXECUTOR
-            </span>
+          <div className="flex items-center gap-[8px]">
+            <span className="text-sm font-medium text-[#656975]">EXECUTOR</span>
 
             {iExecutor && <Tag>You</Tag>}
             {deal.ownerRole === 'EXECUTOR' && <Tag>Owner</Tag>}
           </div>
-          <span className="mt-[16px] text-[22px] font-[500]">
+          <span className="mt-[16px] text-2xl font-[500]">
             {iExecutor
               ? transformString(deal.ownerPublicKey)
               : deal.contractorPublicKey
               ? transformString(deal.contractorPublicKey)
               : 'Empty'}
           </span>
-          <span className="text-[13px] font-[500] text-[#656975]">
+          <span className="mt-[16px] text-sm font-[400] text-[#656975]">
             Performs the work specified in the contract.
           </span>
         </div>
