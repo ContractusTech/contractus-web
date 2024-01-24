@@ -13,9 +13,11 @@ export const RoleSignatureView = () => {
 
   return (
     <div
-      className={`grid grid-cols-[1fr_1px_1fr${
-        withChecker ? '_1px_1fr' : ''
-      }] rounded-[13px] border-[1px] border-[#2A2E37]`}
+      className={`grid ${
+        withChecker
+          ? 'grid-cols-[1fr_1px_1fr_1px_1fr]'
+          : 'grid-cols-[1fr_1px_1fr]'
+      }  rounded-[13px] border-[1px] border-[#2A2E37]`}
     >
       <div className="flex flex-col items-center justify-self-center p-[13px]">
         <UserIcon />
