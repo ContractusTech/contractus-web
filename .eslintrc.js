@@ -40,6 +40,7 @@ module.exports = {
     'unicorn/no-null': 'off',
     'unicorn/no-useless-undefined': 'off',
     'unicorn/no-array-reduce': 'off',
+    'unicorn/consistent-function-scoping': 'off',
 
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': [

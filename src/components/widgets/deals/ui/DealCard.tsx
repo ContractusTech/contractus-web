@@ -1,6 +1,7 @@
 import { clsx } from 'clsx'
 import { useRouter } from 'next/navigation'
 import { FC } from 'react'
+import { formatUnits } from 'viem'
 
 import { Deal } from '@/api/generated-api'
 import { PAGES } from '@/app/constants/pages'
@@ -27,7 +28,7 @@ const DealCard: FC<Props> = ({ deal }) => {
 
   return (
     <div
-      className="flex min-h-[160px] cursor-pointer flex-col rounded-[20px] bg-secondary p-12"
+      className="flex min-h-[160px] cursor-pointer flex-col overflow-hidden rounded-[20px] bg-secondary p-12"
       onClick={handleDealClick}
     >
       <div>
@@ -45,7 +46,9 @@ const DealCard: FC<Props> = ({ deal }) => {
           </p>
         </div>
         <div className="mb-10 flex items-end gap-x-5">
-          <p className="text-[30px] leading-none">{deal.amount}</p>
+          <p className="text-[30px] leading-none">
+            {formatUnits(BigInt(deal.amount), 18)}
+          </p>
           <div className="flex flex-col justify-end gap-y-3">
             {isStatusNew && <ArrowLeftBottomCorner />}
             <p className="text-[13px] font-semibold uppercase leading-none text-secondary-text">

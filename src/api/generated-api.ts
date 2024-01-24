@@ -18,6 +18,7 @@ export interface Success {
 }
 
 export interface Error {
+  /** Equal to HTTP status */
   code?: number
   error?: string
 }
@@ -315,8 +316,10 @@ export interface UpdateDeal {
 }
 
 export interface DealActions {
-  signed?: boolean
-  actions: 'SIGN' | 'CANCEL' | 'FINISH' | 'CANCEL_SIGN'
+  signedByOwner?: boolean
+  signedByContractor?: boolean
+  signedByChecker?: boolean
+  actions: ('SIGN' | 'CANCEL' | 'FINISH' | 'CANCEL_SIGN' | 'REVOKE')[]
 }
 
 export interface DealFee {
@@ -365,9 +368,9 @@ export interface Meta {
 }
 
 export interface TxUpdate {
-  /** Base64 signed transaction */
+  /** Transaction */
   transaction: string
-  /** Base64 string signature */
+  /** TX Signature */
   signature: string
 }
 
@@ -424,6 +427,12 @@ export type TxList = {
   /** @format date-time */
   sendedAt?: string
 }[]
+
+export interface TxStatusCheck {
+  status: 'SUCCESS' | 'ERROR' | 'PEDDING'
+  /** Transaction from RPC as is. */
+  data?: object
+}
 
 export interface Auth {
   message: string
@@ -692,7 +701,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title Contractus API
- * @version 0.1.1
+ * @version 0.2.1
  * @baseUrl https://dev.contractus.tech/api/v1
  *
  * The REST API for Contractus service
@@ -1167,11 +1176,17 @@ export class ContractusAPI<
      * @request POST:/deals/{id}/participate
      * @secure
      */
-    participateCreate: (id: string, params: RequestParams = {}) =>
-      this.request<DealParticipate, Error>({
+    participateCreate: (
+      id: string,
+      data: DealParticipate,
+      params: RequestParams = {}
+    ) =>
+      this.request<Deal, Error>({
         path: `/deals/${id}/participate`,
         method: 'POST',
+        body: data,
         secure: true,
+        type: ContentType.Json,
         format: 'json',
         ...params
       }),
@@ -1186,7 +1201,7 @@ export class ContractusAPI<
      * @secure
      */
     participateDelete: (id: string, params: RequestParams = {}) =>
-      this.request<Id, Error>({
+      this.request<Deal, Error>({
         path: `/deals/${id}/participate`,
         method: 'DELETE',
         secure: true,
@@ -1331,11 +1346,18 @@ export class ContractusAPI<
      * @request POST:/deals/{id}/tx/{type}/sign
      * @secure
      */
-    txSignCreate: (id: string, type: string, params: RequestParams = {}) =>
-      this.request<TxUpdate, Error>({
+    txSignCreate: (
+      id: string,
+      type: string,
+      data: TxUpdate,
+      params: RequestParams = {}
+    ) =>
+      this.request<Tx, Error>({
         path: `/deals/${id}/tx/${type}/sign`,
         method: 'POST',
+        body: data,
         secure: true,
+        type: ContentType.Json,
         format: 'json',
         ...params
       }),
@@ -1459,9 +1481,9 @@ export class ContractusAPI<
     wrapSignCreate: (
       data: {
         id: string
-        /** Base64 signed transaction */
+        /** Transaction */
         transaction: string
-        /** Base64 string signature */
+        /** Signature */
         signature: string
       },
       params: RequestParams = {}
@@ -1537,9 +1559,9 @@ export class ContractusAPI<
     transferSignCreate: (
       data: {
         id: string
-        /** Base64 signed transaction */
+        /** Transaction */
         transaction: string
-        /** Base64 string signature */
+        /** Signature */
         signature: string
       },
       params: RequestParams = {}
@@ -1626,6 +1648,24 @@ export class ContractusAPI<
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Transactions
+     * @name ExternalDetail
+     * @summary Get transaction by hash (EVM) and signature (Solana)
+     * @request GET:/tx/external/{tx}
+     * @secure
+     */
+    externalDetail: (tx: string, params: RequestParams = {}) =>
+      this.request<TxStatusCheck, Error>({
+        path: `/tx/external/${tx}`,
+        method: 'GET',
+        secure: true,
         format: 'json',
         ...params
       })

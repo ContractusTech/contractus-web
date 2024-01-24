@@ -1,7 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { getCookie } from 'cookies-next'
-// import Cookies from 'js-cookie'
-import { bsc } from 'viem/chains'
+import { bscTestnet } from 'viem/chains'
 import { Connector, useAccount, useConnect, useDisconnect } from 'wagmi'
 import { getAccount, signMessage } from 'wagmi/actions'
 
@@ -21,8 +20,9 @@ export const useEvmConnect = () => {
   const { disconnectAsync } = useDisconnect()
   const { setConnectedUser, logout } = useUserStore()
   const { isConnected } = useAccount()
+
   const handleConnect = async (connector: Connector) => {
-    !isConnected && (await connectAsync({ connector, chainId: bsc.id }))
+    !isConnected && (await connectAsync({ connector, chainId: bscTestnet.id }))
     const signature = await signMessage({ message: MESSAGES.SIGN_MESSAGE })
     const account = getAccount()
     const deviceId = localStorage.getItem(LOCAL_STORAGE.DEVICE_ID)

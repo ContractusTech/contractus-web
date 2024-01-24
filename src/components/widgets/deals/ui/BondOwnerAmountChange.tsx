@@ -19,7 +19,7 @@ export const BondOwnerAmountChange = () => {
   const [dialogOpened, setDialogOpened] = useState(false)
   const [token, setToken] = useState<Tokens[number]>()
 
-  const { deal, setDeal } = useDealStore()
+  const { deal, updateDeal } = useDealStore()
 
   const { register, handleSubmit, watch, setValue } = useForm<Deal>({
     defaultValues: {
@@ -65,8 +65,7 @@ export const BondOwnerAmountChange = () => {
         })
       }
 
-      const updatedDeal = await api.deals.dealsDetail(deal.id)
-      setDeal(updatedDeal)
+      await updateDeal()
 
       setDialogOpened(false)
     } catch (error) {
