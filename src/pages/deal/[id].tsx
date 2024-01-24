@@ -27,15 +27,15 @@ const DealPage: NextPageWithLayout = () => {
     })
   }, [dealId])
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     dealStore.updateDeal()
-  //   }, 10_000)
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      dealStore.updateDeal()
+    }, 10_000)
 
-  //   return () => {
-  //     clearInterval(intervalId)
-  //   }
-  // }, [dealId])
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [dealId])
 
   if (dealStore.loading) {
     return null

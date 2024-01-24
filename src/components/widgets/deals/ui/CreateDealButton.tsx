@@ -1,6 +1,8 @@
+import { useRouter } from 'next/navigation'
 import { FC, useState } from 'react'
 
 import { api } from '@/api/client'
+import { PAGES } from '@/app/constants/pages'
 import { PerformanceBondType, Role } from '@/app/types'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
@@ -40,16 +42,21 @@ export const CreateDealButton: FC<Props> = ({ onSuccess }) => {
   const [performanceBondType, setPerformanceBondType] = useState<string>('NONE')
   const [completionCheckType, setCompletionCheckType] = useState<string>('NONE')
 
+  const router = useRouter()
+
   const handleCreate = async () => {
     try {
-      await api.deals.dealsCreate({
+      const newDeal = await api.deals.dealsCreate({
         completionCheckType: completionCheckType as 'NONE' | 'CHECKER',
         role: currentRole,
         performanceBondType: performanceBondType as PerformanceBondType
       })
 
-      setOpen(false)
-      onSuccess && onSuccess()
+      if (newDeal) {
+        setOpen(false)
+        router.push(PAGES.DEAL((newDeal as any).id))
+        onSuccess && onSuccess()
+      }
     } catch (error) {
       console.log({ error })
     }

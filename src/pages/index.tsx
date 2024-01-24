@@ -1,3 +1,4 @@
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useEffect } from 'react'
 
 import { useDeals } from '@/api/modules/deals/hooks/useDeals'
@@ -23,10 +24,23 @@ import LayoutDefault from '@/layouts/default'
 const IndexPage: NextPageWithLayout = () => {
   const { connectedUser } = useUserStore()
   const { deals, refetch } = useDeals()
+  const [parent] = useAutoAnimate()
 
   useEffect(() => {
     if (connectedUser?.publicKey) {
       refetch()
+    }
+  }, [connectedUser?.publicKey, refetch])
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (connectedUser?.publicKey) {
+        refetch()
+      }
+    }, 10_000)
+
+    return () => {
+      clearInterval(intervalId)
     }
   }, [connectedUser?.publicKey, refetch])
 
@@ -150,7 +164,7 @@ const IndexPage: NextPageWithLayout = () => {
               <CreateDealButton onSuccess={refetch} />
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-8 md:grid-cols-2">
+          <div className="grid grid-cols-3 gap-8 md:grid-cols-2" ref={parent}>
             {deals && deals.map(deal => <DealCard deal={deal} key={deal.id} />)}
 
             {deals && deals.length === 0 && <EmptyPlaceholder />}

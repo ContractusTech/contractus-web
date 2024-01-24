@@ -1,3 +1,5 @@
+import { formatUnits } from 'viem'
+
 import { Deal } from '@/api/generated-api'
 import httpClient from '@/api/httpClient'
 import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
@@ -42,12 +44,20 @@ export const CheckerEdit = () => {
         </span>
         {deal?.checkerAmount && (
           <div className="mt-[9px] flex items-end gap-[4px]">
-            <span className="text-2xl font-[500]">{deal?.checkerAmount}</span>
+            <span className="text-2xl font-[500]">
+              {formatUnits(
+                BigInt(deal?.checkerAmount ?? 0),
+                tokens?.find(
+                  token => token.address === deal.checkerToken?.address
+                )?.decimals ?? 0
+              )}
+            </span>
             <span className=" mb-[2px] text-base font-[600] text-[#656975]">
               {
                 /* @ts-ignore */
-                tokens?.find(token => token.address === deal?.checkerToken)
-                  ?.code
+                tokens?.find(
+                  token => token.address === deal?.checkerToken?.address
+                )?.code
               }
             </span>
           </div>

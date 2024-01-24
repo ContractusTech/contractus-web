@@ -2,9 +2,11 @@ import * as Form from '@radix-ui/react-form'
 import { Menu } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { formatUnits, parseUnits } from 'viem'
 
 import { api } from '@/api/client'
 import { Deal, Tokens } from '@/api/generated-api'
+import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
 import { useDealStore } from '@/app/store/deal-store'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
@@ -18,12 +20,16 @@ import { CreateDealHeader } from './CreateDealHeader'
 export const CheckerAmountChange = () => {
   const [dialogOpened, setDialogOpened] = useState(false)
   const [token, setToken] = useState<Tokens[number]>()
+  const { tokens, isTokensLoading } = useTokens()
 
   const { deal, updateDeal } = useDealStore()
 
   const { register, handleSubmit, watch, setValue } = useForm<Deal>({
     defaultValues: {
-      checkerAmount: deal?.checkerAmount,
+      checkerAmount: formatUnits(
+        BigInt(deal?.checkerAmount ?? 0),
+        (deal?.checkerToken as Tokens[number])?.decimals ?? 0
+      ),
       checkerToken: deal?.checkerToken
     }
   })
@@ -55,13 +61,24 @@ export const CheckerAmountChange = () => {
         throw new Error('Invalid token')
       }
 
-      if (data.checkerAmount) {
-        await api.deals.dealsCreate2(deal.id, {
-          checkerAmount: {
-            value: data.checkerAmount,
-            token: data.checkerToken
-          }
+      if (data.checkerAmount && !isTokensLoading) {
+        const neededToken = tokens?.find(token => {
+          return token.address === data.checkerToken?.address
         })
+
+        if (neededToken) {
+          const parsedAmount = parseUnits(
+            data.checkerAmount,
+            neededToken?.decimals
+          )
+
+          await api.deals.dealsCreate2(deal.id, {
+            checkerAmount: {
+              value: String(parsedAmount),
+              token: data.checkerToken
+            }
+          })
+        }
       }
 
       await updateDeal()
