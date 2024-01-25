@@ -61,23 +61,23 @@ export const EditDealForm = () => {
         {dealStore.dealActions?.actions.map(action => {
           switch (action) {
             case 'SIGN': {
-              return <StartDealBtn />
+              return <StartDealBtn key={action} />
             }
 
             case 'CANCEL': {
-              return <CancelButton />
+              return <CancelButton key={action} />
             }
 
             case 'FINISH': {
-              return <FinishDealButton />
+              return <FinishDealButton key={action} />
             }
 
             case 'CANCEL_SIGN': {
-              return <CancelSignButton />
+              return <CancelSignButton key={action} />
             }
 
             case 'REVOKE': {
-              return <RevokeButton />
+              return <RevokeButton key={action} />
             }
           }
         })}
