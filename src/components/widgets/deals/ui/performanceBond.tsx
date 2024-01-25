@@ -1,9 +1,63 @@
+import { formatUnits } from 'viem'
+
+import { Deal } from '@/api/generated-api'
+import { ERRORS } from '@/app/constants/errors'
 import { useDealStore } from '@/app/store/deal-store'
 
+import { BondContractorAmountChange } from './BondContractorAmountChange'
 import { BondOwnerAmountChange } from './BondOwnerAmountChange'
 
 export const PerformanceBond = () => {
   const { deal } = useDealStore()
+
+  const getTokenLabel = (role: Deal['ownerRole']) => {
+    if (!deal) {
+      throw new Error(ERRORS.DEAL_EXISTS)
+    }
+
+    const token =
+      deal.ownerRole === role
+        ? // @ts-ignore
+          deal.ownerBondToken
+        : // @ts-ignore
+          deal.contractorBondToken
+
+    if (token === undefined || token === null) {
+      return ''
+    }
+
+    return token?.code
+  }
+
+  const getAmountValue = (role: Deal['ownerRole']) => {
+    if (!deal) {
+      throw new Error(ERRORS.DEAL_EXISTS)
+    }
+
+    const amount =
+      deal.ownerRole === role ? deal.ownerBondAmount : deal.contractorBondAmount
+
+    if (amount === null || amount === undefined) {
+      return 'Empty'
+    }
+
+    const parsedAmount = BigInt(amount)
+
+    const token =
+      deal.ownerRole === role
+        ? // @ts-ignore
+          deal.ownerBondToken
+        : // @ts-ignore
+          deal.contractorBondToken
+
+    // @ts-ignore
+    if (!token?.decimals) {
+      throw new Error('Error on decimals parsing')
+    }
+
+    // @ts-ignore
+    return formatUnits(parsedAmount, token.decimals)
+  }
 
   return (
     <>
@@ -26,12 +80,10 @@ export const PerformanceBond = () => {
 
             <div className="flex items-end gap-[8px]">
               <span className="text-[29px] font-[500]">
-                {(deal.ownerRole === 'EXECUTOR'
-                  ? deal.ownerBondAmount
-                  : deal.contractorBondAmount) ?? 'Empty'}
+                {getAmountValue('EXECUTOR')}
               </span>
               <span className="mb-[9px] text-base font-[600] text-[#656975]">
-                WBNB
+                {getTokenLabel('EXECUTOR')}
               </span>
             </div>
 
@@ -44,7 +96,7 @@ export const PerformanceBond = () => {
           {deal.ownerRole === 'EXECUTOR' ? (
             <BondOwnerAmountChange />
           ) : (
-            <BondOwnerAmountChange />
+            <BondContractorAmountChange />
           )}
         </div>
       )}
@@ -59,11 +111,11 @@ export const PerformanceBond = () => {
 
             <div className="flex items-end gap-[8px]">
               <span className="text-[29px] font-[500]">
-                {(deal.ownerRole === 'CLIENT'
-                  ? deal.ownerBondAmount
-                  : deal.contractorBondAmount) ?? 'Empty'}
+                {getAmountValue('CLIENT')}
               </span>
-              <span className="mb-[9px] text-[15px] text-[#656975]">WBNB</span>
+              <span className="mb-[9px] text-[15px] text-[#656975]">
+                {getTokenLabel('CLIENT')}
+              </span>
             </div>
 
             <span className="mt-[16px] text-sm font-[400] text-[#656975]">
@@ -75,7 +127,7 @@ export const PerformanceBond = () => {
           {deal.ownerRole === 'CLIENT' ? (
             <BondOwnerAmountChange />
           ) : (
-            <BondOwnerAmountChange />
+            <BondContractorAmountChange />
           )}
         </div>
       )}

@@ -30,7 +30,7 @@ export const CheckerAmountChange = () => {
         BigInt(deal?.checkerAmount ?? 0),
         (deal?.checkerToken as Tokens[number])?.decimals ?? 0
       ),
-      checkerToken: deal?.checkerToken
+      checkerToken: deal?.checkerToken ?? tokens?.at(0)
     }
   })
 
@@ -50,6 +50,12 @@ export const CheckerAmountChange = () => {
       })
     }
   }, [deal, setValue])
+
+  useEffect(() => {
+    if (!deal?.checkerToken && tokens) {
+      handleTokenChange(tokens[0])
+    }
+  }, [deal?.checkerToken, tokens])
 
   const handleAmountSettingsSave = handleSubmit(async data => {
     try {

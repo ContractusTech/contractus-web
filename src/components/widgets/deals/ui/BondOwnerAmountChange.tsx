@@ -2,9 +2,11 @@ import * as Form from '@radix-ui/react-form'
 import { Menu } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { formatUnits, parseUnits } from 'viem'
 
 import { api } from '@/api/client'
 import { Deal, Tokens } from '@/api/generated-api'
+import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
 import { useDealStore } from '@/app/store/deal-store'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
@@ -18,32 +20,45 @@ import { CreateDealHeader } from './CreateDealHeader'
 export const BondOwnerAmountChange = () => {
   const [dialogOpened, setDialogOpened] = useState(false)
   const [token, setToken] = useState<Tokens[number]>()
+  const { tokens } = useTokens()
 
   const { deal, updateDeal } = useDealStore()
 
   const { register, handleSubmit, watch, setValue } = useForm<Deal>({
     defaultValues: {
-      ownerBondAmount: deal?.ownerBondAmount,
+      ownerBondAmount: formatUnits(
+        BigInt(deal?.ownerBondAmount ?? 0),
+        (deal?.ownerBondToken as Tokens[number]).decimals ?? 0
+      ),
       ownerBondToken: deal?.ownerBondToken
     }
   })
 
   const amountValue = watch('ownerBondAmount')
-  const tokenlabel = watch('ownerBondToken.address')
+  const tokenlabel = watch('ownerBondToken.code')
 
   function handleTokenChange(token: Tokens[number]) {
     setToken(token)
-    setValue('ownerBondToken', { address: token.address, code: token.code })
+    setValue('ownerBondToken', {
+      address: token.address,
+      code: token.code
+    })
   }
 
   useEffect(() => {
-    if (deal?.checkerToken) {
+    if (deal?.ownerBondToken) {
       setValue('ownerBondToken', {
-        address: deal.checkerToken.address,
-        code: deal.checkerToken.code
+        address: deal.ownerBondToken.address,
+        code: deal.ownerBondToken.code
       })
     }
   }, [deal, setValue])
+
+  useEffect(() => {
+    if (!deal?.ownerBondToken && tokens) {
+      handleTokenChange(tokens[0])
+    }
+  }, [deal?.ownerBondToken, tokens])
 
   const handleAmountSettingsSave = handleSubmit(async data => {
     try {
@@ -51,19 +66,21 @@ export const BondOwnerAmountChange = () => {
         throw new Error('No deal')
       }
 
-      console.log(data)
       if (!data.ownerBondAmount) {
         throw new Error('Invalid token')
       }
 
-      if (data.ownerBondAmount) {
-        await api.deals.dealsCreate2(deal.id, {
-          ownerBondAmount: {
-            value: data.ownerBondAmount,
-            token: data.ownerBondToken
-          }
-        })
-      }
+      await api.deals.dealsCreate2(deal.id, {
+        ownerBondAmount: {
+          value: parseUnits(
+            data.ownerBondAmount,
+            tokens?.find(
+              token => token.address === data.ownerBondToken?.address
+            )?.decimals ?? 0
+          ).toString(),
+          token: data.ownerBondToken
+        }
+      })
 
       await updateDeal()
 
@@ -135,4 +152,3 @@ export const BondOwnerAmountChange = () => {
     </Dialog>
   )
 }
-2

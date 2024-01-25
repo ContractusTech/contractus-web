@@ -2,9 +2,11 @@ import * as Form from '@radix-ui/react-form'
 import { Menu } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { formatUnits, parseUnits } from 'viem'
 
 import { api } from '@/api/client'
 import { Deal, Tokens } from '@/api/generated-api'
+import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
 import { useDealStore } from '@/app/store/deal-store'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
@@ -15,16 +17,19 @@ import Tag from '@/components/ui/tag'
 import { SelectTokens } from '../../tokens'
 import { CreateDealHeader } from './CreateDealHeader'
 
-export const BondOwnerAmountChange = () => {
+export const BondContractorAmountChange = () => {
   const [dialogOpened, setDialogOpened] = useState(false)
   const [token, setToken] = useState<Tokens[number]>()
+  const { tokens } = useTokens()
 
   const { deal, updateDeal } = useDealStore()
 
   const { register, handleSubmit, watch, setValue } = useForm<Deal>({
     defaultValues: {
-      contractorBondAmount: deal?.contractorBondAmount,
-      contractorBondToken: deal?.contractorBondToken
+      contractorBondAmount: formatUnits(
+        BigInt(deal?.contractorBondAmount ?? 0),
+        (deal?.contractorBondToken as Tokens[number]).decimals ?? 0
+      )
     }
   })
 
@@ -40,13 +45,19 @@ export const BondOwnerAmountChange = () => {
   }
 
   useEffect(() => {
-    if (deal?.checkerToken) {
+    if (deal?.contractorBondToken) {
       setValue('contractorBondToken', {
-        address: deal.checkerToken.address,
-        code: deal.checkerToken.code
+        address: deal.contractorBondToken.address,
+        code: deal.contractorBondToken.code
       })
     }
   }, [deal, setValue])
+
+  useEffect(() => {
+    if (!deal?.contractorBondToken && tokens) {
+      handleTokenChange(tokens[0])
+    }
+  }, [deal?.contractorBondToken, tokens])
 
   const handleAmountSettingsSave = handleSubmit(async data => {
     try {
@@ -60,8 +71,13 @@ export const BondOwnerAmountChange = () => {
 
       if (data.contractorBondAmount) {
         await api.deals.dealsCreate2(deal.id, {
-          ownerBondAmount: {
-            value: data.contractorBondAmount,
+          contractorBondAmount: {
+            value: parseUnits(
+              data.contractorBondAmount,
+              tokens?.find(
+                token => token.address === data.contractorBondToken?.address
+              )?.decimals ?? 0
+            ).toString(),
             token: data.contractorBondToken
           }
         })
@@ -85,7 +101,7 @@ export const BondOwnerAmountChange = () => {
 
         <Form.Root className="flex flex-col gap-[20px] py-[18px]">
           <Input
-            register={register('ownerBondAmount')}
+            register={register('contractorBondAmount')}
             type="number"
             name="amount"
             rightSlot={
@@ -137,4 +153,3 @@ export const BondOwnerAmountChange = () => {
     </Dialog>
   )
 }
-2

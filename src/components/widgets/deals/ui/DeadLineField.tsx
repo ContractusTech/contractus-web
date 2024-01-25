@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 
 import { useDealStore } from '@/app/store/deal-store'
 
-import { EditDeadline } from './editDeadline'
+import { EditDeadline } from './EditDeadline'
 
 export const DeadLineField = () => {
   const { deal } = useDealStore()
