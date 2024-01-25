@@ -8,7 +8,7 @@ import { FileUpload } from '@/components/ui/fileUpload'
 
 type FileWithName = UploadedFile & { name: string; size: number }
 
-export const FileList = () => {
+export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
   const { deal, setDeal, updateDeal } = useDealStore()
   const [parent] = useAutoAnimate()
 
@@ -18,8 +18,8 @@ export const FileList = () => {
     }
 
     const oldFiles = deal.meta?.files ?? []
-    await api.deals.metaCreate(deal.id, {
-      meta: {
+    await api.deals[type === 'meta' ? 'metaCreate' : 'resultsCreate'](deal.id, {
+      [type]: {
         files: [...oldFiles, { ...file, encrypted: false }]
       },
       updatedAt: new Date().toISOString()
@@ -36,8 +36,8 @@ export const FileList = () => {
 
     const oldFiles = deal.meta?.files ?? []
 
-    await api.deals.metaCreate(deal.id, {
-      meta: {
+    await api.deals[type === 'meta' ? 'metaCreate' : 'resultsCreate'](deal.id, {
+      [type]: {
         files: oldFiles.filter(file => file.url !== url)
       },
       updatedAt: new Date().toISOString()

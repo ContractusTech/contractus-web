@@ -46,13 +46,13 @@ export const EditDealForm = () => {
           <div className="flex flex-col gap-[13px]">
             <span className="text-[29px] text-[#D5D9E0]">Result</span>
             <CommentField />
-            <FileList />
+            <FileList type="meta" />
           </div>
         ) : (
           <div className="flex flex-col gap-[13px]">
             <span className="text-[29px] text-[#D5D9E0]">Details</span>
             <CommentField />
-            <FileList />
+            <FileList type="result" />
           </div>
         )}
 

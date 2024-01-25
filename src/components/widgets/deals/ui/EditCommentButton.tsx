@@ -16,7 +16,7 @@ export const EditCommentButton = () => {
   const [dialogOpened, setDialogOpened] = useState(false)
 
   const { register, handleSubmit } = useForm<Deal>({
-    defaultValues: { meta: { content: { text: deal?.meta?.content?.text } } }
+    defaultValues: { result: { content: { text: deal?.meta?.content?.text } } }
   })
 
   const handleSaveComment = handleSubmit(data => {
@@ -25,9 +25,9 @@ export const EditCommentButton = () => {
         throw new Error('No deal')
       }
       if (data.meta?.content) {
-        api.deals.metaCreate(deal.id, {
+        api.deals.resultsCreate(deal.id, {
           updatedAt: new Date().toISOString(),
-          meta: {
+          result: {
             content: {
               text: data.meta?.content?.text,
               md5: CryptoJS.MD5(data.meta.content.text).toString()
