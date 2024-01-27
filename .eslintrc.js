@@ -33,6 +33,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
+    'react-hooks/exhaustive-deps': 'off',
 
     'unicorn/prevent-abbreviations': 'off',
     'unicorn/filename-case': 'off',

@@ -10,8 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "api:codegen": "swagger-typescript-api --unwrap-response-data --axios -p https://dev.contractus.tech/api/swagger-ui/swagger.json -o ./src/api -n generated-api.ts --api-class-name ContractusAPI"
+    "lint:fix": "next lint --fix"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",

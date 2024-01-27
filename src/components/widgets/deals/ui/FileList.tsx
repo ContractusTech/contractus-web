@@ -9,7 +9,7 @@ import { FileUpload } from '@/components/ui/fileUpload'
 type FileWithName = UploadedFile & { name: string; size: number }
 
 export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
-  const { deal, setDeal, updateDeal } = useDealStore()
+  const { deal, updateDeal, iExecutor } = useDealStore()
   const [parent] = useAutoAnimate()
 
   const handleFileUpload = async (file: FileWithName) => {
@@ -18,9 +18,10 @@ export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
     }
 
     const oldFiles = deal.meta?.files ?? []
-    await api.deals[type === 'meta' ? 'metaCreate' : 'resultsCreate'](deal.id, {
+    await api.deals[type === 'meta' ? 'metaCreate' : 'resultCreate'](deal.id, {
       [type]: {
-        files: [...oldFiles, { ...file, encrypted: false }]
+        files: [...oldFiles, { ...file, encrypted: false }],
+        content: deal[type]?.content
       },
       updatedAt: new Date().toISOString()
     })
@@ -36,14 +37,15 @@ export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
 
     const oldFiles = deal.meta?.files ?? []
 
-    await api.deals[type === 'meta' ? 'metaCreate' : 'resultsCreate'](deal.id, {
+    await api.deals[type === 'meta' ? 'metaCreate' : 'resultCreate'](deal.id, {
       [type]: {
-        files: oldFiles.filter(file => file.url !== url)
+        files: oldFiles.filter(file => file.url !== url),
+        content: deal[type]?.content
       },
       updatedAt: new Date().toISOString()
     })
 
-    api.deals.dealsDetail(deal.id).then(deal => setDeal(deal))
+    await updateDeal()
   }
 
   return (
@@ -56,17 +58,19 @@ export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
 
       <div className=" border-t-[1px] border-t-[#22222B]" ref={parent}>
         {deal &&
-          deal.meta?.files?.map(file => (
+          deal[type]?.files?.map(file => (
             <FileCard key={file.url} file={file} onDelete={handleDelete} />
           ))}
       </div>
 
-      <FileUpload
-        className="absolute right-[20px] top-[20px] p-[20px]"
-        onFileUploaded={handleFileUpload}
-      >
-        Attache
-      </FileUpload>
+      {iExecutor && (
+        <FileUpload
+          className="absolute right-[20px] top-[20px] p-[20px]"
+          onFileUploaded={handleFileUpload}
+        >
+          Attache
+        </FileUpload>
+      )}
     </div>
   )
 }

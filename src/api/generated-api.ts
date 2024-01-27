@@ -527,6 +527,7 @@ export type Tokens = {
   decimals: number
   holderMode?: boolean
   logoURL?: string
+  native: boolean
 }[]
 
 import type {
@@ -583,14 +584,12 @@ export class HttpClient<SecurityDataType = unknown> {
   private secure?: boolean
   private format?: ResponseType
 
-  constructor(
-    {
-      securityWorker,
-      secure,
-      format,
-      ...axiosConfig
-    }: ApiConfig<SecurityDataType> = {}
-  ) {
+  constructor({
+    securityWorker,
+    secure,
+    format,
+    ...axiosConfig
+  }: ApiConfig<SecurityDataType> = {}) {
     this.instance = axios.create({
       ...axiosConfig,
       baseURL: axiosConfig.baseURL || 'https://dev.contractus.tech/api/v1'
@@ -652,9 +651,15 @@ export class HttpClient<SecurityDataType = unknown> {
     }, new FormData())
   }
 
-  public request = async <T = any, _E = any>(
-    { secure, path, type, query, format, body, ...params }: FullRequestParams
-  ): Promise<T> => {
+  public request = async <T = any, _E = any>({
+    secure,
+    path,
+    type,
+    query,
+    format,
+    body,
+    ...params
+  }: FullRequestParams): Promise<T> => {
     const secureParams =
       ((typeof secure === 'boolean' ? secure : this.secure) &&
         this.securityWorker &&
@@ -835,6 +840,7 @@ export class ContractusAPI<
      */
     balanceCreate: (
       data: {
+        /** @default [] */
         tokens?: {
           code: string
           address?: string | null
@@ -1258,12 +1264,12 @@ export class ContractusAPI<
      * No description
      *
      * @tags Deals
-     * @name ResultsCreate
+     * @name ResultCreate
      * @summary Update results for deal (only for executor)
-     * @request POST:/deals/{id}/results
+     * @request POST:/deals/{id}/result
      * @secure
      */
-    resultsCreate: (
+    resultCreate: (
       id: string,
       data: {
         /** @format date-time */
@@ -1290,7 +1296,7 @@ export class ContractusAPI<
       params: RequestParams = {}
     ) =>
       this.request<Meta, Error>({
-        path: `/deals/${id}/results`,
+        path: `/deals/${id}/result`,
         method: 'POST',
         body: data,
         secure: true,
@@ -1816,8 +1822,8 @@ export class ContractusAPI<
          * @min 1000
          */
         amount: number
-        /** Blockchain, supported: solana */
-        blockchain?: string
+        /** Blockchain, supported: solana, bsc */
+        blockchain?: 'solana' | 'bsc' | null
         /** Public key of blockchain */
         publicKey?: string
         /** @default "nowpayments" */

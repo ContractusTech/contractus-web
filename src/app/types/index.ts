@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import type { ReactElement, ReactNode } from 'react'
 
 import { api } from '@/api/client'
+import { Tokens } from '@/api/generated-api'
 
 export type NextPageWithLayout<P = NonNullable<unknown>, IP = P> = NextPage<
   P,
@@ -34,4 +35,9 @@ export type AppFile = {
   name: string
   size: number
   encrypted: boolean
+}
+
+export type TokenWithChecked = Tokens[number] & {
+  checked?: boolean
+  disabled?: boolean
 }

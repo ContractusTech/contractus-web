@@ -45,14 +45,14 @@ export const EditDealForm = () => {
         {dealStore.deal?.status === 'STARTED' ? (
           <div className="flex flex-col gap-[13px]">
             <span className="text-[29px] text-[#D5D9E0]">Result</span>
-            <CommentField />
-            <FileList type="meta" />
+            <CommentField type="result" />
+            <FileList type="result" />
           </div>
         ) : (
           <div className="flex flex-col gap-[13px]">
             <span className="text-[29px] text-[#D5D9E0]">Details</span>
-            <CommentField />
-            <FileList type="result" />
+            <CommentField type="meta" />
+            <FileList type="meta" />
           </div>
         )}
 

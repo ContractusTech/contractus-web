@@ -11,12 +11,14 @@ import { Input } from '@/components/ui/input'
 
 import { CreateDealHeader } from './CreateDealHeader'
 
-export const EditCommentButton = () => {
+export const EditCommentButton = ({ type }: { type: 'result' | 'meta' }) => {
   const { deal } = useDealStore()
   const [dialogOpened, setDialogOpened] = useState(false)
 
   const { register, handleSubmit } = useForm<Deal>({
-    defaultValues: { result: { content: { text: deal?.meta?.content?.text } } }
+    defaultValues: {
+      [type]: { content: { text: deal?.[type]?.content?.text } }
+    }
   })
 
   const handleSaveComment = handleSubmit(data => {
@@ -24,17 +26,26 @@ export const EditCommentButton = () => {
       if (!deal) {
         throw new Error('No deal')
       }
-      if (data.meta?.content) {
-        api.deals.resultsCreate(deal.id, {
+
+      if (data[type]?.content) {
+        const text = data[type]?.content?.text
+
+        if (!text) {
+          throw new Error('Invalid text')
+        }
+
+        api.deals[`${type}Create`](deal.id, {
           updatedAt: new Date().toISOString(),
           result: {
             content: {
-              text: data.meta?.content?.text,
-              md5: CryptoJS.MD5(data.meta.content.text).toString()
-            }
+              text,
+              md5: CryptoJS.MD5(text).toString()
+            },
+            files: deal?.[type]?.files
           }
         })
       }
+
       setDialogOpened(false)
     } catch {}
   })
@@ -49,7 +60,7 @@ export const EditCommentButton = () => {
           <CreateDealHeader title="Edit comment" />
           <Input
             variant="textarea"
-            register={register('meta.content.text')}
+            register={register(`${type}.content.text`)}
             name="text"
           />
           <Button className=" self-end" onClick={handleSaveComment}>

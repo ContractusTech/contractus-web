@@ -1,10 +1,8 @@
-import { useMemo } from 'react'
 import { formatUnits } from 'viem'
 
 import { Deal } from '@/api/generated-api'
 import httpClient from '@/api/httpClient'
 import { useDealStore } from '@/app/store/deal-store'
-import { useUserStore } from '@/app/store/user-store'
 import Tag from '@/components/ui/tag'
 import { transformString } from '@/lib/utils'
 
@@ -12,8 +10,7 @@ import { AmountChange } from './AmountChange'
 import { EditAddressButton } from './EditAddressButton'
 
 export const DealInfo = () => {
-  const { deal, setDeal } = useDealStore()
-  const { connectedUser } = useUserStore()
+  const { deal, setDeal, iClient, iExecutor } = useDealStore()
 
   if (!deal) {
     throw new Error('No deal')
@@ -33,20 +30,6 @@ export const DealInfo = () => {
     setDeal(data)
   }
 
-  const iClient = useMemo(
-    () =>
-      deal.ownerRole === 'CLIENT' &&
-      deal.ownerPublicKey === connectedUser?.publicKey,
-    [connectedUser?.publicKey, deal.ownerPublicKey, deal.ownerRole]
-  )
-
-  const iExecutor = useMemo(
-    () =>
-      deal.ownerRole === 'EXECUTOR' &&
-      deal.ownerPublicKey === connectedUser?.publicKey,
-    [connectedUser?.publicKey, deal.ownerPublicKey, deal.ownerRole]
-  )
-
   return (
     <div className="relative flex w-full flex-col items-center gap-[13px]">
       <div className="lex h-full w-full flex-col items-center rounded-[19px] border-[1px] border-[#262930] bg-secondary ">
@@ -61,12 +44,6 @@ export const DealInfo = () => {
             {deal.ownerRole === 'CLIENT'
               ? transformString(deal.ownerPublicKey)
               : transformString(deal.contractorPublicKey ?? '')}
-
-            {/* {iClient
-              ? transformString(deal.ownerPublicKey)
-              : deal.contractorPublicKey
-              ? transformString(deal.contractorPublicKey)
-              : 'Empty'} */}
           </span>
 
           {!iClient && (
