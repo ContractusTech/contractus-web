@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 // import Cookies from 'js-cookie'
 import { twMerge } from 'tailwind-merge'
 
+import { Tokens } from '@/api/generated-api'
 import { COOKIES } from '@/app/constants/cookies'
 import { PreparedToken } from '@/app/types'
 
@@ -70,3 +71,12 @@ export function calculateMD5(file: File): Promise<string> {
     reader.readAsBinaryString(file)
   })
 }
+
+export const format = (number: string) => {
+  const floated = Number.parseFloat(number)
+  const rounded = Math.round(floated * 100) / 100
+  return rounded.toString()
+}
+
+export const getApprovedTokens = (tokens?: Tokens) =>
+  (tokens ?? []).filter(token => !token.native)

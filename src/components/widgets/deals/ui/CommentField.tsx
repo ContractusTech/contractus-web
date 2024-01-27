@@ -1,6 +1,10 @@
+import { useDealStore } from '@/app/store/deal-store'
+
 import { EditCommentButton } from './EditCommentButton'
 
-export const CommentField = () => {
+export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
+  const { iExecutor } = useDealStore()
+
   return (
     <div className="relative flex h-full w-full justify-between  rounded-[19px] border-[1px] border-[#262930] bg-secondary p-[20px]">
       <div className="flex flex-col">
@@ -13,9 +17,11 @@ export const CommentField = () => {
         </span>
       </div>
 
-      <div className="absolute right-[20px] top-[20px]">
-        <EditCommentButton />
-      </div>
+      {iExecutor && (
+        <div className="absolute right-[20px] top-[20px]">
+          <EditCommentButton type={type} />
+        </div>
+      )}
     </div>
   )
 }

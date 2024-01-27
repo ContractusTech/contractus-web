@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import Tag from '@/components/ui/tag'
+import { getApprovedTokens } from '@/lib/utils'
 
 import { SelectTokens } from '../../tokens'
 import { CreateDealHeader } from './CreateDealHeader'
@@ -28,7 +29,7 @@ export const BondOwnerAmountChange = () => {
     defaultValues: {
       ownerBondAmount: formatUnits(
         BigInt(deal?.ownerBondAmount ?? 0),
-        (deal?.ownerBondToken as Tokens[number]).decimals ?? 0
+        (deal?.ownerBondToken as Tokens[number])?.decimals ?? 0
       ),
       ownerBondToken: deal?.ownerBondToken
     }
@@ -37,7 +38,7 @@ export const BondOwnerAmountChange = () => {
   const amountValue = watch('ownerBondAmount')
   const tokenlabel = watch('ownerBondToken.code')
 
-  function handleTokenChange(token: Tokens[number]) {
+  function handleTokenChange([token]: Tokens) {
     setToken(token)
     setValue('ownerBondToken', {
       address: token.address,
@@ -56,7 +57,7 @@ export const BondOwnerAmountChange = () => {
 
   useEffect(() => {
     if (!deal?.ownerBondToken && tokens) {
-      handleTokenChange(tokens[0])
+      handleTokenChange(tokens)
     }
   }, [deal?.ownerBondToken, tokens])
 
@@ -105,7 +106,7 @@ export const BondOwnerAmountChange = () => {
             name="amount"
             rightSlot={
               <SelectTokens
-                selectable
+                tokens={getApprovedTokens(tokens)}
                 onSelect={handleTokenChange}
                 trigger={
                   <button className="flex h-[70%] items-center justify-center gap-[4px] border-l-[1px] border-[#2A2E37] pl-[8px]">

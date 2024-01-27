@@ -2,56 +2,16 @@ import { UserCog, UserIcon } from 'lucide-react'
 import { useMemo } from 'react'
 
 import { useDealStore } from '@/app/store/deal-store'
-import { useUserStore } from '@/app/store/user-store'
 import Tag from '@/components/ui/tag'
 
 const YTag = () => <Tag className=" absolute  right-[8px] top-[8px]">You</Tag>
 
 export const RoleSignatureView = () => {
-  const { deal, dealActions } = useDealStore()
-
-  const { connectedUser } = useUserStore()
+  const { deal, dealActions, iChecker, iClient, iExecutor } = useDealStore()
 
   const withChecker = useMemo(
     () => deal?.completionCheckType === 'CHECKER',
     [deal]
-  )
-
-  const iOwner = useMemo(
-    () => deal?.ownerPublicKey === connectedUser?.publicKey,
-    [connectedUser?.publicKey, deal?.ownerPublicKey]
-  )
-
-  const iContractor = useMemo(
-    () => deal?.contractorPublicKey === connectedUser?.publicKey,
-    [connectedUser?.publicKey, deal?.contractorPublicKey]
-  )
-
-  const iClient = useMemo(() => {
-    if (
-      (iOwner && deal?.ownerRole === 'CLIENT') ||
-      (deal?.ownerRole === 'EXECUTOR' && iContractor)
-    ) {
-      return true
-    }
-
-    return false
-  }, [deal?.ownerRole, iContractor, iOwner])
-
-  const iExecutor = useMemo(() => {
-    if (
-      (iOwner && deal?.ownerRole === 'EXECUTOR') ||
-      (deal?.ownerRole === 'CLIENT' && iContractor)
-    ) {
-      return true
-    }
-
-    return false
-  }, [deal?.ownerRole, iContractor, iOwner])
-
-  const iChecker = useMemo(
-    () => deal?.checkerPublicKey === connectedUser?.publicKey,
-    [connectedUser?.publicKey, deal?.checkerPublicKey]
   )
 
   return (

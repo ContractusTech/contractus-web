@@ -1,3 +1,5 @@
+import { api } from '@/api/client'
+
 export type StaticticType = {
   type: 'LOCKED'
   amount: 0
@@ -6,12 +8,16 @@ export type StaticticType = {
 
 export type StatisticsType = StaticticType[]
 
-export type BalanceRequestType = {
-  tokens: {
-    code: string
-    address: string
-  }[]
-  currency: string
+export type BalanceRequestType = Parameters<
+  typeof api.accounts.balanceCreate
+>[0]
+
+type AmountedToken = {
+  address: null | string
+  code: string
+  decimals: number
+  native: boolean
+  serviced: boolean
 }
 
 export type BalanceType = {
@@ -19,11 +25,13 @@ export type BalanceType = {
   blockchain: string
   tokens: [
     {
-      value: string
-      token: {
-        code: string
-        address: string
+      amount: {
+        token: AmountedToken
+        uiValue: number
+        value: string
       }
+      currency: 'USD'
+      price: number
     }
   ]
   wrap: string[]

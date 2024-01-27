@@ -6,12 +6,14 @@ import { formatUnits, parseUnits } from 'viem'
 
 import { api } from '@/api/client'
 import { Deal, Tokens } from '@/api/generated-api'
+import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
 import { useDealStore } from '@/app/store/deal-store'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import Tag from '@/components/ui/tag'
+import { getApprovedTokens } from '@/lib/utils'
 
 import { SelectTokens } from '../../tokens'
 import { CreateDealHeader } from './CreateDealHeader'
@@ -21,6 +23,8 @@ export const AmountChange = () => {
   const { deal, updateDeal } = useDealStore()
   // @ts-ignore
   const [token, setToken] = useState<Tokens[number]>(deal?.token)
+
+  const { tokens } = useTokens()
 
   const { register, handleSubmit, watch, setValue } = useForm<Deal>({
     defaultValues: {
@@ -36,7 +40,7 @@ export const AmountChange = () => {
   const amountValue = watch('amount')
   const tokenlabel = watch('token.code')
 
-  function handleTokenChange(token: Tokens[number]) {
+  function handleTokenChange([token]: Tokens) {
     setToken(token)
     setValue('token', { address: token.address, code: token.code })
   }
@@ -91,7 +95,7 @@ export const AmountChange = () => {
             name="amount"
             rightSlot={
               <SelectTokens
-                selectable
+                tokens={getApprovedTokens(tokens)}
                 onSelect={handleTokenChange}
                 trigger={
                   <button className="flex h-[70%] items-center justify-center gap-[4px] border-l-[1px] border-[#2A2E37] pl-[8px]">

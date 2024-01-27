@@ -50,7 +50,6 @@ export default function CustomApp({
       state.options.scroll = false
       return true
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

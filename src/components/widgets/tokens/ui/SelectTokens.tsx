@@ -1,8 +1,7 @@
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline'
 import { FC, ReactNode, useState } from 'react'
 
-import { Tokens } from '@/api/generated-api'
-import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
+import { TokenWithChecked } from '@/app/types'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -17,20 +16,26 @@ import { TokensList } from './TokensList'
 type Props = {
   children?: ReactNode | JSX.Element
   trigger?: ReactNode
-  selectable?: boolean
-  onSelect?: (token: Tokens[number]) => void
+  multiple?: boolean
+  onSelect: (tokens: TokenWithChecked[]) => void
+  tokens: TokenWithChecked[]
 }
 
-export const SelectTokens: FC<Props> = ({ trigger, onSelect, selectable }) => {
-  const { tokens } = useTokens()
+export const SelectTokens: FC<Props> = ({
+  trigger,
+  onSelect,
+  multiple,
+  tokens
+}) => {
   const [open, setOpen] = useState(false)
 
-  function handleTokenSelect(token: Tokens[number]) {
-    onSelect && onSelect(token)
+  function handleTokenSelect(tokensList: TokenWithChecked[]) {
+    onSelect(tokensList)
+  }
 
-    if (selectable) {
-      setOpen(false)
-    }
+  function handleOneSelect(token: TokenWithChecked) {
+    onSelect([token])
+    setOpen(false)
   }
 
   return (
@@ -42,13 +47,18 @@ export const SelectTokens: FC<Props> = ({ trigger, onSelect, selectable }) => {
         <SelectTokensHeader title="Select tokens" />
         <div className="px-32">
           {tokens && (
-            <TokensList tokens={tokens} onSelect={handleTokenSelect} />
+            <TokensList
+              tokens={tokens}
+              onSelect={handleTokenSelect}
+              onOneSelect={handleOneSelect}
+              multiple={multiple}
+            />
           )}
         </div>
         <DialogFooter>
           <div className="flex justify-end px-32 pb-30">
             <Button variant="default" size="lg" onClick={() => setOpen(false)}>
-              Apply
+              Close
             </Button>
           </div>
         </DialogFooter>
