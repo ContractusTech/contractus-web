@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import Tag from '@/components/ui/tag'
+import { getApprovedTokens } from '@/lib/utils'
 
 import { SelectTokens } from '../../tokens'
 import { CreateDealHeader } from './CreateDealHeader'
@@ -37,7 +38,7 @@ export const CheckerAmountChange = () => {
   const amountValue = watch('checkerAmount')
   const tokenlabel = watch('checkerToken.code')
 
-  function handleTokenChange(token: Tokens[number]) {
+  function handleTokenChange([token]: Tokens) {
     setToken(token)
     setValue('checkerToken', { address: token.address, code: token.code })
   }
@@ -53,7 +54,7 @@ export const CheckerAmountChange = () => {
 
   useEffect(() => {
     if (!deal?.checkerToken && tokens) {
-      handleTokenChange(tokens[0])
+      handleTokenChange(tokens)
     }
   }, [deal?.checkerToken, tokens])
 
@@ -110,8 +111,8 @@ export const CheckerAmountChange = () => {
             name="amount"
             rightSlot={
               <SelectTokens
-                selectable
                 onSelect={handleTokenChange}
+                tokens={getApprovedTokens(tokens)}
                 trigger={
                   <button className="flex h-[70%] items-center justify-center gap-[4px] border-l-[1px] border-[#2A2E37] pl-[8px]">
                     <span className="text-[#5a606d]" key={token?.code}>
