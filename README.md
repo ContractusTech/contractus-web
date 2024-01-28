@@ -21,5 +21,5 @@ yarn dev
 
 ## License
 
-Contractus WebApp is available under the [MIT License][License].
+Contractus WebApp is available under the [MIT License](LICENSE).
 
