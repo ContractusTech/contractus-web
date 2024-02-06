@@ -3,6 +3,7 @@ import { formatUnits } from 'viem'
 import { Deal } from '@/api/generated-api'
 import httpClient from '@/api/httpClient'
 import { useDealStore } from '@/app/store/deal-store'
+import { useUserStore } from '@/app/store/user-store'
 import Tag from '@/components/ui/tag'
 import { transformString } from '@/lib/utils'
 
@@ -11,6 +12,7 @@ import { EditAddressButton } from './EditAddressButton'
 
 export const DealInfo = () => {
   const { deal, setDeal, iClient, iExecutor } = useDealStore()
+  const { connectedUser } = useUserStore()
 
   if (!deal) {
     throw new Error('No deal')
@@ -23,7 +25,7 @@ export const DealInfo = () => {
       data: {
         type: 'CONTRACTOR',
         publicKey: address,
-        blockchain: 'bsc'
+        blockchain: connectedUser?.blockchain
       }
     })
 

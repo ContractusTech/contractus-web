@@ -1,3 +1,5 @@
+import { useWallet } from '@solana/wallet-adapter-react'
+import { Transaction } from '@solana/web3.js'
 import { toBytes } from 'viem'
 import { getWalletClient } from 'wagmi/actions'
 
@@ -6,6 +8,7 @@ import { Tx } from '@/api/generated-api'
 import httpClient from '@/api/httpClient'
 import { ERRORS } from '@/app/constants/errors'
 import { useDealStore } from '@/app/store/deal-store'
+import { useUserStore } from '@/app/store/user-store'
 import { useApprove } from '@/components/features/approve'
 import { Button } from '@/components/ui/button'
 
@@ -13,12 +16,65 @@ export const StartDealBtn = () => {
   const { deal, updateDeal } = useDealStore()
   const { approve } = useApprove()
 
+  const { connectedUser } = useUserStore()
+
+  const { signTransaction } = useWallet()
+
+  const solanaSign = async (transaction: string) => {
+    if (!signTransaction || !deal) {
+      return
+    }
+
+    const buffer = Buffer.from(transaction, 'base64')
+
+    const unsignedTransaction = Transaction.from(buffer)
+
+    const signedTransaction = await signTransaction(unsignedTransaction)
+
+    const signatures = signedTransaction.signatures
+    const signature = signatures.find(
+      signature => signature.publicKey.toString() === connectedUser?.publicKey
+    )
+
+    if (!signature?.signature) {
+      return
+    }
+
+    const base64Buffer = Buffer.from(signature.signature)
+
+    const base64 = base64Buffer.toString('base64')
+
+    await api.deals.txSignCreate(deal.id, 'DEAL_INIT', {
+      signature: base64,
+      transaction: transaction
+    })
+  }
+
+  const evmSign = async (transaction: string, dealId: string) => {
+    await approve()
+
+    const walletClient = await getWalletClient()
+
+    const messageToSign = toBytes(transaction)
+
+    if (walletClient) {
+      const signature = await walletClient.signMessage({
+        message: { raw: messageToSign }
+      })
+
+      await api.deals.txSignCreate(dealId, 'DEAL_INIT', {
+        signature,
+        transaction: transaction
+      })
+    } else {
+      throw new Error('Error on getting wallet client for sign transaction')
+    }
+  }
+
   const handleSign = async () => {
     if (!deal) {
       throw new Error(ERRORS.DEAL_EXISTS)
     }
-
-    await approve()
 
     const { data: tx } = await httpClient<Tx>({
       url: `deals/${deal.id}/tx/DEAL_INIT?silent=0`,
@@ -29,24 +85,19 @@ export const StartDealBtn = () => {
       throw new Error('No hash transaction')
     }
 
-    const walletClient = await getWalletClient()
+    switch (connectedUser?.blockchain) {
+      case 'bsc': {
+        await evmSign(tx.transaction, deal.id)
+        break
+      }
 
-    const messageToSign = toBytes(tx.transaction)
-
-    if (walletClient) {
-      const signature = await walletClient.signMessage({
-        message: { raw: messageToSign }
-      })
-
-      await api.deals.txSignCreate(deal.id, 'DEAL_INIT', {
-        signature,
-        transaction: tx.transaction
-      })
-
-      await updateDeal()
-    } else {
-      throw new Error('Error on getting wallet client for sign transaction')
+      case 'solana': {
+        await solanaSign(tx.transaction)
+        break
+      }
     }
+
+    await updateDeal()
   }
 
   return (

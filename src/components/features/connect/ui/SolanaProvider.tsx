@@ -70,8 +70,6 @@ export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
 
       const signature = await signMessage(message)
 
-      base58.encode(signature)
-
       generateBase64Token({
         type: 'BROWSER',
         blockchain: 'solana',

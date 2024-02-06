@@ -4,6 +4,7 @@ import { Deal } from '@/api/generated-api'
 import httpClient from '@/api/httpClient'
 import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
 import { useDealStore } from '@/app/store/deal-store'
+import { useUserStore } from '@/app/store/user-store'
 import { transformString } from '@/lib/utils'
 
 import { CheckerAmountChange } from './CheckerAmountChange'
@@ -12,6 +13,8 @@ import { EditAddressButton } from './EditAddressButton'
 export const CheckerEdit = () => {
   const { deal, setDeal } = useDealStore()
   const { tokens } = useTokens()
+
+  const { connectedUser } = useUserStore()
 
   const handleCheckerEdit = async (address: string) => {
     if (!deal) {
@@ -24,7 +27,7 @@ export const CheckerEdit = () => {
       data: {
         type: 'CHECKER',
         publicKey: address,
-        blockchain: 'bsc'
+        blockchain: connectedUser?.blockchain
       }
     })
 
