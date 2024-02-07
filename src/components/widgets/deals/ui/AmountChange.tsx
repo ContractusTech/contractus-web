@@ -8,10 +8,10 @@ import { api } from '@/api/client'
 import { Deal, Tokens } from '@/api/generated-api'
 import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
 import { useDealStore } from '@/app/store/deal-store'
+import { useUserStore } from '@/app/store/user-store'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
 import Tag from '@/components/ui/tag'
 import { getApprovedTokens } from '@/lib/utils'
 
@@ -23,6 +23,7 @@ export const AmountChange = () => {
   const { deal, updateDeal } = useDealStore()
   // @ts-ignore
   const [token, setToken] = useState<Tokens[number]>(deal?.token)
+  const { balance } = useUserStore()
 
   const { tokens } = useTokens()
 
@@ -80,6 +81,22 @@ export const AmountChange = () => {
     }
   })
 
+  useEffect(() => {
+    if (dialogOpened && deal?.id) {
+      api.deals.postDeals(deal?.id, {
+        type: 'DEAL',
+        currency: 'USD',
+        amount: {
+          value: deal.amount,
+          token: {
+            code: deal.token?.code,
+            address: deal.token?.address
+          }
+        }
+      })
+    }
+  }, [dialogOpened, deal?.id])
+
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
       <DialogTrigger asChild>
@@ -112,7 +129,11 @@ export const AmountChange = () => {
           <div className="w-full rounded-[13px] border-[1px] border-solid border-[#2A2E37]">
             <div className="flex items-center justify-between gap-[13px] p-[18px]">
               <span>Holder mode</span>
-              <Switch />
+              {balance?.tier === 'basic' ? (
+                <Tag>Off</Tag>
+              ) : (
+                <Tag type="owner">On</Tag>
+              )}
             </div>
 
             <div className="flex flex-col gap-[13px] border-t border-t-[#2A2E37] p-[18px]">

@@ -1,12 +1,9 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 
-import { useBalance } from '@/api/modules/accounts/hooks/useBalance'
 import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
 import { getCtusBsc, getCtusSolana } from '@/app/constants/getCTUSUrls'
 import { useUserStore } from '@/app/store/user-store'
-import { TokenWithChecked } from '@/app/types'
 import { AddCircleIcon } from '@/assets/svg/AddCircleIcon'
 import { CrownIcon } from '@/assets/svg/CrownIcon'
 import { Button } from '@/components/ui/button'
@@ -19,49 +16,9 @@ import { Token } from './Token'
 export const TokenSwapper = () => {
   const [parent] = useAutoAnimate()
   const { tokens } = useTokens()
-  const [selectedTokens, setSelectedTokens] = useState<TokenWithChecked[]>([])
-  const { balance } = useBalance({
-    currency: 'USD',
-    tokens: selectedTokens
-      .filter(selectedToken => !!selectedToken.checked)
-      .map(selectedToken => ({
-        code: selectedToken.code,
-        address: selectedToken.address
-      }))
-  })
 
-  const { connectedUser } = useUserStore()
-
-  const handleMonitoringTokens = (tokens: TokenWithChecked[]) => {
-    setSelectedTokens(tokens)
-    localStorage.setItem('selectedTokens', JSON.stringify(tokens))
-  }
-
-  useEffect(() => {
-    const storedTokens = localStorage.getItem('selectedTokens')
-    const fromLocalStore: TokenWithChecked[] = JSON.parse(storedTokens ?? '[]')
-
-    if (!tokens || !balance) {
-      return
-    }
-
-    const withDisabledTokens: TokenWithChecked[] =
-      tokens.map(token => {
-        const disabled = balance.wrap.includes(token.code)
-        const mustAutoEnabled = [...balance.wrap, 'CTUS'].includes(token.code)
-
-        return {
-          ...token,
-          disabled: !!disabled,
-          checked:
-            fromLocalStore.find(
-              storagedToken => storagedToken.code === token.code
-            )?.checked ?? mustAutoEnabled
-        }
-      }) ?? []
-
-    setSelectedTokens(withDisabledTokens)
-  }, [tokens, balance])
+  const { connectedUser, balance, setSelectedTokens, selectedTokens } =
+    useUserStore()
 
   return (
     <>
@@ -90,7 +47,7 @@ export const TokenSwapper = () => {
             <SelectTokens
               multiple
               tokens={selectedTokens}
-              onSelect={handleMonitoringTokens}
+              onSelect={setSelectedTokens}
             />
           )}
         </div>

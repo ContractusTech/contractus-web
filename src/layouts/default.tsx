@@ -1,5 +1,6 @@
 import { Footer } from '@/components/widgets/footer'
 import { Header } from '@/components/widgets/header'
+import { BalanceProvider } from '@/providers/BalanceProvider'
 
 export default function RootLayout({
   children
@@ -7,14 +8,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <main className="flex min-h-screen flex-col px-24">
-      <Header />
+    <BalanceProvider>
+      <main className="flex min-h-screen flex-col px-24">
+        <Header />
 
-      <div className="mx-auto flex w-full max-w-[540px] flex-grow flex-col border-t-[1px] border-border pt-20">
-        {children}
-      </div>
+        <div className="mx-auto flex w-full max-w-[540px] flex-grow flex-col border-t-[1px] border-border pt-20">
+          {children}
+        </div>
 
-      <Footer />
-    </main>
+        <Footer />
+      </main>
+    </BalanceProvider>
   )
 }
