@@ -1,3 +1,5 @@
+import { formatNumber } from '@/lib/utils'
+
 export const Balance = ({ amount }: { amount: string }) => {
   return (
     <section className="mb-30">
@@ -5,7 +7,7 @@ export const Balance = ({ amount }: { amount: string }) => {
         <h1 className="typo-label text-center">Estimate balance</h1>
       </div>
       <h2 className="text-center text-6xl font-light leading-none">
-        ${Number(amount).toFixed(2)}
+        ${formatNumber(Number(amount))}
       </h2>
     </section>
   )

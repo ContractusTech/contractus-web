@@ -1,7 +1,6 @@
 import { FC } from 'react'
 
-import { formatDollars } from '@/lib/cost'
-import { cn } from '@/lib/utils'
+import { cn, formatNumber } from '@/lib/utils'
 
 type Props = {
   amount: number
@@ -30,7 +29,7 @@ const StatisticsListItem: FC<Props> = ({ amount, type }) => {
           amount > 0 && 'text-dark-base-green'
         )}
       >
-        {amount > 0 ? `+${formatDollars(amount)}` : formatDollars(amount)}
+        ${amount > 0 ? `+${formatNumber(amount)}` : formatNumber(amount)}
       </p>
     </div>
   )
