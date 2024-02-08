@@ -36,7 +36,7 @@ export const EditCommentButton = ({ type }: { type: 'result' | 'meta' }) => {
 
         api.deals[`${type}Create`](deal.id, {
           updatedAt: new Date().toISOString(),
-          result: {
+          [type]: {
             content: {
               text,
               md5: CryptoJS.MD5(text).toString()

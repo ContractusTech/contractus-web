@@ -1,8 +1,9 @@
 import { create } from 'zustand'
 
 import { api } from '@/api/client'
-import { Account, Deal, DealActions } from '@/api/generated-api'
+import { Account, DealActions } from '@/api/generated-api'
 
+import { Deal } from '../types'
 import { useUserStore } from './user-store'
 
 type DealStore = {
@@ -105,7 +106,10 @@ export const useDealStore = create<DealStore>((set, get) => ({
     const { deal: storedDeal, setDeal } = get()
 
     if (storedDeal?.id) {
-      const deal = await api.deals.dealsDetail(storedDeal.id)
+      const deal = (await api.deals.dealsDetail(
+        storedDeal.id
+      )) as unknown as Deal
+
       setDeal(deal)
     }
   },

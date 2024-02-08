@@ -1,10 +1,10 @@
 import { formatUnits } from 'viem'
 
-import { Deal } from '@/api/generated-api'
 import httpClient from '@/api/httpClient'
 import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
 import { useDealStore } from '@/app/store/deal-store'
 import { useUserStore } from '@/app/store/user-store'
+import { Deal } from '@/app/types'
 import { transformString } from '@/lib/utils'
 
 import { CheckerAmountChange } from './CheckerAmountChange'
@@ -57,7 +57,6 @@ export const CheckerEdit = () => {
             </span>
             <span className=" mb-[2px] text-base font-[600] text-[#656975]">
               {
-                /* @ts-ignore */
                 tokens?.find(
                   token => token.address === deal?.checkerToken?.address
                 )?.code

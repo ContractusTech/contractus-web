@@ -1,3 +1,4 @@
+import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
 import { Footer } from '@/components/widgets/footer'
 import { Header } from '@/components/widgets/header'
 import { BalanceProvider } from '@/providers/BalanceProvider'
@@ -7,6 +8,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const { isTokensLoading } = useTokens()
+
+  if (isTokensLoading) {
+    return <span>Loading</span>
+  }
+
   return (
     <BalanceProvider>
       <main className="flex min-h-screen flex-col px-24">

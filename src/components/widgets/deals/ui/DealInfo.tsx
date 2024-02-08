@@ -1,13 +1,13 @@
 import { formatUnits } from 'viem'
 
-import { Deal } from '@/api/generated-api'
 import httpClient from '@/api/httpClient'
 import { useDealStore } from '@/app/store/deal-store'
 import { useUserStore } from '@/app/store/user-store'
+import { Deal } from '@/app/types'
 import Tag from '@/components/ui/tag'
 import { transformString } from '@/lib/utils'
 
-import { AmountChange } from './AmountChange'
+import { DealAmountChange } from './DealAmountChange'
 import { EditAddressButton } from './EditAddressButton'
 
 export const DealInfo = () => {
@@ -69,7 +69,6 @@ export const DealInfo = () => {
             </span>
             <div className="mt-[9px] flex items-end gap-[4px]">
               <span className="text-2xl font-[500]">
-                {/* @ts-ignore */}
                 {formatUnits(BigInt(deal.amount), deal.token?.decimals)}
               </span>
               <span className=" mb-[2px] text-base font-[600] text-[#656975]">
@@ -79,7 +78,7 @@ export const DealInfo = () => {
           </div>
 
           <div className="absolute right-[20px] top-[20px] flex items-end">
-            <AmountChange />
+            <DealAmountChange />
           </div>
         </div>
       </div>

@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { Tokens } from '@/api/generated-api'
 import { COOKIES } from '@/app/constants/cookies'
-import { PreparedToken } from '@/app/types'
+import { PreparedToken, ShortToken, Token } from '@/app/types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -71,7 +71,7 @@ export function calculateMD5(file: File): Promise<string> {
   })
 }
 
-export const getApprovedTokens = (tokens?: Tokens) =>
+export const getInnativeTokens = (tokens?: Tokens) =>
   (tokens ?? []).filter(token => !token.native)
 
 export function formatNumber(num: number): string {
@@ -97,4 +97,18 @@ export function formatNumber(num: number): string {
     }
     return millions + 'm'
   }
+}
+
+export const getDecimalOfShortToken = (
+  shortToken: ShortToken,
+  tokens: Token[]
+) => {
+  const decimal = tokens.find(token => token.address === shortToken.address)
+    ?.decimals
+
+  if (!decimal) {
+    throw new Error('Error on trying to get decimal of short token')
+  }
+
+  return decimal
 }
