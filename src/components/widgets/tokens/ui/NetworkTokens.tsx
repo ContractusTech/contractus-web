@@ -1,6 +1,7 @@
 import { BalanceType } from '@/api/modules/accounts/accounts.types'
 import { SwapArrowIcon } from '@/assets/svg/SwapArrowIcon'
 import { Button } from '@/components/ui/button'
+import { formatNumber } from '@/lib/utils'
 
 type NetworkTokensProps = {
   tokens: BalanceType['tokens'][number][]
@@ -21,12 +22,12 @@ export const NetworkTokens = ({ tokens }: NetworkTokensProps) => {
                   {token.amount.token.code}
                 </span>
                 <span className="text-normal text-base leading-none text-muted-foreground ">
-                  ${token.price}
+                  ${formatNumber(token.price)}
                 </span>
               </div>
               <div>
                 <span className="text-medium text-base leading-none text-muted-foreground ">
-                  {token.amount.uiValue.toFixed(2)}
+                  {formatNumber(token.amount.uiValue)}
                 </span>
               </div>
             </div>

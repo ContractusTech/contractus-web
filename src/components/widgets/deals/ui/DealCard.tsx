@@ -7,7 +7,7 @@ import { Deal } from '@/api/generated-api'
 import { PAGES } from '@/app/constants/pages'
 import { useUserStore } from '@/app/store/user-store'
 import { ArrowLeftBottomCorner } from '@/assets/svg/ArrowLeftBottomCorner'
-import { getTimeUnitFromNow, transformString } from '@/lib/utils'
+import { formatNumber, getTimeUnitFromNow, transformString } from '@/lib/utils'
 
 type Props = {
   deal: Deal
@@ -47,7 +47,11 @@ const DealCard: FC<Props> = ({ deal }) => {
         </div>
         <div className="mb-10 flex items-end gap-x-5">
           <p className="text-[30px] leading-none">
-            {formatUnits(BigInt(deal.amount), 18)}
+            {formatNumber(
+              Number(
+                formatUnits(BigInt(deal.amount), deal.token?.decimals ?? 0)
+              )
+            )}
           </p>
           <div className="flex flex-col justify-end gap-y-3">
             {isStatusNew && <ArrowLeftBottomCorner />}

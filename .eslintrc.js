@@ -42,6 +42,7 @@ module.exports = {
     'unicorn/no-useless-undefined': 'off',
     'unicorn/no-array-reduce': 'off',
     'unicorn/consistent-function-scoping': 'off',
+    'unicorn/no-negated-condition': 'off',
 
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': [

@@ -7,7 +7,15 @@ import Tag from '@/components/ui/tag'
 const YTag = () => <Tag className=" absolute  right-[8px] top-[8px]">You</Tag>
 
 export const RoleSignatureView = () => {
-  const { deal, dealActions, iChecker, iClient, iExecutor } = useDealStore()
+  const {
+    deal,
+    iChecker,
+    iClient,
+    iExecutor,
+    signedByChecker,
+    signedByClient,
+    signedByExecutor
+  } = useDealStore()
 
   const withChecker = useMemo(
     () => deal?.completionCheckType === 'CHECKER',
@@ -28,14 +36,12 @@ export const RoleSignatureView = () => {
         <div className="flex items-center gap-[13px]">
           <span>Client</span>
         </div>
-        <span className="text-[12px] text-[#8b8f97]">
-          {deal?.ownerRole === 'CLIENT'
-            ? dealActions?.signedByOwner
-              ? 'Signed'
-              : 'No signature'
-            : dealActions?.signedByContractor
-            ? 'Signed'
-            : 'No signature'}
+        <span
+          className={`text-[12px] ${
+            signedByClient ? 'text-[#589648]' : 'text-[#8b8f97]'
+          } `}
+        >
+          {signedByClient ? 'Signed' : 'No signature'}
         </span>
       </div>
 
@@ -45,14 +51,12 @@ export const RoleSignatureView = () => {
         {iExecutor && <YTag />}
         <UserCog />
         <span>Executor</span>
-        <span className="text-[12px] text-[#8b8f97]">
-          {deal?.ownerRole === 'EXECUTOR'
-            ? dealActions?.signedByOwner
-              ? 'Signed'
-              : 'No signature'
-            : dealActions?.signedByContractor
-            ? 'Signed'
-            : 'No signature'}
+        <span
+          className={`text-[12px] ${
+            signedByExecutor ? 'text-[#589648]' : 'text-[#8b8f97]'
+          } `}
+        >
+          {signedByExecutor ? 'Signed' : 'No signature'}
         </span>
       </div>
 
@@ -63,8 +67,12 @@ export const RoleSignatureView = () => {
           {iChecker && <YTag />}
           <UserCog />
           <span>Checker</span>
-          <span className="text-[12px] text-[#8b8f97]">
-            {dealActions?.signedByChecker ? 'Signed' : 'No signature'}
+          <span
+            className={`text-[12px] ${
+              signedByChecker ? 'text-[#589648]' : 'text-[#8b8f97]'
+            } `}
+          >
+            {signedByChecker ? 'Signed' : 'No signature'}
           </span>
         </div>
       )}

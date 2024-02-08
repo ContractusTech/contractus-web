@@ -1,8 +1,9 @@
 import { create } from 'zustand'
 
 import { api } from '@/api/client'
-import { Account, Deal, DealActions } from '@/api/generated-api'
+import { Account, DealActions } from '@/api/generated-api'
 
+import { Deal } from '../types'
 import { useUserStore } from './user-store'
 
 type DealStore = {
@@ -14,26 +15,66 @@ type DealStore = {
   iChecker: boolean
   iClient: boolean
   iExecutor: boolean
+  clientAddress?: string
+  executorPublicKey?: string
+  signedByClient: boolean
+  signedByExecutor: boolean
+  signedByChecker: boolean
 
   setDeal: (deal: Deal) => void
   setLoading: (loading: boolean) => void
   updateDeal: () => Promise<void>
 }
 
-const checkMyRoles = (deal: Deal, connectedUser: Account) => {
+const checkMyRoles = (
+  deal: Deal,
+  connectedUser: Account,
+  actions: DealActions
+) => {
   const iOwner = deal.ownerPublicKey === connectedUser.publicKey
   const iContractor = deal.contractorPublicKey === connectedUser.publicKey
 
+  const iClient =
+    (iOwner && deal.ownerRole === 'CLIENT') ||
+    (iContractor && deal.ownerRole === 'EXECUTOR')
+
+  const iExecutor =
+    (iOwner && deal.ownerRole === 'EXECUTOR') ||
+    (iContractor && deal.ownerRole === 'CLIENT')
+
+  const clientAddress = iClient
+    ? connectedUser.publicKey
+    : deal.ownerPublicKey === connectedUser.publicKey
+    ? deal.contractorPublicKey
+    : deal.ownerPublicKey
+
+  const executorPublicKey = iExecutor
+    ? connectedUser.publicKey
+    : connectedUser.publicKey === deal.ownerPublicKey
+    ? deal.contractorPublicKey
+    : deal.ownerPublicKey
+
+  const signedByClient =
+    deal?.ownerRole === 'CLIENT'
+      ? actions.signedByOwner
+      : actions.signedByContractor
+
+  const signedByExecutor =
+    deal?.ownerRole === 'EXECUTOR'
+      ? actions.signedByOwner
+      : actions.signedByContractor
+
   return {
     iChecker: false,
-    iClient:
-      (iOwner && deal.ownerRole === 'CLIENT') ||
-      (deal.ownerRole === 'EXECUTOR' && iContractor),
+    iClient,
     iContractor,
-    iExecutor:
-      (iOwner && deal.ownerRole === 'EXECUTOR') ||
-      (deal.ownerRole === 'CLIENT' && iContractor),
-    iOwner
+    iExecutor,
+    iOwner,
+    clientAddress,
+    executorPublicKey,
+    signedByClient,
+    signedByExecutor,
+    signedByChecker: actions.signedByChecker
   }
 }
 
@@ -46,6 +87,9 @@ export const useDealStore = create<DealStore>((set, get) => ({
   iContractor: false,
   iExecutor: false,
   iOwner: false,
+  signedByClient: false,
+  signedByExecutor: false,
+  signedByChecker: false,
 
   async setDeal(deal) {
     set({ deal })
@@ -53,17 +97,19 @@ export const useDealStore = create<DealStore>((set, get) => ({
     const user = useUserStore.getState().connectedUser
 
     if (user) {
-      const roles = checkMyRoles(deal, user)
+      const roles = checkMyRoles(deal, user, dealActions)
       set({ ...roles })
+      set({ dealActions })
     }
-
-    set({ dealActions })
   },
   async updateDeal() {
     const { deal: storedDeal, setDeal } = get()
 
     if (storedDeal?.id) {
-      const deal = await api.deals.dealsDetail(storedDeal.id)
+      const deal = (await api.deals.dealsDetail(
+        storedDeal.id
+      )) as unknown as Deal
+
       setDeal(deal)
     }
   },

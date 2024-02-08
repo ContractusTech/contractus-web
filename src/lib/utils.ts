@@ -2,12 +2,11 @@ import { type ClassValue, clsx } from 'clsx'
 import { setCookie } from 'cookies-next'
 import CryptoJS from 'crypto-js'
 import dayjs from 'dayjs'
-// import Cookies from 'js-cookie'
 import { twMerge } from 'tailwind-merge'
 
 import { Tokens } from '@/api/generated-api'
 import { COOKIES } from '@/app/constants/cookies'
-import { PreparedToken } from '@/app/types'
+import { PreparedToken, ShortToken, Token } from '@/app/types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -72,11 +71,44 @@ export function calculateMD5(file: File): Promise<string> {
   })
 }
 
-export const format = (number: string) => {
-  const floated = Number.parseFloat(number)
-  const rounded = Math.round(floated * 100) / 100
-  return rounded.toString()
+export const getInnativeTokens = (tokens?: Tokens) =>
+  (tokens ?? []).filter(token => !token.native)
+
+export function formatNumber(num: number): string {
+  if (num === 0) {
+    return '0'
+  } else if (num < 1) {
+    return '<1.0'
+  } else if (num < 1000) {
+    return num
+      .toFixed(2)
+      .toString()
+      .replace(/\.?0+$/, '')
+  } else if (num < 1_000_000) {
+    let thousands = (num / 1000).toFixed(2).replace(/\.?0+$/, '')
+    if (thousands.endsWith('.')) {
+      thousands = thousands.slice(0, -1)
+    }
+    return thousands + 'k'
+  } else {
+    let millions = (num / 1_000_000).toFixed(2).replace(/\.?0+$/, '')
+    if (millions.endsWith('.')) {
+      millions = millions.slice(0, -1)
+    }
+    return millions + 'm'
+  }
 }
 
-export const getApprovedTokens = (tokens?: Tokens) =>
-  (tokens ?? []).filter(token => !token.native)
+export const getDecimalOfShortToken = (
+  shortToken: ShortToken,
+  tokens: Token[]
+) => {
+  const decimal = tokens.find(token => token.address === shortToken.address)
+    ?.decimals
+
+  if (!decimal) {
+    throw new Error('Error on trying to get decimal of short token')
+  }
+
+  return decimal
+}

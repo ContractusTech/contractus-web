@@ -3,6 +3,7 @@ import 'dayjs/locale/en'
 
 import { Root } from '@radix-ui/react-form'
 import dayjs from 'dayjs'
+import { useMemo } from 'react'
 
 import { useDealStore } from '@/app/store/deal-store'
 
@@ -24,6 +25,11 @@ dayjs.locale('en')
 export const EditDealForm = () => {
   const dealStore = useDealStore()
 
+  const withChecker = useMemo(
+    () => dealStore.deal?.completionCheckType === 'CHECKER',
+    [dealStore.deal]
+  )
+
   return (
     <div className="m-[0_auto] flex max-w-[534px] flex-col gap-[30px]">
       <Root
@@ -32,7 +38,9 @@ export const EditDealForm = () => {
       >
         <div className="flex flex-col gap-[13px]">
           <DealInfo />
-          {dealStore.deal?.completionCheckType === 'CHECKER' && <CheckerEdit />}
+
+          {withChecker && <CheckerEdit />}
+
           <DeadLineField />
         </div>
 

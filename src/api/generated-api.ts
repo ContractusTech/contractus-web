@@ -91,6 +91,7 @@ export type Deals = {
   token?: {
     code: string
     address: string
+    decimals: number
   }
   amount: string
   amountFee: string

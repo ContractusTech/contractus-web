@@ -8,53 +8,40 @@ import { getDecimalOfShortToken } from '@/lib/utils'
 
 import { AmountChoice } from './AmountChoice'
 
-export const CheckerAmountChange = () => {
+export const DealAmountChange = () => {
   const { deal, updateDeal } = useDealStore()
   const { tokens } = useTokens()
 
   if (!deal) {
-    throw new Error('No deal')
+    return null
   }
 
-  if (!tokens) {
-    throw new Error('No tokens')
-  }
+  const handleSaveAmountOfDeal = async (amount: Amount) => {
+    if (!tokens) {
+      throw new Error('Tokens is unavaliable')
+    }
 
-  const handleSaveCheckerAmount = async (amount: Amount) => {
     const decimalAmount = parseUnits(
       amount.value,
       getDecimalOfShortToken(amount.token, tokens)
     ).toString()
 
     await api.deals.dealsCreate2(deal.id, {
-      checkerAmount: {
-        value: decimalAmount,
-        token: amount.token
-      }
+      amount: { value: decimalAmount, token: amount.token }
     })
 
     await updateDeal()
   }
 
-  const defaultValueChecker: Amount | undefined = deal.checkerToken
-    ? {
-        token: {
-          address: deal.checkerToken?.address,
-          code: deal.checkerToken?.code
-        },
-        value: deal.checkerAmount ?? '0'
-      }
-    : undefined
-
   return (
     <AmountChoice
-      dealAmount={deal.amount}
+      defaultAmount={{
+        token: { address: deal.token.address, code: deal.token.code },
+        value: deal.amount
+      }}
+      onSelect={handleSaveAmountOfDeal}
       feeDealid={deal.id}
-      onSelect={handleSaveCheckerAmount}
-      defaultAmount={defaultValueChecker}
       withFee
-      checker
-      dealToken={deal.token}
     />
   )
 }

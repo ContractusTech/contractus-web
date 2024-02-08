@@ -4,8 +4,7 @@ import { Deal } from '@/api/generated-api'
 import { ERRORS } from '@/app/constants/errors'
 import { useDealStore } from '@/app/store/deal-store'
 
-import { BondContractorAmountChange } from './BondContractorAmountChange'
-import { BondOwnerAmountChange } from './BondOwnerAmountChange'
+import { BondAmountChange } from './BondAmountChange'
 
 export const PerformanceBond = () => {
   const { deal } = useDealStore()
@@ -16,11 +15,7 @@ export const PerformanceBond = () => {
     }
 
     const token =
-      deal.ownerRole === role
-        ? // @ts-ignore
-          deal.ownerBondToken
-        : // @ts-ignore
-          deal.contractorBondToken
+      deal.ownerRole === role ? deal.ownerBondToken : deal.contractorBondToken
 
     if (token === undefined || token === null) {
       return ''
@@ -44,18 +39,12 @@ export const PerformanceBond = () => {
     const parsedAmount = BigInt(amount)
 
     const token =
-      deal.ownerRole === role
-        ? // @ts-ignore
-          deal.ownerBondToken
-        : // @ts-ignore
-          deal.contractorBondToken
+      deal.ownerRole === role ? deal.ownerBondToken : deal.contractorBondToken
 
-    // @ts-ignore
     if (!token?.decimals) {
       throw new Error('Error on decimals parsing')
     }
 
-    // @ts-ignore
     return formatUnits(parsedAmount, token.decimals)
   }
 
@@ -94,9 +83,9 @@ export const PerformanceBond = () => {
           </div>
 
           {deal.ownerRole === 'EXECUTOR' ? (
-            <BondOwnerAmountChange />
+            <BondAmountChange type="owner" />
           ) : (
-            <BondContractorAmountChange />
+            <BondAmountChange type="contractor" />
           )}
         </div>
       )}
@@ -125,9 +114,9 @@ export const PerformanceBond = () => {
           </div>
 
           {deal.ownerRole === 'CLIENT' ? (
-            <BondOwnerAmountChange />
+            <BondAmountChange type="owner" />
           ) : (
-            <BondContractorAmountChange />
+            <BondAmountChange type="contractor" />
           )}
         </div>
       )}

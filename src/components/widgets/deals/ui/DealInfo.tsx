@@ -1,17 +1,24 @@
 import { formatUnits } from 'viem'
 
-import { Deal } from '@/api/generated-api'
 import httpClient from '@/api/httpClient'
 import { useDealStore } from '@/app/store/deal-store'
 import { useUserStore } from '@/app/store/user-store'
+import { Deal } from '@/app/types'
 import Tag from '@/components/ui/tag'
 import { transformString } from '@/lib/utils'
 
-import { AmountChange } from './AmountChange'
+import { DealAmountChange } from './DealAmountChange'
 import { EditAddressButton } from './EditAddressButton'
 
 export const DealInfo = () => {
-  const { deal, setDeal, iClient, iExecutor } = useDealStore()
+  const {
+    deal,
+    setDeal,
+    iClient,
+    iExecutor,
+    executorPublicKey,
+    clientAddress
+  } = useDealStore()
   const { connectedUser } = useUserStore()
 
   if (!deal) {
@@ -39,13 +46,11 @@ export const DealInfo = () => {
           <div className="flex items-center gap-[8px] ">
             <span className="text-sm font-medium text-[#656975]">CLIENT</span>
             {iClient && <Tag>You</Tag>}
-            {deal.ownerRole === 'CLIENT' && <Tag>Owner</Tag>}
+            {deal.ownerRole === 'CLIENT' && <Tag type="owner">Owner</Tag>}
           </div>
 
           <span className="mt-[9px] text-2xl font-[500]">
-            {deal.ownerRole === 'CLIENT'
-              ? transformString(deal.ownerPublicKey)
-              : transformString(deal.contractorPublicKey ?? '')}
+            {clientAddress ? transformString(clientAddress) : 'Empty'}
           </span>
 
           {!iClient && (
@@ -64,7 +69,6 @@ export const DealInfo = () => {
             </span>
             <div className="mt-[9px] flex items-end gap-[4px]">
               <span className="text-2xl font-[500]">
-                {/* @ts-ignore */}
                 {formatUnits(BigInt(deal.amount), deal.token?.decimals)}
               </span>
               <span className=" mb-[2px] text-base font-[600] text-[#656975]">
@@ -74,7 +78,7 @@ export const DealInfo = () => {
           </div>
 
           <div className="absolute right-[20px] top-[20px] flex items-end">
-            <AmountChange />
+            <DealAmountChange />
           </div>
         </div>
       </div>
@@ -85,14 +89,10 @@ export const DealInfo = () => {
             <span className="text-sm font-medium text-[#656975]">EXECUTOR</span>
 
             {iExecutor && <Tag>You</Tag>}
-            {deal.ownerRole === 'EXECUTOR' && <Tag>Owner</Tag>}
+            {deal.ownerRole === 'EXECUTOR' && <Tag type="owner">Owner</Tag>}
           </div>
           <span className="mt-[16px] text-2xl font-[500]">
-            {iExecutor
-              ? transformString(deal.ownerPublicKey)
-              : deal.contractorPublicKey
-              ? transformString(deal.contractorPublicKey)
-              : 'Empty'}
+            {executorPublicKey ? transformString(executorPublicKey) : 'Empty'}
           </span>
           <span className="mt-[16px] text-sm font-[400] text-[#656975]">
             Performs the work specified in the contract.

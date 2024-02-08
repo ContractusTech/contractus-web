@@ -9,7 +9,7 @@ import { FileUpload } from '@/components/ui/fileUpload'
 type FileWithName = UploadedFile & { name: string; size: number }
 
 export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
-  const { deal, updateDeal, iExecutor } = useDealStore()
+  const { deal, updateDeal } = useDealStore()
   const [parent] = useAutoAnimate()
 
   const handleFileUpload = async (file: FileWithName) => {
@@ -63,14 +63,12 @@ export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
           ))}
       </div>
 
-      {iExecutor && (
-        <FileUpload
-          className="absolute right-[20px] top-[20px] p-[20px]"
-          onFileUploaded={handleFileUpload}
-        >
-          Attache
-        </FileUpload>
-      )}
+      <FileUpload
+        className="absolute right-[20px] top-[20px] p-[20px]"
+        onFileUploaded={handleFileUpload}
+      >
+        Attache
+      </FileUpload>
     </div>
   )
 }

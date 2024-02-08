@@ -23,6 +23,10 @@ export const Input = ({
     return variant === 'textarea' ? 'h-[150px]' : 'h-[35px]'
   }, [variant])
 
+  if (!register) {
+    return null
+  }
+
   return (
     <Form.Field name={name} className="grid">
       <div className="flex items-baseline justify-between">
