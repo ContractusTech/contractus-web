@@ -1,4 +1,5 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
 
 import { useDeals } from '@/api/modules/deals/hooks/useDeals'
@@ -14,7 +15,10 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { DealCard, EmptyPlaceholder } from '@/components/widgets/deals'
 import { CreateDealButton, TokenSwapper } from '@/components/widgets/tokens'
-import LayoutDefault from '@/layouts/default'
+
+const RootLayout = dynamic(() => import('../layouts/default'), {
+  ssr: false
+})
 
 const IndexPage: NextPageWithLayout = () => {
   const { connectedUser } = useUserStore()
@@ -80,7 +84,7 @@ const IndexPage: NextPageWithLayout = () => {
 }
 
 IndexPage.getLayout = page => {
-  return <LayoutDefault>{page}</LayoutDefault>
+  return <RootLayout>{page}</RootLayout>
 }
 
 export default IndexPage

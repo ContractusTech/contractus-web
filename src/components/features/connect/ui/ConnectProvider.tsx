@@ -1,5 +1,4 @@
 import { getCookie } from 'cookies-next'
-// import Cookies from 'js-cookie'
 import { FC, PropsWithChildren, useEffect, useState } from 'react'
 
 import { api } from '@/api/client'

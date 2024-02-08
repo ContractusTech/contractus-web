@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { useUserStore } from '@/app/store/user-store'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -15,12 +16,17 @@ type EditAddressButton = {
 
 export const PartnerEdit = ({
   triggerClassName,
-  title,
   onSave
 }: EditAddressButton) => {
   const [open, setOpen] = useState(false)
 
-  const { register, handleSubmit } = useForm<{ value: string }>()
+  const { connectedUser } = useUserStore()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid }
+  } = useForm<{ value: string }>({})
 
   const handleSave = handleSubmit(data => {
     onSave && onSave(data.value)
@@ -33,10 +39,44 @@ export const PartnerEdit = ({
         <Button variant={'tertiary'}>Edit</Button>
       </DialogTrigger>
       <DialogContent className="w-full max-w-[600px] rounded-[10px] bg-[#070708] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
-        {title && <CreateDealHeader title={title} />}
+        <CreateDealHeader title={'Edit partner'} />
         <div className="flex flex-col gap-[20px] p-[20px]">
-          <Input register={register('value')} name="value" />
-          <Button onClick={handleSave}>Save</Button>
+          <div className="flex flex-col gap-[10px]">
+            <span className="text-center text-[30px] font-[600]">
+              Enter address
+            </span>
+            <span className="text-center text-[13px] text-[#656975]">
+              Of the account who will perform the work under the contract.
+            </span>
+          </div>
+
+          <div className="flex flex-col gap-[10px]">
+            <Input
+              centered
+              register={register('value', {
+                required: true,
+                pattern:
+                  connectedUser?.blockchain === 'solana'
+                    ? {
+                        value: /^([\dA-Za-z]{44})$/,
+                        message: 'Input valid address for Solana'
+                      }
+                    : {
+                        value: /^0x[\dA-Fa-f]{40}$/,
+                        message: 'Input valid address for BSC'
+                      }
+              })}
+              name="value"
+              size="l"
+            />
+            <span className="text-center text-[13px] text-[#656975]">
+              Account must be {connectedUser?.blockchain.toUpperCase()}{' '}
+              blockchain
+            </span>
+          </div>
+          <Button disabled={!isValid} onClick={handleSave}>
+            Update
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

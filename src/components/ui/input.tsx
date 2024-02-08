@@ -9,6 +9,8 @@ type InputProps = {
   variant?: 'input' | 'textarea'
   rightSlot?: React.ReactNode
   type?: InputHTMLAttributes<HTMLInputElement>['type']
+  size?: 'md' | 'l'
+  centered?: boolean
 }
 
 export const Input = ({
@@ -17,10 +19,16 @@ export const Input = ({
   register,
   variant,
   rightSlot,
-  type
+  type,
+  size,
+  centered
 }: InputProps) => {
   const fieldHeight = useMemo(() => {
-    return variant === 'textarea' ? 'h-[150px]' : 'h-[35px]'
+    return variant === 'textarea'
+      ? 'h-[150px]'
+      : size === 'l'
+      ? 'h-[55px]'
+      : 'h-[35px]'
   }, [variant])
 
   if (!register) {
@@ -47,7 +55,9 @@ export const Input = ({
             <input
               {...register}
               type={type ?? 'text'}
-              className="h-[100%] flex-grow bg-transparent"
+              className={`h-[100%] flex-grow bg-transparent ${
+                size === 'l' && 'text-[30px]'
+              } ${centered && 'text-center'}`}
             />
           )}
         </Form.Control>

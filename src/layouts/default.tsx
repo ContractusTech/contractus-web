@@ -14,6 +14,8 @@ export default function RootLayout({
     return <span>Loading</span>
   }
 
+  // Используйте компонент RootLayout внутри вашего страницы или другого компонента
+
   return (
     <BalanceProvider>
       <main className="flex min-h-screen flex-col px-24">

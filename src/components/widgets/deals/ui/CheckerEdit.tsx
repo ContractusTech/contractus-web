@@ -8,7 +8,7 @@ import { Deal } from '@/app/types'
 import { transformString } from '@/lib/utils'
 
 import { CheckerAmountChange } from './CheckerAmountChange'
-import { EditAddressButton } from './EditAddressButton'
+import { PartnerEdit } from './PartnerEdit'
 
 export const CheckerEdit = () => {
   const { deal, setDeal } = useDealStore()
@@ -71,7 +71,7 @@ export const CheckerEdit = () => {
       </div>
 
       <div className="flex gap-[8px]">
-        <EditAddressButton title="Edit checker" onSave={handleCheckerEdit} />
+        <PartnerEdit onSave={handleCheckerEdit} />
         <CheckerAmountChange />
       </div>
     </div>

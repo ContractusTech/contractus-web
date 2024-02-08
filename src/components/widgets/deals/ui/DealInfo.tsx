@@ -8,7 +8,6 @@ import Tag from '@/components/ui/tag'
 import { transformString } from '@/lib/utils'
 
 import { DealAmountChange } from './DealAmountChange'
-import { EditAddressButton } from './EditAddressButton'
 import { PartnerEdit } from './PartnerEdit'
 
 export const DealInfo = () => {
@@ -54,14 +53,7 @@ export const DealInfo = () => {
             {clientAddress ? transformString(clientAddress) : 'Empty'}
           </span>
 
-          {!iClient && (
-            <PartnerEdit />
-            // <EditAddressButton
-            //   triggerClassName="absolute right-[20px] top-[20px]"
-            //   title="Edit client"
-            //   onSave={handleClientEdit}
-            // />
-          )}
+          {!iClient && <PartnerEdit onSave={handleClientEdit} />}
         </div>
 
         <div className="relative flex h-full w-full justify-between  border-t-[1px] border-t-[#262930] p-[20px] ">
@@ -101,13 +93,7 @@ export const DealInfo = () => {
           </span>
         </div>
 
-        {!iExecutor && (
-          <EditAddressButton
-            triggerClassName="absolute right-[20px] top-[20px]"
-            title="Edit executor"
-            onSave={handleClientEdit}
-          />
-        )}
+        {!iExecutor && <PartnerEdit onSave={handleClientEdit} />}
       </div>
     </div>
   )

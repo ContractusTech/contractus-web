@@ -67,7 +67,7 @@ export const CreateDealButton: FC<Props> = ({ onSuccess }) => {
       <DialogTrigger asChild>
         <Button>Create new</Button>
       </DialogTrigger>
-      <DialogContent className="w-full max-w-[600px] rounded-[10px] bg-[#070708] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
+      <DialogContent className="max-h-[100vh] w-full max-w-[600px] overflow-scroll rounded-[10px] bg-[#070708] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
         <CreateDealHeader title="New deal" />
         <div className="flex flex-col gap-[22px] px-[35px] pb-[30px] pt-[40px] md:px-[15px] md:pb-[15px]">
           <h2 className="mb-4 text-lg font-semibold">Select your role</h2>

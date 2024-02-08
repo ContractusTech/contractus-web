@@ -37,6 +37,10 @@ export const EditDealForm = () => {
         onSubmit={e => e.preventDefault()}
       >
         <div className="flex flex-col gap-[13px]">
+          {(dealStore.deal?.status === 'STARTED' ||
+            // @ts-ignore
+            'EXPIRED' === dealStore.deal?.status) && <DealStatusBadge />}
+
           <DealInfo />
 
           {withChecker && <CheckerEdit />}
@@ -63,8 +67,9 @@ export const EditDealForm = () => {
             <FileList type="meta" />
           </div>
         )}
-
-        <DealStatusBadge />
+        {dealStore.deal?.status !== 'STARTED' &&
+          // @ts-ignore
+          'EXPIRED' !== dealStore.deal?.status && <DealStatusBadge />}
 
         {dealStore.dealActions?.actions.map(action => {
           switch (action) {

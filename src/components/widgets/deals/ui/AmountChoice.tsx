@@ -123,7 +123,7 @@ export const AmountChoice = ({
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
       <DialogTrigger asChild>
-        <Button variant={'tertiary'}>Edit</Button>
+        <Button variant={'tertiary'}>{checker ? 'Fee' : 'Edit'}</Button>
       </DialogTrigger>
       <DialogContent className="w-full max-w-[600px] rounded-[10px] bg-[#070708] px-[18px] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
         <CreateDealHeader title="Change amount" />
@@ -133,6 +133,7 @@ export const AmountChoice = ({
             register={register('value')}
             type="number"
             name="amount"
+            size="l"
             rightSlot={
               <SelectTokens
                 tokens={innativeTokens}
