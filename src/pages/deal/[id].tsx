@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 
 import { api } from '@/api/client'
 import { useDealStore } from '@/app/store/deal-store'
-import { NextPageWithLayout } from '@/app/types'
+import { Deal, NextPageWithLayout } from '@/app/types'
 import { EditDealForm } from '@/components/widgets/deals'
 import RootLayout from '@/layouts/default'
 
@@ -22,7 +22,7 @@ const DealPage: NextPageWithLayout = () => {
     dealStore.setLoading(true)
 
     api.deals.dealsDetail(dealId).then(deal => {
-      dealStore.setDeal(deal)
+      dealStore.setDeal(deal as unknown as Deal)
       dealStore.setLoading(false)
     })
   }, [dealId])

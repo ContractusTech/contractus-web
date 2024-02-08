@@ -9,6 +9,7 @@ import { transformString } from '@/lib/utils'
 
 import { DealAmountChange } from './DealAmountChange'
 import { EditAddressButton } from './EditAddressButton'
+import { PartnerEdit } from './PartnerEdit'
 
 export const DealInfo = () => {
   const {
@@ -54,11 +55,12 @@ export const DealInfo = () => {
           </span>
 
           {!iClient && (
-            <EditAddressButton
-              triggerClassName="absolute right-[20px] top-[20px]"
-              title="Edit client"
-              onSave={handleClientEdit}
-            />
+            <PartnerEdit />
+            // <EditAddressButton
+            //   triggerClassName="absolute right-[20px] top-[20px]"
+            //   title="Edit client"
+            //   onSave={handleClientEdit}
+            // />
           )}
         </div>
 

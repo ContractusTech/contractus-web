@@ -3,9 +3,9 @@ import { useRouter } from 'next/navigation'
 import { FC } from 'react'
 import { formatUnits } from 'viem'
 
-import { Deal } from '@/api/generated-api'
 import { PAGES } from '@/app/constants/pages'
 import { useUserStore } from '@/app/store/user-store'
+import { Deal } from '@/app/types'
 import { ArrowLeftBottomCorner } from '@/assets/svg/ArrowLeftBottomCorner'
 import { formatNumber, getTimeUnitFromNow, transformString } from '@/lib/utils'
 

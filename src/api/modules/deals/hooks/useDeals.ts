@@ -3,6 +3,7 @@ import { getCookie } from 'cookies-next'
 
 import { api } from '@/api/client'
 import { COOKIES } from '@/app/constants/cookies'
+import { Deal } from '@/app/types'
 
 export const DEALS_UQ_KEY = 'deals'
 export const DEAL_UQ_KEY = 'deal'
@@ -14,7 +15,7 @@ export const useDeals = () => {
     refetch
   } = useQuery({
     queryKey: [DEALS_UQ_KEY],
-    queryFn: () => api.deals.dealsList(),
+    queryFn: () => api.deals.dealsList() as unknown as Deal[],
     enabled: !!getCookie(COOKIES.AUTH_TOKEN)
   })
 

@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { CreateDealHeader } from './CreateDealHeader'
 
 export const EditDeadline = () => {
-  const { setDeal, deal } = useDealStore()
+  const { deal, updateDeal } = useDealStore()
 
   const [dialogOpened, setDialogOpened] = useState(false)
 
@@ -25,7 +25,7 @@ export const EditDeadline = () => {
         .dealsCreate2(deal.id, {
           deadline: selected?.toISOString()
         })
-        .then(updateDeal => setDeal(updateDeal))
+        .then(() => updateDeal())
     }
   }, [selected, deal])
 
