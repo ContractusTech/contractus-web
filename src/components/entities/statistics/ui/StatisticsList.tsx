@@ -4,7 +4,7 @@ import { FC } from 'react'
 import { FreeMode, Mousewheel } from 'swiper/modules'
 import { Swiper as SwiperComponent, SwiperSlide } from 'swiper/react'
 
-import { useStatistics } from '@/api/modules/accounts/hooks/useStatistics'
+import { useStatistics } from '@/api/hooks/useStatistics'
 
 import StatisticsListItem from './StatisticsListItem'
 

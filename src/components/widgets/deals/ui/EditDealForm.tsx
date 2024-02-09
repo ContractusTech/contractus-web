@@ -3,9 +3,10 @@ import 'dayjs/locale/en'
 
 import { Root } from '@radix-ui/react-form'
 import dayjs from 'dayjs'
-import { useMemo } from 'react'
 
-import { useDealStore } from '@/app/store/deal-store'
+import { useDeal } from '@/api/hooks/useDeal'
+import { useDealActions } from '@/api/hooks/useDealActions'
+import { useRolesStore } from '@/app/store/roles-store'
 
 import { CancelButton } from './CancelButton'
 import { CancelSignButton } from './CancelSignButton'
@@ -23,12 +24,13 @@ import { StartDealBtn } from './StartDealBtn'
 dayjs.locale('en')
 
 export const EditDealForm = () => {
-  const dealStore = useDealStore()
+  const { withChecker } = useRolesStore()
+  const { deal } = useDeal()
+  const { actions } = useDealActions()
 
-  const withChecker = useMemo(
-    () => dealStore.deal?.completionCheckType === 'CHECKER',
-    [dealStore.deal]
-  )
+  if (!deal || !actions) {
+    return null
+  }
 
   return (
     <div className="m-[0_auto] flex max-w-[534px] flex-col gap-[30px]">
@@ -37,9 +39,9 @@ export const EditDealForm = () => {
         onSubmit={e => e.preventDefault()}
       >
         <div className="flex flex-col gap-[13px]">
-          {(dealStore.deal?.status === 'STARTED' ||
-            // @ts-ignore
-            'EXPIRED' === dealStore.deal?.status) && <DealStatusBadge />}
+          {(deal.status === 'STARTED' || deal.status === 'EXPIRED') && (
+            <DealStatusBadge />
+          )}
 
           <DealInfo />
 
@@ -48,13 +50,13 @@ export const EditDealForm = () => {
           <DeadLineField />
         </div>
 
-        {dealStore.deal?.performanceBondType !== 'NONE' && (
+        {deal.performanceBondType !== 'NONE' && (
           <div className="flex flex-col gap-[13px]">
             <PerformanceBond />
           </div>
         )}
 
-        {dealStore.deal?.status === 'STARTED' ? (
+        {deal.status === 'STARTED' ? (
           <div className="flex flex-col gap-[13px]">
             <span className="text-[29px] text-[#D5D9E0]">Result</span>
             <CommentField type="result" />
@@ -67,11 +69,11 @@ export const EditDealForm = () => {
             <FileList type="meta" />
           </div>
         )}
-        {dealStore.deal?.status !== 'STARTED' &&
-          // @ts-ignore
-          'EXPIRED' !== dealStore.deal?.status && <DealStatusBadge />}
+        {deal.status !== 'STARTED' && deal.status !== 'EXPIRED' && (
+          <DealStatusBadge />
+        )}
 
-        {dealStore.dealActions?.actions.map(action => {
+        {actions.actions.map(action => {
           switch (action) {
             case 'SIGN': {
               return <StartDealBtn key={action} />

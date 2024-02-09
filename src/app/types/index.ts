@@ -1,8 +1,6 @@
 import type { NextPage } from 'next'
 import type { ReactElement, ReactNode } from 'react'
 
-import { Tokens } from '@/api/generated-api'
-
 export type NextPageWithLayout<P = NonNullable<unknown>, IP = P> = NextPage<
   P,
   IP
@@ -32,7 +30,7 @@ export type AppFile = {
   encrypted: boolean
 }
 
-export type TokenWithChecked = Tokens[number] & {
+export type TokenWithChecked = Token & {
   checked?: boolean
   disabled?: boolean
 }
@@ -73,6 +71,7 @@ export type DealStatus =
   | 'CANCELED'
   | 'CANCELING'
   | 'REVOKED'
+  | 'EXPIRED'
 
 export type PerformanceBondType =
   | 'ONLY_CLIENT'
@@ -143,4 +142,30 @@ export type DealFee = {
   isMinimum: boolean
   percent: number
   type: 'DEAL'
+}
+
+type AmountedToken = {
+  address: null | string
+  code: string
+  decimals: number
+  native: boolean
+  serviced: boolean
+}
+
+export type BalanceType = {
+  estimateAmount: string
+  blockchain: string
+  tokens: [
+    {
+      amount: {
+        token: AmountedToken
+        uiValue: number
+        value: string
+      }
+      currency: 'USD'
+      price: number
+    }
+  ]
+  wrap: string[]
+  tier: 'basic' | 'holder'
 }

@@ -1,26 +1,20 @@
 import { UserCog, UserIcon } from 'lucide-react'
-import { useMemo } from 'react'
 
-import { useDealStore } from '@/app/store/deal-store'
+import { useRolesStore } from '@/app/store/roles-store'
 import Tag from '@/components/ui/tag'
 
 const YTag = () => <Tag className=" absolute  right-[8px] top-[8px]">You</Tag>
 
 export const RoleSignatureView = () => {
   const {
-    deal,
     iChecker,
     iClient,
     iExecutor,
     signedByChecker,
     signedByClient,
-    signedByExecutor
-  } = useDealStore()
-
-  const withChecker = useMemo(
-    () => deal?.completionCheckType === 'CHECKER',
-    [deal]
-  )
+    signedByExecutor,
+    withChecker
+  } = useRolesStore()
 
   return (
     <div

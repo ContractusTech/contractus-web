@@ -4,8 +4,8 @@ import { useMemo } from 'react'
 import { formatUnits } from 'viem'
 
 import { Deal } from '@/api/generated-api'
+import { useDeal } from '@/api/hooks/useDeal'
 import { ERRORS } from '@/app/constants/errors'
-import { useDealStore } from '@/app/store/deal-store'
 import { transformString } from '@/lib/utils'
 
 import { RoleSignatureView } from './RoleSignatureView'
@@ -77,7 +77,7 @@ const BADGES_MAP: {
 }
 
 export const DealStatusBadge = () => {
-  const { deal } = useDealStore()
+  const { deal } = useDeal()
 
   if (!deal) {
     throw new Error(ERRORS.DEAL_EXISTS)

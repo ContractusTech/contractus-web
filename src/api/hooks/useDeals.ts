@@ -6,43 +6,22 @@ import { COOKIES } from '@/app/constants/cookies'
 import { Deal } from '@/app/types'
 
 export const DEALS_UQ_KEY = 'deals'
-export const DEAL_UQ_KEY = 'deal'
 
 export const useDeals = () => {
   const {
     data: deals,
     isLoading: isDealsLoading,
-    refetch
+    refetch: refetchDeals
   } = useQuery({
     queryKey: [DEALS_UQ_KEY],
     queryFn: () => api.deals.dealsList() as unknown as Deal[],
-    enabled: !!getCookie(COOKIES.AUTH_TOKEN)
+    enabled: !!getCookie(COOKIES.AUTH_TOKEN),
+    refetchInterval: 10_000
   })
 
   return {
     deals,
     isDealsLoading,
-    refetch
-  }
-}
-
-export const useDeal = (dealId: string) => {
-  const {
-    data: deal,
-    isLoading: isDealLoading,
-    refetch
-  } = useQuery({
-    queryKey: [DEAL_UQ_KEY],
-    queryFn: () =>
-      api.deals.dealsDetail(dealId, {
-        baseURL: process.env.NEXT_PUBLIC_API_HOST
-      }),
-    enabled: !!getCookie(COOKIES.AUTH_TOKEN)
-  })
-
-  return {
-    deal,
-    isDealLoading,
-    refetch
+    refetchDeals
   }
 }

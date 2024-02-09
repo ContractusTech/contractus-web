@@ -1,9 +1,9 @@
-import { useUserStore } from '@/app/store/user-store'
+import { useBalance } from '@/api/hooks/useBalance'
 import { CrownIcon } from '@/assets/svg/CrownIcon'
 import { Button } from '@/components/ui/button'
 
 export const UserStatus = () => {
-  const { balance } = useUserStore()
+  const { balance } = useBalance()
 
   if (balance?.tier === 'holder') {
     return (

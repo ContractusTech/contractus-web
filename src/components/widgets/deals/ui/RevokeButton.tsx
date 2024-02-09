@@ -1,10 +1,10 @@
+import { useDeal } from '@/api/hooks/useDeal'
 import httpClient from '@/api/httpClient'
 import { ERRORS } from '@/app/constants/errors'
-import { useDealStore } from '@/app/store/deal-store'
 import { Button } from '@/components/ui/button'
 
 export const RevokeButton = () => {
-  const { deal } = useDealStore()
+  const { deal, refetchDeal } = useDeal()
 
   const handleRevoke = async () => {
     if (!deal) {
@@ -18,6 +18,8 @@ export const RevokeButton = () => {
         force: false
       }
     })
+
+    await refetchDeal()
   }
 
   return <Button onClick={handleRevoke}>Revoke</Button>

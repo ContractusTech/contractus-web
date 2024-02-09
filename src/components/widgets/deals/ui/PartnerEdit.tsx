@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { useUserStore } from '@/app/store/user-store'
+import { useUser } from '@/api/hooks/useUser'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -20,7 +20,7 @@ export const PartnerEdit = ({
 }: EditAddressButton) => {
   const [open, setOpen] = useState(false)
 
-  const { connectedUser } = useUserStore()
+  const { user } = useUser()
 
   const {
     register,
@@ -56,7 +56,7 @@ export const PartnerEdit = ({
               register={register('value', {
                 required: true,
                 pattern:
-                  connectedUser?.blockchain === 'solana'
+                  user?.blockchain === 'solana'
                     ? {
                         value: /^([\dA-Za-z]{44})$/,
                         message: 'Input valid address for Solana'
@@ -70,8 +70,7 @@ export const PartnerEdit = ({
               size="l"
             />
             <span className="text-center text-[13px] text-[#656975]">
-              Account must be {connectedUser?.blockchain.toUpperCase()}{' '}
-              blockchain
+              Account must be {user?.blockchain.toUpperCase()} blockchain
             </span>
           </div>
           <Button disabled={!isValid} onClick={handleSave}>

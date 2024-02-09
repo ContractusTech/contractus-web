@@ -3,8 +3,8 @@ import { useRouter } from 'next/navigation'
 import { FC } from 'react'
 import { formatUnits } from 'viem'
 
+import { useUser } from '@/api/hooks/useUser'
 import { PAGES } from '@/app/constants/pages'
-import { useUserStore } from '@/app/store/user-store'
 import { Deal } from '@/app/types'
 import { ArrowLeftBottomCorner } from '@/assets/svg/ArrowLeftBottomCorner'
 import { formatNumber, getTimeUnitFromNow, transformString } from '@/lib/utils'
@@ -14,7 +14,7 @@ type Props = {
 }
 
 const DealCard: FC<Props> = ({ deal }) => {
-  const { connectedUser } = useUserStore()
+  const { user } = useUser()
   const router = useRouter()
 
   const handleDealClick = () => {
@@ -60,7 +60,7 @@ const DealCard: FC<Props> = ({ deal }) => {
             </p>
           </div>
         </div>
-        {connectedUser?.publicKey === deal.checkerPublicKey && (
+        {user?.publicKey === deal.checkerPublicKey && (
           <div>
             <p className="text-[12px] font-medium leading-none">
               <span className="text-secondary-text">Earning</span>

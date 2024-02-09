@@ -1,36 +1,27 @@
-import { getCookie } from 'cookies-next'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { FC, PropsWithChildren, useEffect, useState } from 'react'
 
-import { api } from '@/api/client'
-import { COOKIES } from '@/app/constants/cookies'
-import { useUserStore } from '@/app/store/user-store'
+import { useUser } from '@/api/hooks/useUser'
 
 import { ConnectOverflow } from './ConnectOverflow'
 import { SolanaConnectProvider } from './SolanaProvider'
 
 export const ConnectProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [overflowOpened, setOverflowOpened] = useState(false)
-  const { setConnectedUser, connectedUser } = useUserStore()
+  const { user } = useUser()
+  const [parent] = useAutoAnimate()
 
-  useEffect(() => {
-    if (connectedUser) {
-      setOverflowOpened(false)
-    } else {
-      setOverflowOpened(true)
-      const token = getCookie(COOKIES.AUTH_TOKEN)
+  const [mounted, setMounted] = useState(false)
 
-      if (token) {
-        api.accounts
-          .getAccounts({ headers: { 'X-Authorization': token } })
-          .then(data => setConnectedUser(data))
-      }
-    }
-  }, [connectedUser])
+  useEffect(() => setMounted(true), [])
+
+  if (!mounted) {
+    return null
+  }
 
   return (
     <SolanaConnectProvider>
       {children}
-      <ConnectOverflow open={overflowOpened} />
+      <div ref={parent}>{!user && <ConnectOverflow />}</div>
     </SolanaConnectProvider>
   )
 }

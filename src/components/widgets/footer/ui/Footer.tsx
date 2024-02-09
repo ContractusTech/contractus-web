@@ -8,10 +8,10 @@ export const Footer = () => {
       <span>HashHorizon Tech</span>
 
       <div className="ml-[auto] flex items-center gap-[10px]">
-        <Link href={PAGES.MAIN}>Home</Link>
-        <Link href={PAGES.MAIN}>Privacy</Link>
-        <Link href={PAGES.MAIN}>Terms</Link>
-        <Link href={PAGES.MAIN}>Github</Link>
+        <Link href={PAGES.HOME}>Home</Link>
+        <Link href={PAGES.PRIVACY}>Privacy</Link>
+        <Link href={PAGES.TERMS}>Terms</Link>
+        <Link href={PAGES.GITHUB}>Github</Link>
 
         <span>v1.0.1</span>
       </div>

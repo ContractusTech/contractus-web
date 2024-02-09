@@ -1,13 +1,13 @@
 import { formatUnits } from 'viem'
 
 import { Deal } from '@/api/generated-api'
+import { useDeal } from '@/api/hooks/useDeal'
 import { ERRORS } from '@/app/constants/errors'
-import { useDealStore } from '@/app/store/deal-store'
 
 import { BondAmountChange } from './BondAmountChange'
 
 export const PerformanceBond = () => {
-  const { deal } = useDealStore()
+  const { deal } = useDeal()
 
   const getTokenLabel = (role: Deal['ownerRole']) => {
     if (!deal) {

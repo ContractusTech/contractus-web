@@ -15,11 +15,7 @@ import { Button } from '@/components/ui/button'
 import { useEvmConnect } from '../model/useEvmConnect'
 import { useSolanaConnect } from './SolanaProvider'
 
-type Props = {
-  open: boolean
-}
-
-export const ConnectOverflow: FC<Props> = ({ open }) => {
+export const ConnectOverflow: FC = () => {
   const { connectors } = useConnect()
   const { handleConnect: evmConnect } = useEvmConnect()
   const { handleConnect: solanaConnect } = useSolanaConnect()
@@ -38,10 +34,6 @@ export const ConnectOverflow: FC<Props> = ({ open }) => {
     } catch (error) {
       console.log({ e: error })
     }
-  }
-
-  if (!open) {
-    return null
   }
 
   return (

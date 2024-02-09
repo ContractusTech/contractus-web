@@ -7,8 +7,8 @@ import { formatUnits } from 'viem'
 
 import { api } from '@/api/client'
 import { Tokens } from '@/api/generated-api'
-import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
-import { useUserStore } from '@/app/store/user-store'
+import { useBalance } from '@/api/hooks/useBalance'
+import { useTokens } from '@/api/hooks/useTokens'
 import { Amount, DealFee, Token } from '@/app/types'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
@@ -42,7 +42,7 @@ export const AmountChoice = ({
   dealToken
 }: AmountChoiceProps) => {
   const { tokens } = useTokens()
-  const { balance } = useUserStore()
+  const { balance } = useBalance()
   const [dialogOpened, setDialogOpened] = useState(false)
   const [fee, setFee] = useState<DealFee | null>(null)
   const [parent] = useAutoAnimate()
