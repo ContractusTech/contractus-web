@@ -1,9 +1,9 @@
 import { formatUnits } from 'viem'
 
+import { useDeal } from '@/api/hooks/useDeal'
+import { useTokens } from '@/api/hooks/useTokens'
+import { useUser } from '@/api/hooks/useUser'
 import httpClient from '@/api/httpClient'
-import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
-import { useDealStore } from '@/app/store/deal-store'
-import { useUserStore } from '@/app/store/user-store'
 import { Deal } from '@/app/types'
 import { transformString } from '@/lib/utils'
 
@@ -11,27 +11,26 @@ import { CheckerAmountChange } from './CheckerAmountChange'
 import { PartnerEdit } from './PartnerEdit'
 
 export const CheckerEdit = () => {
-  const { deal, setDeal } = useDealStore()
+  const { deal, refetchDeal } = useDeal()
   const { tokens } = useTokens()
-
-  const { connectedUser } = useUserStore()
+  const { user } = useUser()
 
   const handleCheckerEdit = async (address: string) => {
     if (!deal) {
       throw new Error('No deal')
     }
 
-    const { data } = await httpClient<Deal>({
+    await httpClient<Deal>({
       url: `deals/${deal.id}/participate`,
       method: 'POST',
       data: {
         type: 'CHECKER',
         publicKey: address,
-        blockchain: connectedUser?.blockchain
+        blockchain: user?.blockchain
       }
     })
 
-    setDeal(data)
+    await refetchDeal()
   }
 
   return (

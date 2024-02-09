@@ -1,9 +1,7 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
 
-import { useDeals } from '@/api/modules/deals/hooks/useDeals'
-import { useUserStore } from '@/app/store/user-store'
+import { useDeals } from '@/api/hooks/useDeals'
 import { NextPageWithLayout } from '@/app/types'
 import { ChevronDownIcon } from '@/assets/svg/ChevronDownIcon'
 import { StatisticsList } from '@/components/entities/statistics'
@@ -21,27 +19,8 @@ const RootLayout = dynamic(() => import('../layouts/default'), {
 })
 
 const IndexPage: NextPageWithLayout = () => {
-  const { connectedUser } = useUserStore()
-  const { deals, refetch } = useDeals()
+  const { deals, refetchDeals } = useDeals()
   const [parent] = useAutoAnimate()
-
-  useEffect(() => {
-    if (connectedUser?.publicKey) {
-      refetch()
-    }
-  }, [connectedUser?.publicKey, refetch])
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (connectedUser?.publicKey) {
-        refetch()
-      }
-    }, 10_000)
-
-    return () => {
-      clearInterval(intervalId)
-    }
-  }, [connectedUser?.publicKey, refetch])
 
   return (
     <>
@@ -70,7 +49,7 @@ const IndexPage: NextPageWithLayout = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           <div>
-            <CreateDealButton onSuccess={refetch} />
+            <CreateDealButton onSuccess={refetchDeals} />
           </div>
         </div>
         <div className="grid grid-cols-3 gap-8 md:grid-cols-2" ref={parent}>

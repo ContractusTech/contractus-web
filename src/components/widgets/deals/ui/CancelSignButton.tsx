@@ -2,13 +2,13 @@ import { toBytes } from 'viem'
 import { getWalletClient } from 'wagmi/actions'
 
 import { Tx } from '@/api/generated-api'
+import { useDeal } from '@/api/hooks/useDeal'
 import httpClient from '@/api/httpClient'
 import { ERRORS } from '@/app/constants/errors'
-import { useDealStore } from '@/app/store/deal-store'
 import { Button } from '@/components/ui/button'
 
 export const CancelSignButton = () => {
-  const { deal, updateDeal } = useDealStore()
+  const { deal, refetchDeal } = useDeal()
 
   const cancelDeal = async () => {
     try {
@@ -43,7 +43,7 @@ export const CancelSignButton = () => {
           }
         })
 
-        await updateDeal()
+        await refetchDeal()
       } else {
         throw new Error(ERRORS.WALLET_EXISTS)
       }

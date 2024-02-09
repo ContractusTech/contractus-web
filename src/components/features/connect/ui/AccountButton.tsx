@@ -1,6 +1,6 @@
 import { ChevronDown } from 'lucide-react'
 
-import { useUserStore } from '@/app/store/user-store'
+import { useUser } from '@/api/hooks/useUser'
 import { BalanceWalletIcon } from '@/assets/svg/BalanceWalletIcon'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,11 +15,11 @@ import { useEvmConnect } from '../model/useEvmConnect'
 import { useSolanaConnect } from './SolanaProvider'
 
 export const AccountButton = () => {
-  const { connectedUser } = useUserStore()
+  const { user } = useUser()
   const { handleDisconnect: handleSolanaDisconnect } = useSolanaConnect()
   const { handleDisconnect: handleEvmDisconnect } = useEvmConnect()
 
-  if (!connectedUser) {
+  if (!user) {
     return null
   }
 
@@ -31,9 +31,7 @@ export const AccountButton = () => {
           className="h-42 items-center gap-[8px] md:gap-x-8 md:px-5 md:pl-8 md:pr-5"
         >
           <BalanceWalletIcon className="h-16 w-16" />
-          <span className="md:hidden">
-            {transformString(connectedUser.publicKey)}
-          </span>
+          <span className="md:hidden">{transformString(user.publicKey)}</span>
           <ChevronDown className="h-16 w-16 text-textSecondary" />
         </Button>
       </DropdownMenuTrigger>
@@ -41,7 +39,7 @@ export const AccountButton = () => {
       <DropdownMenuContent>
         <DropdownMenuItem
           onClick={() =>
-            connectedUser.blockchain === 'solana'
+            user.blockchain === 'solana'
               ? handleSolanaDisconnect()
               : handleEvmDisconnect()
           }

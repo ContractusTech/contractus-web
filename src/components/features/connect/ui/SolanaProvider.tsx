@@ -2,7 +2,6 @@ import { WalletName } from '@solana/wallet-adapter-base'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useQueryClient } from '@tanstack/react-query'
 import base58 from 'bs58'
-import { getCookie } from 'cookies-next'
 import React, {
   createContext,
   PropsWithChildren,
@@ -10,11 +9,7 @@ import React, {
   useEffect
 } from 'react'
 
-import { api } from '@/api/client'
-import { STATISTICS_UQ_KEY } from '@/api/modules/accounts/hooks/useStatistics'
-import { DEALS_UQ_KEY } from '@/api/modules/deals/hooks/useDeals'
-import { TOKENS_UQ_KEY } from '@/api/modules/tokens/hooks/useTokens'
-import { COOKIES } from '@/app/constants/cookies'
+import { useUser } from '@/api/hooks/useUser'
 import { LOCAL_STORAGE } from '@/app/constants/localStorage'
 import MESSAGES from '@/app/constants/web3'
 import { useUserStore } from '@/app/store/user-store'
@@ -45,7 +40,8 @@ export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
     connected,
     disconnecting
   } = useWallet()
-  const { connectedUser, setConnectedUser, logout } = useUserStore()
+  const { logout } = useUserStore()
+  const { user, refetchUser } = useUser()
 
   useEffect(() => {
     const connectAndSign = async () => {
@@ -58,7 +54,7 @@ export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
         return
       }
 
-      if (connectedUser) {
+      if (user) {
         return
       }
 
@@ -78,29 +74,11 @@ export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
         identifier: deviceId
       })
 
-      const token = getCookie(COOKIES.AUTH_TOKEN)
-
-      const account = await api.accounts.getAccounts({
-        headers: { 'X-Authorization': token }
-      })
-      setConnectedUser(account)
-
-      queryClient.invalidateQueries({ queryKey: [TOKENS_UQ_KEY] })
-      queryClient.invalidateQueries({ queryKey: [STATISTICS_UQ_KEY] })
-      queryClient.invalidateQueries({ queryKey: [DEALS_UQ_KEY] })
+      refetchUser()
     }
 
     connectAndSign()
-  }, [
-    wallet,
-    signMessage,
-    publicKey,
-    connectedUser,
-    connected,
-    disconnecting,
-    setConnectedUser,
-    queryClient
-  ])
+  }, [wallet, signMessage, publicKey, connected, disconnecting, queryClient])
 
   const handleConnect = (selectedWallet: WalletName) => {
     if (!connected) {
@@ -112,10 +90,6 @@ export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
     try {
       await disconnect()
       logout()
-
-      queryClient.invalidateQueries({ queryKey: [TOKENS_UQ_KEY] })
-      queryClient.invalidateQueries({ queryKey: [STATISTICS_UQ_KEY] })
-      queryClient.invalidateQueries({ queryKey: [DEALS_UQ_KEY] })
     } catch (error) {
       console.log({ e: error })
     }

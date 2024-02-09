@@ -3,13 +3,13 @@ import { getWalletClient } from 'wagmi/actions'
 
 import { api } from '@/api/client'
 import { Tx } from '@/api/generated-api'
+import { useDeal } from '@/api/hooks/useDeal'
 import httpClient from '@/api/httpClient'
 import { ERRORS } from '@/app/constants/errors'
-import { useDealStore } from '@/app/store/deal-store'
 import { Button } from '@/components/ui/button'
 
 export const CancelButton = () => {
-  const { deal, updateDeal } = useDealStore()
+  const { deal, refetchDeal } = useDeal()
 
   const handleCancelDeal = async () => {
     try {
@@ -45,12 +45,12 @@ export const CancelButton = () => {
             }
           })
 
-          await updateDeal()
+          await refetchDeal()
         }
       } else {
         await api.deals.txSignDelete(deal.id, 'DEAL_INIT')
       }
-      await updateDeal()
+      await refetchDeal()
     } catch (error) {
       console.log(error)
     }

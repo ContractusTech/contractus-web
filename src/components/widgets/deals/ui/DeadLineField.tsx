@@ -1,11 +1,11 @@
 import dayjs from 'dayjs'
 
-import { useDealStore } from '@/app/store/deal-store'
+import { useDeal } from '@/api/hooks/useDeal'
 
 import { EditDeadline } from './EditDeadline'
 
 export const DeadLineField = () => {
-  const { deal } = useDealStore()
+  const { deal } = useDeal()
 
   if (!deal) {
     throw new Error('No deal')

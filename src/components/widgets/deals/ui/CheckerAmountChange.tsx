@@ -1,15 +1,15 @@
 import { parseUnits } from 'viem'
 
 import { api } from '@/api/client'
-import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
-import { useDealStore } from '@/app/store/deal-store'
+import { useDeal } from '@/api/hooks/useDeal'
+import { useTokens } from '@/api/hooks/useTokens'
 import { Amount } from '@/app/types'
 import { getDecimalOfShortToken } from '@/lib/utils'
 
 import { AmountChoice } from './AmountChoice'
 
 export const CheckerAmountChange = () => {
-  const { deal, updateDeal } = useDealStore()
+  const { deal, refetchDeal } = useDeal()
   const { tokens } = useTokens()
 
   if (!deal) {
@@ -33,7 +33,7 @@ export const CheckerAmountChange = () => {
       }
     })
 
-    await updateDeal()
+    await refetchDeal()
   }
 
   const defaultValueChecker: Amount | undefined = deal.checkerToken

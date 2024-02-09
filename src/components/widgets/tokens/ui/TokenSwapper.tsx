@@ -1,7 +1,10 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Link from 'next/link'
 
-import { useTokens } from '@/api/modules/tokens/hooks/useTokens'
+import { api } from '@/api/client'
+import { useBalance } from '@/api/hooks/useBalance'
+import { useTokens } from '@/api/hooks/useTokens'
+import { useUser } from '@/api/hooks/useUser'
 import { getCtusBsc, getCtusSolana } from '@/app/constants/getCTUSUrls'
 import { useUserStore } from '@/app/store/user-store'
 import { AddCircleIcon } from '@/assets/svg/AddCircleIcon'
@@ -16,22 +19,38 @@ import { Token } from './Token'
 export const TokenSwapper = () => {
   const [parent] = useAutoAnimate()
   const { tokens } = useTokens()
+  const { balance } = useBalance()
+  const { user } = useUser()
 
-  const { connectedUser, balance, setSelectedTokens, selectedTokens } =
-    useUserStore()
+  const { setSelectedTokens, selectedTokens } = useUserStore()
+
+  const handleBuy = async () => {
+    const { methods } = await api.accounts.topupCreate()
+
+    const a = document.createElement('a')
+    const url = methods?.at(0)?.url
+
+    if (url) {
+      a.href = url
+      a.target = '_blank'
+      a.click()
+    }
+  }
+
+  if (!balance) {
+    return null
+  }
 
   return (
     <>
-      <Balance amount={balance?.estimateAmount ?? '0'} />
+      <Balance amount={balance.estimateAmount ?? '0'} />
       <section className="mx-auto mb-30 flex gap-13 md:flex-wrap md:justify-center">
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={handleBuy}>
           <AddCircleIcon className="mr-4 h-16 w-16" />
           Buy
         </Button>
         <Link
-          href={
-            connectedUser?.blockchain === 'bsc' ? getCtusBsc : getCtusSolana
-          }
+          href={user?.blockchain === 'bsc' ? getCtusBsc : getCtusSolana}
           className="flex h-38 items-center gap-x-8 rounded-[12px] border border-input bg-background px-20 py-10 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
           target="_blank"
         >
@@ -54,7 +73,7 @@ export const TokenSwapper = () => {
 
         <div className="flex flex-col gap-[13px]" ref={parent}>
           {(() => {
-            const CTUS = balance?.tokens.find(
+            const CTUS = balance.tokens.find(
               token => token.amount.token.code === 'CTUS'
             )
 

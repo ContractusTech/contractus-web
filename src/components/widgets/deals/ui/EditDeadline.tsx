@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { DayPicker } from 'react-day-picker'
 
 import { api } from '@/api/client'
-import { useDealStore } from '@/app/store/deal-store'
+import { useDeal } from '@/api/hooks/useDeal'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 
 import { CreateDealHeader } from './CreateDealHeader'
 
 export const EditDeadline = () => {
-  const { deal, updateDeal } = useDealStore()
+  const { deal, refetchDeal } = useDeal()
 
   const [dialogOpened, setDialogOpened] = useState(false)
 
@@ -25,7 +25,7 @@ export const EditDeadline = () => {
         .dealsCreate2(deal.id, {
           deadline: selected?.toISOString()
         })
-        .then(() => updateDeal())
+        .then(() => refetchDeal())
     }
   }, [selected, deal])
 

@@ -1,11 +1,8 @@
 import { type ClassValue, clsx } from 'clsx'
-import { setCookie } from 'cookies-next'
 import CryptoJS from 'crypto-js'
 import dayjs from 'dayjs'
 import { twMerge } from 'tailwind-merge'
 
-import { Tokens } from '@/api/generated-api'
-import { COOKIES } from '@/app/constants/cookies'
 import { PreparedToken, ShortToken, Token } from '@/app/types'
 
 export function cn(...inputs: ClassValue[]) {
@@ -15,7 +12,7 @@ export function cn(...inputs: ClassValue[]) {
 export function generateBase64Token(prepared: PreparedToken) {
   const json = JSON.stringify(prepared)
   const base64String = Buffer.from(json).toString('base64')
-  setCookie(COOKIES.AUTH_TOKEN, base64String)
+  return base64String
 }
 
 export function transformString(input: string): string {
@@ -71,7 +68,7 @@ export function calculateMD5(file: File): Promise<string> {
   })
 }
 
-export const getInnativeTokens = (tokens?: Tokens) =>
+export const getInnativeTokens = (tokens?: Token[]) =>
   (tokens ?? []).filter(token => !token.native)
 
 export function formatNumber(num: number): string {

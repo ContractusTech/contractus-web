@@ -1,8 +1,9 @@
 import { formatUnits } from 'viem'
 
+import { useDeal } from '@/api/hooks/useDeal'
+import { useUser } from '@/api/hooks/useUser'
 import httpClient from '@/api/httpClient'
-import { useDealStore } from '@/app/store/deal-store'
-import { useUserStore } from '@/app/store/user-store'
+import { useRolesStore } from '@/app/store/roles-store'
 import { Deal } from '@/app/types'
 import Tag from '@/components/ui/tag'
 import { transformString } from '@/lib/utils'
@@ -11,32 +12,27 @@ import { DealAmountChange } from './DealAmountChange'
 import { PartnerEdit } from './PartnerEdit'
 
 export const DealInfo = () => {
-  const {
-    deal,
-    setDeal,
-    iClient,
-    iExecutor,
-    executorPublicKey,
-    clientAddress
-  } = useDealStore()
-  const { connectedUser } = useUserStore()
+  const { deal, refetchDeal } = useDeal()
+  const { iClient, clientAddress, iExecutor, executorPublicKey } =
+    useRolesStore()
+  const { user } = useUser()
 
   if (!deal) {
     throw new Error('No deal')
   }
 
   const handleClientEdit = async (address: string) => {
-    const { data } = await httpClient<Deal>({
+    await httpClient<Deal>({
       url: `deals/${deal.id}/participate`,
       method: 'POST',
       data: {
         type: 'CONTRACTOR',
         publicKey: address,
-        blockchain: connectedUser?.blockchain
+        blockchain: user?.blockchain
       }
     })
 
-    setDeal(data)
+    refetchDeal()
   }
 
   return (

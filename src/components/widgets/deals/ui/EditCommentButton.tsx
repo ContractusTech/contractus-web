@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 
 import { api } from '@/api/client'
 import { Deal } from '@/api/generated-api'
-import { useDealStore } from '@/app/store/deal-store'
+import { useDeal } from '@/api/hooks/useDeal'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { CreateDealHeader } from './CreateDealHeader'
 
 export const EditCommentButton = ({ type }: { type: 'result' | 'meta' }) => {
-  const { deal } = useDealStore()
+  const { deal } = useDeal()
   const [dialogOpened, setDialogOpened] = useState(false)
 
   const { register, handleSubmit } = useForm<Deal>({

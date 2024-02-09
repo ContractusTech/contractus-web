@@ -5,18 +5,18 @@ import { getWalletClient } from 'wagmi/actions'
 
 import { api } from '@/api/client'
 import { Tx } from '@/api/generated-api'
+import { useDeal } from '@/api/hooks/useDeal'
+import { useUser } from '@/api/hooks/useUser'
 import httpClient from '@/api/httpClient'
 import { ERRORS } from '@/app/constants/errors'
-import { useDealStore } from '@/app/store/deal-store'
-import { useUserStore } from '@/app/store/user-store'
 import { useApprove } from '@/components/features/approve'
 import { Button } from '@/components/ui/button'
 
 export const StartDealBtn = () => {
-  const { deal, updateDeal } = useDealStore()
+  const { deal, refetchDeal } = useDeal()
   const { approve } = useApprove()
 
-  const { connectedUser } = useUserStore()
+  const { user } = useUser()
 
   const { signTransaction } = useWallet()
 
@@ -33,7 +33,7 @@ export const StartDealBtn = () => {
 
     const signatures = signedTransaction.signatures
     const signature = signatures.find(
-      signature => signature.publicKey.toString() === connectedUser?.publicKey
+      signature => signature.publicKey.toString() === user?.publicKey
     )
 
     if (!signature?.signature) {
@@ -85,7 +85,7 @@ export const StartDealBtn = () => {
       throw new Error('No hash transaction')
     }
 
-    switch (connectedUser?.blockchain) {
+    switch (user?.blockchain) {
       case 'bsc': {
         await evmSign(tx.transaction, deal.id)
         break
@@ -97,7 +97,7 @@ export const StartDealBtn = () => {
       }
     }
 
-    await updateDeal()
+    await refetchDeal()
   }
 
   return (

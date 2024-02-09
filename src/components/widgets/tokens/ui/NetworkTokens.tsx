@@ -1,4 +1,4 @@
-import { BalanceType } from '@/api/modules/accounts/accounts.types'
+import { BalanceType } from '@/app/types'
 import { SwapArrowIcon } from '@/assets/svg/SwapArrowIcon'
 import { Button } from '@/components/ui/button'
 import { formatNumber } from '@/lib/utils'
