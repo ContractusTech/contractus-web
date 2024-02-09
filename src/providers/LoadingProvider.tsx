@@ -1,4 +1,3 @@
-import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { PropsWithChildren, useEffect, useMemo, useState } from 'react'
 
 import { useBalance } from '@/api/hooks/useBalance'
@@ -20,7 +19,7 @@ export const LoadingProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { isActionsLoading } = useDealActions()
 
   const [mounted, setMounted] = useState(false)
-  const [parent] = useAutoAnimate()
+
   useEffect(() => {
     setMounted(true)
   }, [mounted])
@@ -41,8 +40,16 @@ export const LoadingProvider: React.FC<PropsWithChildren> = ({ children }) => {
     isUserLoading,
     isTokensLoading,
     isStatisticsLoading,
-    isBalanceLoading
+    isBalanceLoading,
+    isDealLoading,
+    isDealsLoading,
+    isActionsLoading
   ])
 
-  return <div ref={parent}>{isAppLoading ? <LogoScreen /> : children}</div>
+  return (
+    <>
+      <LogoScreen loading={isAppLoading} />
+      {!isAppLoading && <div className="relative z-[2]"> {children}</div>}
+    </>
+  )
 }

@@ -17,7 +17,7 @@ export const useDeal = () => {
     isLoading: isDealLoading,
     refetch: refetchDeal
   } = useQuery({
-    queryKey: [DEAL_UQ_KEY],
+    queryKey: [DEAL_UQ_KEY, params?.id],
     enabled: !!params?.id && !!getCookie(COOKIES.AUTH_TOKEN),
     refetchInterval: 10_000,
     queryFn: () => {
