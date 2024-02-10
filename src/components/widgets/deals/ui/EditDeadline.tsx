@@ -19,15 +19,23 @@ export const EditDeadline = () => {
     setSelected(day)
   }
 
-  useEffect(() => {
+  const handleSaveDeadline = async () => {
     if (selected && deal) {
-      api.deals
-        .dealsCreate2(deal.id, {
-          deadline: selected?.toISOString()
-        })
-        .then(() => refetchDeal())
+      await api.deals.dealsCreate2(deal.id, {
+        deadline: selected?.toISOString()
+      })
+
+      await refetchDeal()
+
+      setDialogOpened(false)
     }
-  }, [selected, deal])
+  }
+
+  useEffect(() => {
+    if (deal?.deadline) {
+      setSelected(new Date(deal.deadline))
+    }
+  }, [deal])
 
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
@@ -42,6 +50,8 @@ export const EditDeadline = () => {
           onSelect={handleDeadlineChange}
           mode="single"
         />
+
+        <Button onClick={handleSaveDeadline}>Apply</Button>
       </DialogContent>
     </Dialog>
   )

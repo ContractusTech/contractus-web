@@ -51,6 +51,7 @@ export const TokensList: FC<Props> = ({
                   width={32}
                   height={32}
                   alt={token.code}
+                  priority
                 />
               </div>
             )}

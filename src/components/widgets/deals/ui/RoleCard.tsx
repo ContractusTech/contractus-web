@@ -23,7 +23,13 @@ export const RoleCard = ({ type, onClick, active }: RoleCardProps) => {
       className="flex flex-col items-center space-x-4 rounded-[13px] border-[1px] border-solid border-[#262930] bg-secondary p-[24px] outline outline-[3px] hover:bg-accent"
       style={{ outlineColor: active ? '#fff' : 'transparent' }}
     >
-      <Image alt={type} src={image} width={ICON_SIZE} height={ICON_SIZE} />
+      <Image
+        alt={type}
+        src={image}
+        width={ICON_SIZE}
+        height={ICON_SIZE}
+        priority
+      />
       <span className="pb-4 text-lg font-[600] text-[#fff]">
         {type === 'EXECUTOR' ? 'Executor' : 'Client'}
       </span>

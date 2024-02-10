@@ -1,5 +1,4 @@
 import { useWallet } from '@solana/wallet-adapter-react'
-import { Transaction } from '@solana/web3.js'
 import { toBytes } from 'viem'
 import { getWalletClient } from 'wagmi/actions'
 
@@ -11,6 +10,7 @@ import httpClient from '@/api/httpClient'
 import { ERRORS } from '@/app/constants/errors'
 import { useApprove } from '@/components/features/approve'
 import { Button } from '@/components/ui/button'
+import { useSolanaConnect } from '@/providers/SolanaProvider'
 
 type StartDealBtnProps = {
   disabled?: boolean
@@ -23,33 +23,16 @@ export const StartDealBtn = ({ disabled }: StartDealBtnProps) => {
   const { user } = useUser()
 
   const { signTransaction } = useWallet()
+  const { signTransactionBase64 } = useSolanaConnect()
 
   const solanaSign = async (transaction: string) => {
     if (!signTransaction || !deal) {
       return
     }
-
-    const buffer = Buffer.from(transaction, 'base64')
-
-    const unsignedTransaction = Transaction.from(buffer)
-
-    const signedTransaction = await signTransaction(unsignedTransaction)
-
-    const signatures = signedTransaction.signatures
-    const signature = signatures.find(
-      signature => signature.publicKey.toString() === user?.publicKey
-    )
-
-    if (!signature?.signature) {
-      return
-    }
-
-    const base64Buffer = Buffer.from(signature.signature)
-
-    const base64 = base64Buffer.toString('base64')
+    const signature = await signTransactionBase64(transaction)
 
     await api.deals.txSignCreate(deal.id, 'DEAL_INIT', {
-      signature: base64,
+      signature,
       transaction: transaction
     })
   }

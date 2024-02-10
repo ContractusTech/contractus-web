@@ -22,3 +22,22 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
 }
+
+button.rdp-day {
+  color: #fff;
+}
+
+button.rdp-day_selected,
+button:hover.rdp-day_selected {
+  background: #fff;
+  color: #000;
+}
+
+button:hover.rdp-day,
+button:hover.rdp-nav_button {
+  color: #000;
+}
+
+:root {
+  --rdp-accent-color: #fff;
+}

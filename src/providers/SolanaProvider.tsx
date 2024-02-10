@@ -1,5 +1,6 @@
 import { WalletName } from '@solana/wallet-adapter-base'
 import { useWallet } from '@solana/wallet-adapter-react'
+import { Transaction } from '@solana/web3.js'
 import base58 from 'bs58'
 import { setCookie } from 'cookies-next'
 import React, {
@@ -16,7 +17,17 @@ import MESSAGES from '@/app/constants/web3'
 import { useLogout } from '@/hooks/useLogout'
 import { generateBase64Token } from '@/lib/utils'
 
-const SolanaConnectContext = createContext<any>(null)
+type SolanaConnectContextType = {
+  signTransactionBase64: (transaction: string) => Promise<string>
+  handleConnect: (wallet: WalletName) => void
+  handleDisconnect: () => Promise<void>
+}
+
+const SolanaConnectContext = createContext<SolanaConnectContextType>({
+  signTransactionBase64: async () => '',
+  handleConnect: async () => undefined,
+  handleDisconnect: async () => undefined
+})
 
 export const useSolanaConnect = () => {
   const context = useContext(SolanaConnectContext)
@@ -43,6 +54,8 @@ export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
   const { logout } = useLogout()
 
   const { user, refetchUser } = useUser()
+
+  const { signTransaction } = useWallet()
 
   useEffect(() => {
     const connectAndSign = async () => {
@@ -85,7 +98,6 @@ export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
 
   const handleConnect = (selectedWallet: WalletName) => {
     if (!connected) {
-      console.log(1)
       select(selectedWallet)
     }
   }
@@ -99,13 +111,37 @@ export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
     }
   }
 
-  const value = {
-    handleConnect,
-    handleDisconnect
+  const signTransactionBase64 = async (transaction: string) => {
+    if (!signTransaction) {
+      throw new Error('Method is unavaliable')
+    }
+
+    const buffer = Buffer.from(transaction, 'base64')
+
+    const unsignedTransaction = Transaction.from(buffer)
+
+    const signedTransaction = await signTransaction(unsignedTransaction)
+
+    const signatures = signedTransaction.signatures
+    const signature = signatures.find(
+      signature => signature.publicKey.toString() === user?.publicKey
+    )
+
+    if (!signature?.signature) {
+      throw new Error('Error on get signature from signed transaction')
+    }
+
+    const base64Buffer = Buffer.from(signature.signature)
+
+    const base64 = base64Buffer.toString('base64')
+
+    return base64
   }
 
   return (
-    <SolanaConnectContext.Provider value={value}>
+    <SolanaConnectContext.Provider
+      value={{ handleConnect, handleDisconnect, signTransactionBase64 }}
+    >
       {children}
     </SolanaConnectContext.Provider>
   )

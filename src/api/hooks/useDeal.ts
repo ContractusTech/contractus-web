@@ -6,11 +6,14 @@ import { COOKIES } from '@/app/constants/cookies'
 import { Deal } from '@/app/types'
 
 import { api } from '../client'
+import { useDealActions } from './useDealActions'
 
 const DEAL_UQ_KEY = 'deal'
 
 export const useDeal = () => {
   const params = useParams<{ id: string }>()
+
+  const { refetchActions } = useDealActions()
 
   const {
     data: deal,
@@ -29,5 +32,10 @@ export const useDeal = () => {
     }
   })
 
-  return { deal, isDealLoading, refetchDeal }
+  const handleRefetch = async () => {
+    await refetchDeal()
+    await refetchActions()
+  }
+
+  return { deal, isDealLoading, refetchDeal: handleRefetch }
 }

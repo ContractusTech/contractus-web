@@ -37,6 +37,8 @@
     --blue: 227, 72%, 62%;
     --secondary-text: 225, 7%, 43%;
     --dark-base-green: 108, 47%, 41%, 1;
+
+    --rdp-accent-color: #fff;
   }
 
   .dark {
