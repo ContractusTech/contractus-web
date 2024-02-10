@@ -1,7 +1,7 @@
 import { WalletName } from '@solana/wallet-adapter-base'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { useQueryClient } from '@tanstack/react-query'
 import base58 from 'bs58'
+import { setCookie } from 'cookies-next'
 import React, {
   createContext,
   PropsWithChildren,
@@ -10,9 +10,10 @@ import React, {
 } from 'react'
 
 import { useUser } from '@/api/hooks/useUser'
+import { COOKIES } from '@/app/constants/cookies'
 import { LOCAL_STORAGE } from '@/app/constants/localStorage'
 import MESSAGES from '@/app/constants/web3'
-import { useUserStore } from '@/app/store/user-store'
+import { useLogout } from '@/hooks/useLogout'
 import { generateBase64Token } from '@/lib/utils'
 
 const SolanaConnectContext = createContext<any>(null)
@@ -30,7 +31,6 @@ export const useSolanaConnect = () => {
 export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
   children
 }) => {
-  const queryClient = useQueryClient()
   const {
     select,
     signMessage,
@@ -40,7 +40,8 @@ export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
     connected,
     disconnecting
   } = useWallet()
-  const { logout } = useUserStore()
+  const { logout } = useLogout()
+
   const { user, refetchUser } = useUser()
 
   useEffect(() => {
@@ -66,7 +67,7 @@ export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
 
       const signature = await signMessage(message)
 
-      generateBase64Token({
+      const token = generateBase64Token({
         type: 'BROWSER',
         blockchain: 'solana',
         pubKey: publicKey.toBase58(),
@@ -74,14 +75,17 @@ export const SolanaConnectProvider: React.FC<PropsWithChildren> = ({
         identifier: deviceId
       })
 
+      setCookie(COOKIES.AUTH_TOKEN, token)
+
       refetchUser()
     }
 
     connectAndSign()
-  }, [wallet, signMessage, publicKey, connected, disconnecting, queryClient])
+  }, [wallet, signMessage, publicKey, connected, disconnecting])
 
   const handleConnect = (selectedWallet: WalletName) => {
     if (!connected) {
+      console.log(1)
       select(selectedWallet)
     }
   }

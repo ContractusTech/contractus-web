@@ -10,14 +10,14 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { transformString } from '@/lib/utils'
+import { useEthereum } from '@/providers/EthereumProvider'
 
-import { useEvmConnect } from '../model/useEvmConnect'
-import { useSolanaConnect } from './SolanaProvider'
+import { useSolanaConnect } from '../../../../providers/SolanaProvider'
 
 export const AccountButton = () => {
   const { user } = useUser()
   const { handleDisconnect: handleSolanaDisconnect } = useSolanaConnect()
-  const { handleDisconnect: handleEvmDisconnect } = useEvmConnect()
+  const { handleDisconnect: handleEvmDisconnect } = useEthereum()
 
   if (!user) {
     return null

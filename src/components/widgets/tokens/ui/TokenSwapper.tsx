@@ -6,7 +6,7 @@ import { useBalance } from '@/api/hooks/useBalance'
 import { useTokens } from '@/api/hooks/useTokens'
 import { useUser } from '@/api/hooks/useUser'
 import { getCtusBsc, getCtusSolana } from '@/app/constants/getCTUSUrls'
-import { useUserStore } from '@/app/store/user-store'
+import { useSelectedTokensStore } from '@/app/store/selectedTokensStore'
 import { AddCircleIcon } from '@/assets/svg/AddCircleIcon'
 import { CrownIcon } from '@/assets/svg/CrownIcon'
 import { Button } from '@/components/ui/button'
@@ -22,7 +22,7 @@ export const TokenSwapper = () => {
   const { balance } = useBalance()
   const { user } = useUser()
 
-  const { setSelectedTokens, selectedTokens } = useUserStore()
+  const { setSelectedTokens, selectedTokens } = useSelectedTokensStore()
 
   const handleBuy = async () => {
     const { methods } = await api.accounts.topupCreate()

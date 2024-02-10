@@ -11,13 +11,13 @@ import SolanaIcon from '@/assets/svg/SolanaIcon'
 import SolflareIcon from '@/assets/svg/SolflareIcon'
 import WalletConnectIcon from '@/assets/svg/WalletConnect'
 import { Button } from '@/components/ui/button'
+import { useEthereum } from '@/providers/EthereumProvider'
 
-import { useEvmConnect } from '../model/useEvmConnect'
 import { useSolanaConnect } from './SolanaProvider'
 
 export const ConnectOverflow: FC = () => {
   const { connectors } = useConnect()
-  const { handleConnect: evmConnect } = useEvmConnect()
+  const { handleConnect: evmConnect } = useEthereum()
   const { handleConnect: solanaConnect } = useSolanaConnect()
 
   const handleSolanaConnect = async (wallet: WalletName) => {

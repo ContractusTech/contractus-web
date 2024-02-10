@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { useBalance } from '@/api/hooks/useBalance'
 import { useTokens } from '@/api/hooks/useTokens'
-import { useUserStore } from '@/app/store/user-store'
+import { useSelectedTokensStore } from '@/app/store/selectedTokensStore'
 import { TokenWithChecked } from '@/app/types'
 
 type BalanceProviderProps = {
@@ -10,7 +10,7 @@ type BalanceProviderProps = {
 }
 
 export const BalanceProvider = (props: BalanceProviderProps) => {
-  const { setSelectedTokens } = useUserStore()
+  const { setSelectedTokens } = useSelectedTokensStore()
 
   const { tokens } = useTokens()
   const { balance } = useBalance()

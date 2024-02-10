@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getCookie } from 'cookies-next'
 
 import { COOKIES } from '@/app/constants/cookies'
-import { useUserStore } from '@/app/store/user-store'
+import { useSelectedTokensStore } from '@/app/store/selectedTokensStore'
 import { BalanceType } from '@/app/types'
 
 import { api } from '../client'
@@ -10,7 +10,7 @@ import { api } from '../client'
 const BALANCE_UQ_KEY = 'balance'
 
 export const useBalance = () => {
-  const { selectedTokens } = useUserStore()
+  const { selectedTokens } = useSelectedTokensStore()
 
   const { data: balance, isLoading } = useQuery({
     queryKey: [BALANCE_UQ_KEY, selectedTokens],

@@ -9,10 +9,9 @@ import { useEffect } from 'react'
 
 import { pageTitle } from '@/app/core'
 import { NextPageWithLayout } from '@/app/types'
-import { ModulesContainer } from '@/components/features/modules-container'
-import { ReactQueryProvider } from '@/components/features/react-query-provider'
+import ModulesContainer from '@/providers/ModulesContainer'
+import ReactQueryProvider from '@/providers/ReactQueryProvider'
 
-// require('@solana/wallet-adapter-ant-design/styles.css')
 require('@/assets/styles/tailwind.css')
 require('@/assets/styles/custom-scrollbar.css')
 require('@solana/wallet-adapter-react-ui/styles.css')
