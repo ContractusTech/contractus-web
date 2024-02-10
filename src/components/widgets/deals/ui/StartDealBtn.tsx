@@ -12,7 +12,11 @@ import { ERRORS } from '@/app/constants/errors'
 import { useApprove } from '@/components/features/approve'
 import { Button } from '@/components/ui/button'
 
-export const StartDealBtn = () => {
+type StartDealBtnProps = {
+  disabled?: boolean
+}
+
+export const StartDealBtn = ({ disabled }: StartDealBtnProps) => {
   const { deal, refetchDeal } = useDeal()
   const { approve } = useApprove()
 
@@ -102,7 +106,9 @@ export const StartDealBtn = () => {
 
   return (
     <div className="flex flex-col gap-[16px]">
-      <Button onClick={handleSign}>Sign</Button>
+      <Button disabled={disabled} onClick={handleSign}>
+        Sign
+      </Button>
 
       <span className="text-center text-[12px] text-[#8b8f97]">
         To start the deal, fill in the amount, deadline, the Solana accounts of

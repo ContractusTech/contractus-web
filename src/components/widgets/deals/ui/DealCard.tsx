@@ -63,8 +63,10 @@ const DealCard: FC<Props> = ({ deal }) => {
         {user?.publicKey === deal.checkerPublicKey && (
           <div>
             <p className="text-[12px] font-medium leading-none">
-              <span className="text-secondary-text">Earning</span>
-              <span className="uppercase text-dark-base-green">{`${deal.checkerAmount} ${deal.checkerToken?.code}`}</span>
+              <span className="text-secondary-text">Earning</span>{' '}
+              <span className="uppercase text-dark-base-green">{`${
+                deal.checkerAmount ?? 'Empty'
+              } ${deal.checkerToken?.code ?? ''} `}</span>
             </p>
           </div>
         )}

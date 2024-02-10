@@ -1,5 +1,3 @@
-import { formatNumber } from '@/lib/utils'
-
 type TokenProps = {
   value: number
   reserve: number
@@ -15,12 +13,12 @@ export const Token = ({ reserve, tokenLabel, value }: TokenProps) => {
             {tokenLabel}
           </span>
           <span className="text-normal text-base leading-none text-muted-foreground ">
-            ${formatNumber(value)}
+            ${value.toFixed(1)}
           </span>
         </div>
         <div>
           <span className="text-medium text-base leading-none text-muted-foreground">
-            {formatNumber(reserve)}
+            {reserve.toFixed(1)}
           </span>
         </div>
       </div>

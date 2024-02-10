@@ -49,7 +49,12 @@ export const DealInfo = () => {
             {clientAddress ? transformString(clientAddress) : 'Empty'}
           </span>
 
-          {!iClient && <PartnerEdit onSave={handleClientEdit} />}
+          {!iClient && (
+            <PartnerEdit
+              triggerClassName="absolute right-[20px]"
+              onSave={handleClientEdit}
+            />
+          )}
         </div>
 
         <div className="relative flex h-full w-full justify-between  border-t-[1px] border-t-[#262930] p-[20px] ">
@@ -89,7 +94,12 @@ export const DealInfo = () => {
           </span>
         </div>
 
-        {!iExecutor && <PartnerEdit onSave={handleClientEdit} />}
+        {!iExecutor && (
+          <PartnerEdit
+            triggerClassName="absolute right-[20px]"
+            onSave={handleClientEdit}
+          />
+        )}
       </div>
     </div>
   )

@@ -57,7 +57,12 @@ export const SelectTokens: FC<Props> = ({
         </div>
         <DialogFooter>
           <div className="flex justify-end px-32 pb-30">
-            <Button variant="default" size="lg" onClick={() => setOpen(false)}>
+            <Button
+              className="mt-[20px]"
+              variant="default"
+              size="lg"
+              onClick={() => setOpen(false)}
+            >
               Close
             </Button>
           </div>

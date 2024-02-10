@@ -25,7 +25,7 @@ const Header: FC<Props> = ({ className }) => {
       <div className="mt-auto basis-[200px] md:basis-60">
         <Logo />
       </div>
-      <div className="py-6">
+      <div className="flex w-full max-w-[540px] justify-center">
         {pathname?.includes('deal') ? <EditDealHeader /> : <UserStatus />}
       </div>
       <div className="mt-auto basis-[200px] md:basis-60">

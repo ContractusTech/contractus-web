@@ -73,6 +73,10 @@ export const EditDealForm = () => {
           <DealStatusBadge />
         )}
 
+        {deal.status === 'NEW' &&
+          !actions.actions.includes('CANCEL_SIGN') &&
+          !actions.actions.includes('SIGN') && <StartDealBtn disabled />}
+
         {actions.actions.map(action => {
           switch (action) {
             case 'SIGN': {

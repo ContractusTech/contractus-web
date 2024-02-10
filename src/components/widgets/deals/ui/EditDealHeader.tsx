@@ -7,7 +7,7 @@ export const EditDealHeader = () => {
   const router = useRouter()
 
   return (
-    <div className="grid w-[100%] flex-grow grid-cols-3 items-center  py-[20px]">
+    <div className="grid w-[100%] max-w-[540px] flex-grow grid-cols-3  items-center py-[20px]">
       <button
         className="w-[fit-content]"
         onClick={() => router.push(PAGES.MAIN)}

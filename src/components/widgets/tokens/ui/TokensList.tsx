@@ -35,9 +35,11 @@ export const TokensList: FC<Props> = ({
     <div className="space-y-4">
       {tokens.map(token => (
         <FormItem
-          className={`flex cursor-pointer flex-row items-center justify-between border-b-[1.5px] border-border py-15 transition-all  ${
+          className={`flex ${
+            !token.disabled && 'cursor-pointer'
+          } flex-row items-center justify-between border-b-[1.5px] border-border py-15 transition-all  ${
             !multiple && 'hover:opacity-50'
-          }`}
+          } ${token.disabled && 'opacity-[0.2]'}`}
           key={token.code}
           onClick={() => handleOneSelect(token)}
         >
