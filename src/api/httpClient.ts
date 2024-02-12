@@ -2,8 +2,9 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { getCookie } from 'cookies-next'
 
 import { COOKIES } from '@/app/constants/cookies'
+import { ENV } from '@/app/constants/environment'
 
-axios.defaults.baseURL = 'https://dev.contractus.tech/api/v1/'
+axios.defaults.baseURL = `${ENV.API_HOST}/api/v1/`
 
 const httpClient = <T>({
   method = 'GET',
