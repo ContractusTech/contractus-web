@@ -1,6 +1,24 @@
+import { useMemo } from 'react'
+
+import { useRolesStore } from '@/app/store/roles-store'
+
 import { EditCommentButton } from './EditCommentButton'
 
 export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
+  const { dealCanceled, iClient, iExecutor } = useRolesStore()
+
+  const canEdit = useMemo(() => {
+    if (type === 'meta') {
+      return iClient && !dealCanceled
+    }
+    //
+    else if (type === 'result') {
+      return iExecutor && !dealCanceled
+    }
+
+    return false
+  }, [dealCanceled, iExecutor])
+
   return (
     <div className="relative flex h-full w-full justify-between  rounded-[19px] border-[1px] border-[#262930] bg-secondary p-[20px]">
       <div className="flex flex-col">
@@ -14,7 +32,7 @@ export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
       </div>
 
       <div className="absolute right-[20px] top-[20px]">
-        <EditCommentButton type={type} />
+        <EditCommentButton type={type} edit={canEdit} />
       </div>
     </div>
   )

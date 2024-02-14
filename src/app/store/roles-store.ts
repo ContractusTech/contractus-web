@@ -16,6 +16,7 @@ type RoleStore = {
   signedByExecutor: boolean
   signedByChecker: boolean
   withChecker: boolean
+  dealCanceled: boolean
 
   setRoles: (deal: Deal, user: Account, actions: DealActions) => void
 }
@@ -33,6 +34,7 @@ export const useRolesStore = create<RoleStore>(set => ({
   signedByExecutor: false,
   signedByChecker: false,
   withChecker: false,
+  dealCanceled: false,
 
   setRoles(deal, user, actions) {
     const iOwner = deal.ownerPublicKey === user.publicKey
@@ -68,6 +70,9 @@ export const useRolesStore = create<RoleStore>(set => ({
         ? actions.signedByOwner
         : actions.signedByContractor
 
+    const FINISH_STATUSES: Deal['status'][] = ['CANCELED', 'REVOKED']
+    const dealCanceled = FINISH_STATUSES.includes(deal.status)
+
     set({
       clientAddress,
       executorPublicKey,
@@ -77,9 +82,10 @@ export const useRolesStore = create<RoleStore>(set => ({
       iOwner,
       signedByExecutor,
       signedByClient,
-      iChecker: false,
+      iChecker: deal.checkerPublicKey === user.publicKey,
       signedByChecker: actions.signedByChecker,
-      withChecker: deal.completionCheckType === 'CHECKER'
+      withChecker: deal.completionCheckType === 'CHECKER',
+      dealCanceled
     })
   }
 }))

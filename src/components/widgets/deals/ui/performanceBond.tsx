@@ -1,13 +1,16 @@
+import { useMemo } from 'react'
 import { formatUnits } from 'viem'
 
 import { Deal } from '@/api/generated-api'
 import { useDeal } from '@/api/hooks/useDeal'
 import { ERRORS } from '@/app/constants/errors'
+import { useRolesStore } from '@/app/store/roles-store'
 
 import { BondAmountChange } from './BondAmountChange'
 
 export const PerformanceBond = () => {
   const { deal } = useDeal()
+  const { dealCanceled, iExecutor, iClient } = useRolesStore()
 
   const getTokenLabel = (role: Deal['ownerRole']) => {
     if (!deal) {
@@ -48,6 +51,13 @@ export const PerformanceBond = () => {
     return formatUnits(parsedAmount, token.decimals)
   }
 
+  const canViewExecutorBond = useMemo(
+    () => (!dealCanceled && iExecutor) || iClient,
+    [dealCanceled, iExecutor, iClient]
+  )
+
+  const canViewClientBond = useMemo(() => !dealCanceled && iClient, [])
+
   return (
     <>
       <div className="flex flex-col gap-[8px] leading-[120%]">
@@ -82,11 +92,12 @@ export const PerformanceBond = () => {
             </span>
           </div>
 
-          {deal.ownerRole === 'EXECUTOR' ? (
-            <BondAmountChange type="owner" />
-          ) : (
-            <BondAmountChange type="contractor" />
-          )}
+          {canViewExecutorBond &&
+            (deal.ownerRole === 'EXECUTOR' ? (
+              <BondAmountChange type="owner" />
+            ) : (
+              <BondAmountChange type="contractor" />
+            ))}
         </div>
       )}
 
@@ -113,11 +124,12 @@ export const PerformanceBond = () => {
             </span>
           </div>
 
-          {deal.ownerRole === 'CLIENT' ? (
-            <BondAmountChange type="owner" />
-          ) : (
-            <BondAmountChange type="contractor" />
-          )}
+          {canViewClientBond &&
+            (deal.ownerRole === 'CLIENT' ? (
+              <BondAmountChange type="owner" />
+            ) : (
+              <BondAmountChange type="contractor" />
+            ))}
         </div>
       )}
     </>

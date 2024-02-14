@@ -29,7 +29,6 @@ export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
     refetchDeal()
   }
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   const handleDelete = async (url: string) => {
     if (!deal) {
       throw new Error('No deal')
@@ -66,6 +65,7 @@ export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
       <FileUpload
         className="absolute right-[20px] top-[20px] p-[20px]"
         onFileUploaded={handleFileUpload}
+        type={type}
       >
         Attache
       </FileUpload>

@@ -13,7 +13,7 @@ import { PartnerEdit } from './PartnerEdit'
 
 export const DealInfo = () => {
   const { deal, refetchDeal } = useDeal()
-  const { iClient, clientAddress, iExecutor, executorPublicKey } =
+  const { iClient, clientAddress, iExecutor, executorPublicKey, dealCanceled } =
     useRolesStore()
   const { user } = useUser()
 
@@ -49,10 +49,12 @@ export const DealInfo = () => {
             {clientAddress ? transformString(clientAddress) : 'Empty'}
           </span>
 
-          {!iClient && (
+          {!dealCanceled && (
             <PartnerEdit
+              data-tooltip-id={!iClient ? 'only-client' : ''}
               triggerClassName="absolute right-[20px]"
               onSave={handleClientEdit}
+              disabled={!iClient}
             />
           )}
         </div>
@@ -72,9 +74,11 @@ export const DealInfo = () => {
             </div>
           </div>
 
-          <div className="absolute right-[20px] top-[20px] flex items-end">
-            <DealAmountChange />
-          </div>
+          {!dealCanceled && (
+            <div className="absolute right-[20px] top-[20px] flex items-end">
+              <DealAmountChange />
+            </div>
+          )}
         </div>
       </div>
 
@@ -94,8 +98,10 @@ export const DealInfo = () => {
           </span>
         </div>
 
-        {!iExecutor && (
+        {!dealCanceled && (
           <PartnerEdit
+            data-tooltip-id={!iClient ? 'only-client' : ''}
+            disabled={!iClient}
             triggerClassName="absolute right-[20px]"
             onSave={handleClientEdit}
           />

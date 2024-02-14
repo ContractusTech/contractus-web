@@ -4,6 +4,7 @@ import { useDeal } from '@/api/hooks/useDeal'
 import { useTokens } from '@/api/hooks/useTokens'
 import { useUser } from '@/api/hooks/useUser'
 import httpClient from '@/api/httpClient'
+import { useRolesStore } from '@/app/store/roles-store'
 import { Deal } from '@/app/types'
 import { transformString } from '@/lib/utils'
 
@@ -14,6 +15,7 @@ export const CheckerEdit = () => {
   const { deal, refetchDeal } = useDeal()
   const { tokens } = useTokens()
   const { user } = useUser()
+  const { dealCanceled, iOwner } = useRolesStore()
 
   const handleCheckerEdit = async (address: string) => {
     if (!deal) {
@@ -69,10 +71,16 @@ export const CheckerEdit = () => {
         </span>
       </div>
 
-      <div className="flex gap-[8px]">
-        <PartnerEdit onSave={handleCheckerEdit} />
-        <CheckerAmountChange />
-      </div>
+      {!dealCanceled && (
+        <div className="flex gap-[8px]">
+          <PartnerEdit
+            onSave={handleCheckerEdit}
+            disabled={!iOwner}
+            data-tooltip-id={!iOwner ? 'only-owner' : ''}
+          />
+          <CheckerAmountChange />
+        </div>
+      )}
     </div>
   )
 }

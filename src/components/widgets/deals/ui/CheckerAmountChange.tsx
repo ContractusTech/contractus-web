@@ -3,6 +3,7 @@ import { parseUnits } from 'viem'
 import { api } from '@/api/client'
 import { useDeal } from '@/api/hooks/useDeal'
 import { useTokens } from '@/api/hooks/useTokens'
+import { useRolesStore } from '@/app/store/roles-store'
 import { Amount } from '@/app/types'
 import { getDecimalOfShortToken } from '@/lib/utils'
 
@@ -11,6 +12,7 @@ import { AmountChoice } from './AmountChoice'
 export const CheckerAmountChange = () => {
   const { deal, refetchDeal } = useDeal()
   const { tokens } = useTokens()
+  const { iOwner, iChecker } = useRolesStore()
 
   if (!deal) {
     throw new Error('No deal')
@@ -46,6 +48,8 @@ export const CheckerAmountChange = () => {
       }
     : undefined
 
+  console.log(iChecker)
+
   return (
     <AmountChoice
       dealAmount={deal.amount}
@@ -55,6 +59,7 @@ export const CheckerAmountChange = () => {
       withFee
       checker
       dealToken={deal.token}
+      disabled={!iChecker && !iOwner}
     />
   )
 }

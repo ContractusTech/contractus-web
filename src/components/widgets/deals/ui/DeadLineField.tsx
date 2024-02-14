@@ -1,11 +1,14 @@
 import dayjs from 'dayjs'
 
 import { useDeal } from '@/api/hooks/useDeal'
+import { useRolesStore } from '@/app/store/roles-store'
 
 import { EditDeadline } from './EditDeadline'
 
 export const DeadLineField = () => {
   const { deal } = useDeal()
+
+  const { dealCanceled } = useRolesStore()
 
   if (!deal) {
     throw new Error('No deal')
@@ -30,7 +33,7 @@ export const DeadLineField = () => {
         </span>
       </div>
 
-      <EditDeadline />
+      {!dealCanceled && <EditDeadline />}
     </div>
   )
 }

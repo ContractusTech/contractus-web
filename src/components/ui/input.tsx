@@ -11,6 +11,7 @@ type InputProps = {
   type?: InputHTMLAttributes<HTMLInputElement>['type']
   size?: 'md' | 'l'
   centered?: boolean
+  disabled?: boolean
 }
 
 export const Input = ({
@@ -21,7 +22,8 @@ export const Input = ({
   rightSlot,
   type,
   size,
-  centered
+  centered,
+  disabled
 }: InputProps) => {
   const fieldHeight = useMemo(() => {
     return variant === 'textarea'
@@ -49,11 +51,13 @@ export const Input = ({
           {variant === 'textarea' ? (
             <textarea
               {...register}
+              disabled={disabled}
               className="h-[100%] flex-grow resize-none bg-transparent p-[12px_8px]"
             />
           ) : (
             <input
               {...register}
+              disabled={disabled}
               type={type ?? 'text'}
               className={`h-[100%] flex-grow bg-transparent ${
                 size === 'l' && 'text-[30px]'

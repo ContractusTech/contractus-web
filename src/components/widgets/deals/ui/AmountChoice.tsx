@@ -27,6 +27,7 @@ type AmountChoiceProps = {
   dealAmount?: string
   dealToken?: Token
   onSelect?: (amount: Amount) => void
+  disabled?: boolean
 }
 
 const getFeeString = (fee: DealFee) =>
@@ -39,7 +40,8 @@ export const AmountChoice = ({
   feeDealid,
   checker,
   dealAmount,
-  dealToken
+  dealToken,
+  disabled
 }: AmountChoiceProps) => {
   const { tokens } = useTokens()
   const { balance } = useBalance()
@@ -123,7 +125,15 @@ export const AmountChoice = ({
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
       <DialogTrigger asChild>
-        <Button variant={'tertiary'}>{checker ? 'Fee' : 'Edit'}</Button>
+        <Button
+          disabled={disabled}
+          variant={'tertiary'}
+          data-tooltip-id={
+            disabled ? `only-client${checker ? '-checker' : ''}` : ''
+          }
+        >
+          {checker ? 'Fee' : 'Edit'}
+        </Button>
       </DialogTrigger>
       <DialogContent className="w-full max-w-[600px] rounded-[10px] bg-[#070708] px-[18px] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
         <CreateDealHeader title="Change amount" />
