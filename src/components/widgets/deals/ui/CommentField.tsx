@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { useRolesStore } from '@/app/store/roles-store'
 
 import { EditCommentButton } from './EditCommentButton'
+import { EditDescription } from './EditDescription'
 
 export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
   const { dealCanceled, iClient, iExecutor } = useRolesStore()
@@ -32,7 +33,11 @@ export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
       </div>
 
       <div className="absolute right-[20px] top-[20px]">
-        <EditCommentButton type={type} edit={canEdit} />
+        {type === 'meta' && canEdit ? (
+          <EditDescription />
+        ) : (
+          <EditCommentButton type={type} edit={canEdit} />
+        )}
       </div>
     </div>
   )

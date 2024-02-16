@@ -45,7 +45,7 @@ export const Input = ({
         </Form.Label>
       </div>
       <div
-        className={`flex ${fieldHeight} w-full items-center justify-center rounded-[4px] bg-[#15151A] px-[10px] text-[15px] leading-none text-white  shadow-[0_0_0_1px_black] outline-none`}
+        className={`flex ${fieldHeight} w-full items-center justify-center rounded-[4px] bg-[#15151A] px-[10px] text-[15px] leading-none text-white   outline-none`}
       >
         <Form.Control asChild>
           {variant === 'textarea' ? (

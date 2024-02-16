@@ -9,6 +9,7 @@ import { useUser } from '@/api/hooks/useUser'
 import httpClient from '@/api/httpClient'
 import { ERRORS } from '@/app/constants/errors'
 import { useApprove } from '@/components/features/approve'
+import { TokenKey } from '@/components/features/approve/model/useApprove'
 import { Button } from '@/components/ui/button'
 import { useSolanaConnect } from '@/providers/SolanaProvider'
 
@@ -18,7 +19,8 @@ type StartDealBtnProps = {
 
 export const StartDealBtn = ({ disabled }: StartDealBtnProps) => {
   const { deal, refetchDeal } = useDeal()
-  const { approve } = useApprove()
+
+  const { approve } = useApprove(deal?.token.code as TokenKey)
 
   const { user } = useUser()
 

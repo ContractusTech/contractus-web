@@ -5,7 +5,7 @@ import { COOKIES } from '@/app/constants/cookies'
 export const useLogout = () => {
   const logout = () => {
     deleteCookie(COOKIES.AUTH_TOKEN)
-    window.location.reload()
+    window.location.href = '/'
   }
 
   return { logout }
