@@ -5,8 +5,6 @@ import { useMemo, useState } from 'react'
 
 import { api } from '@/api/client'
 import { useDeal } from '@/api/hooks/useDeal'
-import { useUser } from '@/api/hooks/useUser'
-import { getRoles } from '@/app/store/roles-store'
 import { AppFile } from '@/app/types'
 import LoadingSpinner from '@/assets/svg/LoadingCircle'
 
