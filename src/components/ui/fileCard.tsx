@@ -1,13 +1,20 @@
 import { filesize } from 'filesize'
-import { File, Image as ImageIcon, XCircle } from 'lucide-react'
+import { File, Image as ImageIcon } from 'lucide-react'
 import Link from 'next/link'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
+import { api } from '@/api/client'
+import { useDeal } from '@/api/hooks/useDeal'
+import { useUser } from '@/api/hooks/useUser'
+import { getRoles } from '@/app/store/roles-store'
 import { AppFile } from '@/app/types'
+import LoadingSpinner from '@/assets/svg/LoadingCircle'
+
+import { FileDelete } from './FileDelete'
 
 type FileCardProps = {
   file: AppFile
-  onDelete?: (fileUrl: string) => void
+  type: 'result' | 'meta'
 }
 
 const IMAGE_EXTENSIONS = new Set(['png', 'jpeg', 'jpg', 'gif', 'bmp', 'tiff'])
@@ -23,14 +30,37 @@ const getFileIcon = (extension: string) => {
   }
 }
 
-export const FileCard = ({ file, onDelete }: FileCardProps) => {
+export const FileCard = ({ file, type }: FileCardProps) => {
+  const { deal, refetchDeal } = useDeal()
+
   const fileSize = useMemo(() => filesize(file.size), [file.size])
+  const [deleteLoading, setDeleteLoading] = useState(false)
 
   const fileIcon = useMemo(() => {
     const extension = file.name.split('.').pop()
     const icon = getFileIcon(extension ?? '')
     return icon
   }, [file.name])
+
+  const handleDelete = async () => {
+    setDeleteLoading(true)
+    if (!deal) {
+      throw new Error('No deal')
+    }
+
+    const oldFiles = deal.meta?.files ?? []
+
+    await api.deals[type === 'meta' ? 'metaCreate' : 'resultCreate'](deal.id, {
+      [type]: {
+        files: oldFiles.filter(file => file.url !== file.url),
+        content: deal[type]?.content
+      },
+      updatedAt: new Date().toISOString()
+    })
+
+    await refetchDeal()
+    setDeleteLoading(false)
+  }
 
   return (
     <Link
@@ -44,12 +74,13 @@ export const FileCard = ({ file, onDelete }: FileCardProps) => {
         <span className="text-[#656975] ">{fileSize}</span>
       </div>
 
-      <button
-        className="ml-[auto] cursor-pointer"
-        onClick={() => onDelete && onDelete(file.url)}
-      >
-        <XCircle fill="#8D92A1" color="#15151b" />
-      </button>
+      <div className="ml-[auto] cursor-pointer">
+        {deleteLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <FileDelete onDelete={handleDelete} />
+        )}
+      </div>
     </Link>
   )
 }

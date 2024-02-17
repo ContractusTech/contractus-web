@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { useMemo } from 'react'
 
 import { useDeal } from '@/api/hooks/useDeal'
 import { useRolesStore } from '@/app/store/roles-store'
@@ -14,6 +15,11 @@ export const DeadLineField = () => {
     throw new Error('No deal')
   }
 
+  const invalidDedline = useMemo(() => {
+    const diff = dayjs(deal.deadline).diff(dayjs())
+    return diff < 0
+  }, [deal.deadline])
+
   return (
     <div className="relative flex h-full w-full justify-between  rounded-[19px] border-[1px] border-[#262930] bg-secondary p-[20px]">
       <div className="flex flex-col">
@@ -22,7 +28,11 @@ export const DeadLineField = () => {
         </div>
 
         <div className="mt-[16px] flex items-end gap-[8px] ">
-          <span className="text-2xl font-[500]">
+          <span
+            className={`text-2xl font-[500] ${
+              invalidDedline ? 'text-[#ad4c4c]' : 'text-[#d5d9e0]'
+            }`}
+          >
             {dayjs(deal.deadline).format('DD MMMM YYYY')}
           </span>
         </div>

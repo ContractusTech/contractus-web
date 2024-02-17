@@ -19,7 +19,7 @@ export const useApprove = (token: TokenKey) => {
   const approve = async () => {
     const allowance = await checkAllowance()
 
-    if (!allowance) {
+    if (allowance === undefined) {
       throw new Error('Error on getting allowance')
     }
 
