@@ -60,7 +60,7 @@ export const EditDescription = () => {
         <Button>Edit</Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="max-w-[607px]">
         <CreateDealHeader title="Deal description" />
 
         <div className=" flex flex-col gap-[24px] p-[16px]">
@@ -80,6 +80,7 @@ export const EditDescription = () => {
             </div>
             <div className="w-fill h-[1px] bg-[#2A2C34]"></div>
             <Input
+              size="l"
               variant="textarea"
               name="text"
               register={register('meta.content.text')}

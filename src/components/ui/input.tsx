@@ -27,7 +27,9 @@ export const Input = ({
 }: InputProps) => {
   const fieldHeight = useMemo(() => {
     return variant === 'textarea'
-      ? 'h-[150px]'
+      ? size === 'l'
+        ? 'h-[50vh]'
+        : 'h-[150px]'
       : size === 'l'
       ? 'h-[55px]'
       : 'h-[35px]'

@@ -25,7 +25,7 @@ module.exports = {
   ],
 
   rules: {
-    'no-console': 'warn',
+    'no-console': 'off',
     curly: 'error',
 
     '@typescript-eslint/interface-name-prefix': 'off',

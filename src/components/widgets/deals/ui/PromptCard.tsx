@@ -9,11 +9,11 @@ export const PromptCard = ({
   onUse?: (val: string) => void
 }) => {
   return (
-    <div className="flex h-[104px] flex-col gap-[10px] rounded-[20px] border border-[#191A1E] p-[12px]">
+    <div className="flex h-full flex-col gap-[10px] rounded-[20px] border border-[#191A1E] p-[12px]">
       <span className="text-[15px] text-[#EBEBEF]">{prompt.text}</span>
       <Button
-        className="self-start"
-        size={'sm'}
+        className="mt-[auto] self-start"
+        size={'default'}
         variant={'tertiary'}
         onClick={() => onUse && onUse(prompt.text)}
       >
