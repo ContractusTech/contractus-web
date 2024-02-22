@@ -18,16 +18,14 @@ export const FileDelete = ({ onDelete }: { onDelete: () => void }) => {
       <DialogContent className="max-w-[280px]">
         <CreateDealHeader title="Confirm" />
 
-        <div className="flex flex-col gap-[20px] p-[16px]">
+        <div className="flex flex-col gap-[20px] p-[10px]">
           <span>Are you sure you want to delete the file?</span>
 
           <div className="flex justify-between">
-            <Button size={'sm'} variant={'destructive'} onClick={onDelete}>
+            <Button variant={'destructive'} onClick={onDelete}>
               Yes, delete
             </Button>
-            <Button size={'sm'} onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
+            <Button onClick={() => setOpen(false)}>Cancel</Button>
           </div>
         </div>
       </DialogContent>

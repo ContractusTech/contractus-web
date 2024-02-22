@@ -49,7 +49,7 @@ export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
             <FileCard key={file.url} file={file} type={type} />
           ))}
 
-        {deal && deal[type]?.files.length === 0 && (
+        {deal && (!deal[type] || deal[type]?.files.length === 0) && (
           <div className="p-[16px] text-center text-[15px] text-[]">
             The files will be available for viewing only to contract partners.
           </div>

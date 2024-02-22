@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { api } from '@/api/client'
 import { Deal } from '@/api/generated-api'
 import { useDeal } from '@/api/hooks/useDeal'
-import { ArrowSvg } from '@/assets/svg/BackSvg'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -57,7 +56,7 @@ export const EditDescription = () => {
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
       <DialogTrigger>
-        <Button>Edit</Button>
+        <Button variant={'tertiary'}>Edit</Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-[607px]">
@@ -67,12 +66,12 @@ export const EditDescription = () => {
           <div className="overflow-hidden rounded-[20px] bg-[#15151b]">
             <div className="flex w-full rounded-[20px_20px_0_0] p-[10px] ">
               <div className="flex gap-[24px]">
-                <button>
+                {/* <button>
                   <ArrowSvg />
                 </button>
                 <button className="" style={{ transform: 'rotateY(180deg)' }}>
                   <ArrowSvg />
-                </button>
+                </button> */}
               </div>
               <div className="ml-[auto]">
                 <AiGeneratedDescription />
