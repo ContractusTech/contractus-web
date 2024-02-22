@@ -22,7 +22,7 @@ const Header: FC<Props> = ({ className }) => {
         className
       )}
     >
-      <div className="mt-auto basis-[200px] md:basis-60">
+      <div className="mt-auto basis-[200px] md:hidden md:basis-60">
         <Logo />
       </div>
       <div className="flex w-full max-w-[540px] justify-center">

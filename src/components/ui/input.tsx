@@ -61,7 +61,7 @@ export const Input = ({
               {...register}
               disabled={disabled}
               type={type ?? 'text'}
-              className={`h-[100%] flex-grow bg-transparent ${
+              className={`h-[100%] w-full flex-grow bg-transparent ${
                 size === 'l' && 'text-[30px]'
               } ${centered && 'text-center'}`}
             />

@@ -1,5 +1,6 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 import { api } from '@/api/client'
 import { useBalance } from '@/api/hooks/useBalance'
@@ -22,20 +23,19 @@ export const TokenSwapper = () => {
   const { balance } = useBalance()
   const { user } = useUser()
 
+  const [buyUrl, setBuyUrl] = useState('')
+
   const { setSelectedTokens, selectedTokens } = useSelectedTokensStore()
 
-  const handleBuy = async () => {
-    const { methods } = await api.accounts.topupCreate()
-
-    const a = document.createElement('a')
-    const url = methods?.at(0)?.url
-
-    if (url) {
-      a.href = url
-      a.target = '_blank'
-      a.click()
-    }
-  }
+  useEffect(() => {
+    user &&
+      api.accounts.topupCreate().then(({ methods }) => {
+        const url = methods?.at(0)?.url
+        if (url) {
+          setBuyUrl(url)
+        }
+      })
+  }, [user])
 
   if (!balance) {
     return null
@@ -45,10 +45,14 @@ export const TokenSwapper = () => {
     <>
       <Balance amount={balance.estimateAmount ?? '0'} />
       <section className="mx-auto mb-30 flex gap-13 md:flex-wrap md:justify-center">
-        <Button variant="secondary" onClick={handleBuy}>
-          <AddCircleIcon className="mr-4 h-16 w-16" />
-          Buy
-        </Button>
+        {buyUrl && (
+          <Link href={buyUrl} target="_blank">
+            <Button variant="secondary">
+              <AddCircleIcon className="mr-4 h-16 w-16" />
+              Buy
+            </Button>
+          </Link>
+        )}
         <Link
           href={user?.blockchain === 'bsc' ? getCtusBsc : getCtusSolana}
           className="flex h-38 items-center gap-x-8 rounded-[12px] border border-input bg-background px-20 py-10 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"

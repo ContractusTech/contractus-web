@@ -135,7 +135,7 @@ export const AmountChoice = ({
           {checker ? 'Fee' : 'Edit'}
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-full max-w-[600px] rounded-[10px] bg-[#070708] px-[18px] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
+      <DialogContent className="w-full  rounded-[10px] bg-[#070708] px-[18px] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
         <CreateDealHeader title="Change amount" />
 
         <Form.Root className="flex flex-col gap-[20px] py-[18px]" ref={parent}>
