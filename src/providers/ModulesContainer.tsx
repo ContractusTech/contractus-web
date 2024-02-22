@@ -1,4 +1,7 @@
+import 'react-toastify/ReactToastify.css'
+
 import { FC, ReactNode } from 'react'
+import { ToastContainer } from 'react-toastify'
 import { Tooltip } from 'react-tooltip'
 
 import { MESSAGES } from '@/app/constants/messages'
@@ -30,6 +33,8 @@ const ModulesContainer: FC<Props> = ({ children }) => {
           </EthereumProvider>
         </WagmiProvider>
       </SolanaWalletAdapter>
+
+      <ToastContainer theme="dark" />
 
       <Tooltip
         content={MESSAGES.ONLY_CLIENT}
