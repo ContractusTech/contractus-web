@@ -1,24 +1,17 @@
 import { useState } from 'react'
-import { toBytes } from 'viem'
-import { getWalletClient } from 'wagmi/actions'
 
 import { Tx } from '@/api/generated-api'
 import { useDeal } from '@/api/hooks/useDeal'
-import { useUser } from '@/api/hooks/useUser'
 import httpClient from '@/api/httpClient'
 import { ERRORS } from '@/app/constants/errors'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { useSolanaConnect } from '@/providers/SolanaProvider'
 
 import { CreateDealHeader } from './CreateDealHeader'
 
 export const CancelSignButton = () => {
   const { deal, refetchDeal } = useDeal()
   const [opened, setOpened] = useState(false)
-  const { user } = useUser()
-
-  const { signTransactionBase64 } = useSolanaConnect()
 
   const cancelDeal = async () => {
     try {
@@ -35,31 +28,10 @@ export const CancelSignButton = () => {
         throw new Error(ERRORS.TX_EXISTS)
       }
 
-      let signatureTx: string
-      if (user?.blockchain === 'bsc') {
-        const walletClient = await getWalletClient()
-        const messageToSign = toBytes(tx.transaction)
-
-        if (walletClient) {
-          const signature = await walletClient.signMessage({
-            message: { raw: messageToSign }
-          })
-
-          signatureTx = signature
-        } else {
-          throw new Error(ERRORS.WALLET_EXISTS)
-        }
-      } else if (user?.blockchain === 'solana') {
-        signatureTx = await signTransactionBase64(tx.transaction)
-      } else {
-        throw new Error('Invalid blockchain')
-      }
-
       await httpClient({
         url: `deals/${deal.id}/tx/DEAL_INIT/sign`,
         method: 'DELETE',
         data: {
-          signature: signatureTx,
           transaction: tx.transaction
         }
       })
