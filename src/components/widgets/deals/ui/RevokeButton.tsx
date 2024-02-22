@@ -42,7 +42,7 @@ export const RevokeButton = () => {
             variant={'destructive'}
             onClick={() => setOpen(true)}
           >
-            Revoke
+            Revoke deal
           </Button>
         </DialogTrigger>
 

@@ -46,7 +46,7 @@ export const CancelSignButton = () => {
     <div className="flex flex-col gap-[16px]">
       <Dialog open={opened} onOpenChange={setOpened}>
         <DialogTrigger>
-          <Button className="w-full" variant={'destructive'}>
+          <Button className="w-full" variant={'destructive-2'}>
             Cancel sign
           </Button>
         </DialogTrigger>
