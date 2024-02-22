@@ -1,9 +1,11 @@
 import 'react-toastify/ReactToastify.css'
 
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { FC, ReactNode } from 'react'
 import { ToastContainer } from 'react-toastify'
 import { Tooltip } from 'react-tooltip'
 
+import { GOOGLE_KEY } from '@/app/constants/google-a'
 import { MESSAGES } from '@/app/constants/messages'
 import { BalanceProvider } from '@/providers/BalanceProvider'
 import { EthereumProvider } from '@/providers/EthereumProvider'
@@ -17,6 +19,7 @@ import { SolanaWalletAdapter } from './SolanaWalletAdapter'
 type Props = {
   children?: ReactNode
 }
+
 const ModulesContainer: FC<Props> = ({ children }) => {
   return (
     <>
@@ -33,6 +36,8 @@ const ModulesContainer: FC<Props> = ({ children }) => {
           </EthereumProvider>
         </WagmiProvider>
       </SolanaWalletAdapter>
+
+      <GoogleAnalytics gaId={GOOGLE_KEY} />
 
       <ToastContainer theme="dark" />
 
