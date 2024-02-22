@@ -74,11 +74,15 @@ const IndexPage: NextPageWithLayout = () => {
             <CreateDealButton onSuccess={refetchDeals} />
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-8 md:grid-cols-2" ref={parent}>
-          {deals && deals.map(deal => <DealCard deal={deal} key={deal.id} />)}
-
-          {deals && deals.length === 0 && <EmptyPlaceholder />}
-        </div>
+        {deals && deals.length > 0 ? (
+          <div className="grid grid-cols-3 gap-8 md:grid-cols-2" ref={parent}>
+            {deals && deals.map(deal => <DealCard deal={deal} key={deal.id} />)}
+          </div>
+        ) : (
+          <div className="flex w-full justify-center">
+            <EmptyPlaceholder />
+          </div>
+        )}
       </section>
     </>
   )

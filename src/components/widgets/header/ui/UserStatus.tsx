@@ -35,7 +35,7 @@ export const UserStatus = () => {
         )}
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-scroll">
         <CreateDealHeader title="About tiers" />
         <div>
           <div className="relative h-[337px] w-full">
