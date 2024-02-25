@@ -27,7 +27,7 @@ export const EditCommentButton = ({
     }
   })
 
-  const handleSaveComment = handleSubmit(data => {
+  const handleSaveComment = handleSubmit(async data => {
     try {
       if (!deal) {
         throw new Error('No deal')

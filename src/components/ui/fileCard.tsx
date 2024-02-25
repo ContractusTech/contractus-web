@@ -48,13 +48,21 @@ export const FileCard = ({ file, type }: FileCardProps) => {
 
     const oldFiles = deal.meta?.files ?? []
 
-    await api.deals[type === 'meta' ? 'metaCreate' : 'resultCreate'](deal.id, {
-      [type]: {
-        files: oldFiles.filter(file => file.url !== file.url),
-        content: deal[type]?.content
+    await api.deals[type === 'meta' ? 'metaCreate' : 'resultCreate'](
+      deal.id,
+      {
+        [type]: {
+          files: oldFiles.filter(file => file.url !== file.url),
+          content: deal[type]?.content
+        },
+        updatedAt: new Date().toISOString()
       },
-      updatedAt: new Date().toISOString()
-    })
+      {
+        headers: {
+          test: 'deal_edit'
+        }
+      }
+    )
 
     await refetchDeal()
     setDeleteLoading(false)

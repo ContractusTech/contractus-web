@@ -3,14 +3,18 @@ import { DayPicker } from 'react-day-picker'
 
 import { api } from '@/api/client'
 import { useDeal } from '@/api/hooks/useDeal'
+import { PROMPTS } from '@/app/constants/prompts'
 import { useRolesStore } from '@/app/store/roles-store'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import { useCustomPrompt } from '@/providers/DealChangeAlert'
 
 import { CreateDealHeader } from './CreateDealHeader'
 
 export const EditDeadline = () => {
   const { deal, refetchDeal } = useDeal()
+  const { requestPrompt } = useCustomPrompt()
+  const { signedByChecker, signedByClient, signedByExecutor } = useRolesStore()
 
   const [dialogOpened, setDialogOpened] = useState(false)
 
@@ -22,6 +26,14 @@ export const EditDeadline = () => {
   }
 
   const handleSaveDeadline = async () => {
+    if ([signedByChecker, signedByClient, signedByExecutor].includes(true)) {
+      const res = await requestPrompt(PROMPTS.CONFIGN_UNSIGN)
+
+      if (!res) {
+        return
+      }
+    }
+
     if (selected && deal) {
       await api.deals.dealsCreate2(deal.id, {
         deadline: selected?.toISOString()

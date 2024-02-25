@@ -13,6 +13,7 @@ import { LoadingProvider } from '@/providers/LoadingProvider'
 import { WagmiProvider } from '@/providers/WagmiProvider'
 
 import { ConnectProvider } from './ConnectProvider'
+import { CustomPromptProvider } from './DealChangeAlert'
 import { DeviceIdProvider } from './DeviceIdProvider'
 import { SolanaWalletAdapter } from './SolanaWalletAdapter'
 
@@ -29,7 +30,9 @@ const ModulesContainer: FC<Props> = ({ children }) => {
             <LoadingProvider>
               <ConnectProvider>
                 <DeviceIdProvider>
-                  <BalanceProvider>{children}</BalanceProvider>
+                  <BalanceProvider>
+                    <CustomPromptProvider>{children}</CustomPromptProvider>
+                  </BalanceProvider>
                 </DeviceIdProvider>
               </ConnectProvider>
             </LoadingProvider>

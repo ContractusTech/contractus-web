@@ -36,7 +36,7 @@ export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
         {type === 'meta' && canEdit ? (
           <EditDescription />
         ) : (
-          <EditCommentButton type={type} edit={canEdit} />
+          <EditCommentButton type={'result'} edit={canEdit} />
         )}
       </div>
     </div>

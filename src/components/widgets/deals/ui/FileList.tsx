@@ -4,9 +4,12 @@ import { useState } from 'react'
 import { api } from '@/api/client'
 import { UploadedFile } from '@/api/generated-api'
 import { useDeal } from '@/api/hooks/useDeal'
+import { PROMPTS } from '@/app/constants/prompts'
+import { useRolesStore } from '@/app/store/roles-store'
 import LoadingSpinner from '@/assets/svg/LoadingCircle'
 import { FileCard } from '@/components/ui/fileCard'
 import { FileUpload } from '@/components/ui/fileUpload'
+import { useCustomPrompt } from '@/providers/DealChangeAlert'
 
 type FileWithName = UploadedFile & { name: string; size: number }
 
@@ -14,8 +17,21 @@ export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
   const { deal, refetchDeal } = useDeal()
   const [parent] = useAutoAnimate()
   const [attachLoading, setAttachLoading] = useState(false)
+  const { signedByChecker, signedByClient, signedByExecutor } = useRolesStore()
+  const { requestPrompt } = useCustomPrompt()
 
   const handleFileUpload = async (file: FileWithName) => {
+    if (
+      type === 'result' &&
+      [signedByChecker, signedByClient, signedByExecutor].includes(true)
+    ) {
+      const res = await requestPrompt(PROMPTS.CONFIGN_UNSIGN)
+
+      if (!res) {
+        return
+      }
+    }
+
     setAttachLoading(true)
     if (!deal) {
       throw new Error('No deal')

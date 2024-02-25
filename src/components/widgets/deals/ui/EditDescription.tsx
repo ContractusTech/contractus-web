@@ -5,9 +5,12 @@ import { useForm } from 'react-hook-form'
 import { api } from '@/api/client'
 import { Deal } from '@/api/generated-api'
 import { useDeal } from '@/api/hooks/useDeal'
+import { PROMPTS } from '@/app/constants/prompts'
+import { useRolesStore } from '@/app/store/roles-store'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { useCustomPrompt } from '@/providers/DealChangeAlert'
 
 import { AiGeneratedDescription } from './AiGeneratedDescription'
 import { CreateDealHeader } from './CreateDealHeader'
@@ -15,6 +18,8 @@ import { CreateDealHeader } from './CreateDealHeader'
 export const EditDescription = () => {
   const { deal } = useDeal()
   const [dialogOpened, setDialogOpened] = useState(false)
+  const { signedByChecker, signedByClient, signedByExecutor } = useRolesStore()
+  const { requestPrompt } = useCustomPrompt()
 
   const { register, handleSubmit } = useForm<Deal>({
     defaultValues: {
@@ -22,8 +27,16 @@ export const EditDescription = () => {
     }
   })
 
-  const handleSaveComment = handleSubmit(data => {
+  const handleSaveComment = handleSubmit(async data => {
     try {
+      if ([signedByChecker, signedByClient, signedByExecutor].includes(true)) {
+        const res = await requestPrompt(PROMPTS.CONFIGN_UNSIGN)
+
+        if (!res) {
+          return
+        }
+      }
+
       if (!deal) {
         throw new Error('No deal')
       }
