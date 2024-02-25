@@ -27,11 +27,16 @@ export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
 
   const dealTextMessage = useMemo(() => {
     const isEncrypted = deal?.encryptedSecretKey
+
     if (isEncrypted) {
       return Array.from({ length: MESSAGE_LENGTH_MAX }).fill('*').join('')
     }
 
-    return deal?.meta?.content.text
+    if (deal?.meta?.content.text) {
+      return atob(deal.meta.content.text)
+    }
+
+    return
   }, [deal?.encryptedSecretKey, deal?.meta?.content.text])
 
   return (
