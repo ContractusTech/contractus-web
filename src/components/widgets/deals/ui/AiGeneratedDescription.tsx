@@ -142,7 +142,7 @@ export const AiGeneratedDescription = () => {
                     </>
                   ) : (
                     <>
-                      Paste in deal
+                      Copy
                       <Copy size={16} />
                     </>
                   )}
