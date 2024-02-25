@@ -23,7 +23,7 @@ export const EditCommentButton = ({
 
   const { register, handleSubmit } = useForm<Deal>({
     defaultValues: {
-      [type]: { content: { text: deal?.[type]?.content?.text } }
+      [type]: { content: { text: atob(deal?.[type]?.content?.text ?? '') } }
     }
   })
 
@@ -44,7 +44,7 @@ export const EditCommentButton = ({
           updatedAt: new Date().toISOString(),
           [type]: {
             content: {
-              text,
+              text: btoa(text),
               md5: CryptoJS.MD5(text).toString()
             },
             files: deal?.[type]?.files

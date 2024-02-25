@@ -32,11 +32,17 @@ export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
       return Array.from({ length: MESSAGE_LENGTH_MAX }).fill('*').join('')
     }
 
-    if (deal?.meta?.content.text) {
-      return atob(deal.meta.content.text)
+    const text = deal?.meta?.content.text
+
+    if (text) {
+      // if (!/^[A-Za-z0-9+/]+={0,2}$/.test(text) || text.length % 4 !== 0) {
+      //   return text
+      // }
+
+      return atob(text)
     }
 
-    return
+    return text
   }, [deal?.encryptedSecretKey, deal?.meta?.content.text])
 
   return (

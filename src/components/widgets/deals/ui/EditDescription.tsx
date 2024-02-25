@@ -23,7 +23,7 @@ export const EditDescription = () => {
 
   const { register, handleSubmit } = useForm<Deal>({
     defaultValues: {
-      meta: { content: { text: deal?.meta?.content?.text } }
+      meta: { content: { text: atob(deal?.meta?.content?.text ?? '') } }
     }
   })
 
@@ -52,7 +52,7 @@ export const EditDescription = () => {
           updatedAt: new Date().toISOString(),
           meta: {
             content: {
-              text,
+              text: btoa(text),
               md5: CryptoJS.MD5(text).toString()
             },
             files: deal?.meta?.files
