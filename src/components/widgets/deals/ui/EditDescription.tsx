@@ -79,7 +79,7 @@ export const EditDescription = () => {
       </DialogTrigger>
 
       <DialogContent
-        className="max-w-[807px]"
+        className="max-w-[607px]"
         onInteractOutside={e => e.preventDefault()}
       >
         <CreateDealHeader title="Deal description" />

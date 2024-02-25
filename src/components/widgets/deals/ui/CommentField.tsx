@@ -7,7 +7,7 @@ import { useRolesStore } from '@/app/store/roles-store'
 import { EditCommentButton } from './EditCommentButton'
 import { EditDescription } from './EditDescription'
 
-const MESSAGE_LENGTH_MAX = 210
+const MESSAGE_LENGTH_MAX = 410
 
 export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
   const { dealCanceled, iClient, iExecutor } = useRolesStore()
@@ -43,14 +43,25 @@ export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
           <span className="text-2xl text-[#fff]">Text</span>
         </div>
 
-        <span
-          className={`white mt-[16px]  break-all text-sm font-[400] text-[#656975] ${
+        <div
+          className={`white mt-[16px]  w-[100%]   text-sm font-[400] text-[#656975] ${
             dealTextMessage ? 'text-[#fff]' : 'text-[#656975]'
           }`}
+          style={{
+            wordBreak: 'break-word',
+            overflow: 'hidden',
+            display: 'block',
+            textOverflow: 'ellipsis',
+            lineClamp: 3,
+            WebkitLineClamp: 3,
+            maxHeight: 60
+
+            // ['-webkit-box-orient']: 'vertical'
+          }}
         >
           {dealTextMessage ??
             'This text will be available for viewing only to contract partners.'}
-        </span>
+        </div>
       </div>
 
       <div className="absolute right-[20px] top-[20px]">
@@ -63,7 +74,7 @@ export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
 
       {/* @ts-ignore */}
       {dealTextMessage?.length > MAX_SEED_LENGTH && (
-        <div className="absolute bottom-0 left-0 h-[140px] w-full bg-gradient-to-t from-[#0b0b0d]" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-[140px] w-full bg-gradient-to-t from-[#0b0b0d]" />
       )}
     </div>
   )

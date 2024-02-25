@@ -67,13 +67,14 @@ export const EditCommentButton = ({
           {edit ? 'Edit' : 'View'}
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-[607px]">
         <div className="flex flex-col gap-[13px]">
           <CreateDealHeader title={edit ? 'Edit comment' : 'View comment'} />
           <Input
             variant="textarea"
             register={register(`${type}.content.text`)}
             name="text"
+            size="l"
             disabled={!edit}
           />
           {edit && (
