@@ -55,10 +55,10 @@ export const CancelSignButton = () => {
           <CreateDealHeader title={'Confirm'} />
 
           <div className="flex flex-col gap-[20px] p-[10px]">
-            <span>Are you sure you want to cancel the deal?</span>
+            <span>Are you sure you want to cancel signature of the deal?</span>
 
             <div className="flex justify-end gap-[10px]">
-              <Button>Close</Button>
+              <Button onClick={() => setOpened(false)}>Close</Button>
               <Button variant={'destructive'} onClick={cancelDeal}>
                 Confirm
               </Button>

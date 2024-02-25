@@ -78,20 +78,16 @@ export const EditDescription = () => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-[607px]">
+      <DialogContent
+        className="max-w-[807px]"
+        onInteractOutside={e => e.preventDefault()}
+      >
         <CreateDealHeader title="Deal description" />
 
         <div className=" flex flex-col gap-[24px] p-[16px]">
           <div className="overflow-hidden rounded-[20px] bg-[#15151b]">
             <div className="flex w-full rounded-[20px_20px_0_0] p-[10px] ">
-              <div className="flex gap-[24px]">
-                {/* <button>
-                  <ArrowSvg />
-                </button>
-                <button className="" style={{ transform: 'rotateY(180deg)' }}>
-                  <ArrowSvg />
-                </button> */}
-              </div>
+              <div className="flex gap-[24px]"></div>
               <div className="ml-[auto]">
                 <AiGeneratedDescription />
               </div>
