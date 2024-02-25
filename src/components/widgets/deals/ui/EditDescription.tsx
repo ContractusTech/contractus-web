@@ -69,7 +69,13 @@ export const EditDescription = () => {
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
       <DialogTrigger>
-        <Button variant={'tertiary'}>Edit</Button>
+        <Button
+          data-tooltip-id={!!deal?.encryptedSecretKey ? 'encrypted' : ''}
+          disabled={!!deal?.encryptedSecretKey}
+          variant={'tertiary'}
+        >
+          Edit
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-[607px]">

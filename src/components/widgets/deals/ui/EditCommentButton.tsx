@@ -59,7 +59,13 @@ export const EditCommentButton = ({
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
       <DialogTrigger asChild>
-        <Button variant={'tertiary'}>{edit ? 'Edit' : 'View'}</Button>
+        <Button
+          data-tooltip-id={!!deal?.encryptedSecretKey ? 'encrypted' : ''}
+          variant={'tertiary'}
+          disabled={!!deal?.encryptedSecretKey}
+        >
+          {edit ? 'Edit' : 'View'}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <div className="flex flex-col gap-[13px]">

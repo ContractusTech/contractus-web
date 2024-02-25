@@ -18,25 +18,23 @@ export const LoadingProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { isDealsLoading } = useDeals()
   const { isActionsLoading } = useDealActions()
 
-  const [mounted, setMounted] = useState(false)
+  const [m, sM] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-  }, [mounted])
+    sM(true)
+  }, [])
 
   const isAppLoading = useMemo(() => {
     return (
-      mounted &&
-      (isUserLoading ||
-        isTokensLoading ||
-        isStatisticsLoading ||
-        isBalanceLoading ||
-        isDealLoading ||
-        isDealsLoading ||
-        isActionsLoading)
+      isUserLoading ||
+      isTokensLoading ||
+      isStatisticsLoading ||
+      isBalanceLoading ||
+      isDealLoading ||
+      isDealsLoading ||
+      isActionsLoading
     )
   }, [
-    mounted,
     isUserLoading,
     isTokensLoading,
     isStatisticsLoading,
@@ -45,6 +43,10 @@ export const LoadingProvider: React.FC<PropsWithChildren> = ({ children }) => {
     isDealsLoading,
     isActionsLoading
   ])
+
+  if (!m) {
+    return null
+  }
 
   return (
     <>

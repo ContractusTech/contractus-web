@@ -61,6 +61,12 @@ const ModulesContainer: FC<Props> = ({ children }) => {
         id="only-owner"
         style={{ zIndex: 999 }}
       />
+
+      <Tooltip
+        content={MESSAGES.ENCRYPTED}
+        id="encrypted"
+        style={{ zIndex: 999 }}
+      />
     </>
   )
 }
