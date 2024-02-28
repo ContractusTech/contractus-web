@@ -4,8 +4,11 @@ import { useDeal } from '@/api/hooks/useDeal'
 import { useTokens } from '@/api/hooks/useTokens'
 import { useUser } from '@/api/hooks/useUser'
 import httpClient from '@/api/httpClient'
+import { PROMPTS } from '@/app/constants/prompts'
+import { useRolesStore } from '@/app/store/roles-store'
 import { Deal } from '@/app/types'
 import { transformString } from '@/lib/utils'
+import { useCustomPrompt } from '@/providers/DealChangeAlert'
 
 import { CheckerAmountChange } from './CheckerAmountChange'
 import { PartnerEdit } from './PartnerEdit'
@@ -14,8 +17,24 @@ export const CheckerEdit = () => {
   const { deal, refetchDeal } = useDeal()
   const { tokens } = useTokens()
   const { user } = useUser()
+  const {
+    dealCanceled,
+    iOwner,
+    signedByChecker,
+    signedByClient,
+    signedByExecutor
+  } = useRolesStore()
+  const { requestPrompt } = useCustomPrompt()
 
   const handleCheckerEdit = async (address: string) => {
+    if ([signedByChecker, signedByClient, signedByExecutor].includes(true)) {
+      const res = await requestPrompt(PROMPTS.CONFIGN_UNSIGN)
+
+      if (!res) {
+        return
+      }
+    }
+
     if (!deal) {
       throw new Error('No deal')
     }
@@ -69,10 +88,16 @@ export const CheckerEdit = () => {
         </span>
       </div>
 
-      <div className="flex gap-[8px]">
-        <PartnerEdit onSave={handleCheckerEdit} />
-        <CheckerAmountChange />
-      </div>
+      {!dealCanceled && (
+        <div className="flex gap-[8px]">
+          <PartnerEdit
+            onSave={handleCheckerEdit}
+            disabled={!iOwner}
+            data-tooltip-id={!iOwner ? 'only-owner' : ''}
+          />
+          <CheckerAmountChange />
+        </div>
+      )}
     </div>
   )
 }

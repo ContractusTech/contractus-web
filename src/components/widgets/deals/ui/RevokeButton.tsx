@@ -42,23 +42,19 @@ export const RevokeButton = () => {
             variant={'destructive'}
             onClick={() => setOpen(true)}
           >
-            Revoke
+            Revoke deal
           </Button>
         </DialogTrigger>
 
         <DialogContent className="max-w-[270px]">
           <CreateDealHeader title={'Confirm'} />
 
-          <div className="flex flex-col gap-[20px] p-[20px]">
+          <div className="flex flex-col gap-[20px] p-[10px]">
             <span>Are you sure you want to revoke the deal?</span>
 
             <div className="flex justify-end gap-[10px]">
-              <Button size={'sm'}>Close</Button>
-              <Button
-                size={'sm'}
-                variant={'destructive'}
-                onClick={handleRevoke}
-              >
+              <Button>Close</Button>
+              <Button variant={'destructive'} onClick={handleRevoke}>
                 Confirm
               </Button>
             </div>

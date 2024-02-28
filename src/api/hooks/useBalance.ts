@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { getCookie } from 'cookies-next'
 
 import { COOKIES } from '@/app/constants/cookies'
@@ -24,7 +24,8 @@ export const useBalance = () => {
             address: selectedToken.address
           }))
       }) as unknown as BalanceType,
-    enabled: !!getCookie(COOKIES.AUTH_TOKEN)
+    enabled: !!getCookie(COOKIES.AUTH_TOKEN) && selectedTokens.length > 0,
+    placeholderData: keepPreviousData
   })
 
   return { balance, isBalanceLoading: isLoading }

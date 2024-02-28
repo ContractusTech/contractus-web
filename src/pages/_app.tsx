@@ -1,4 +1,6 @@
 import '@/app/plugins'
+import 'react-tooltip/dist/react-tooltip.css'
+import '../global.css'
 
 import type { Metadata } from 'next'
 import type { AppProps } from 'next/app'

@@ -3,6 +3,7 @@ import { parseUnits } from 'viem'
 import { api } from '@/api/client'
 import { useDeal } from '@/api/hooks/useDeal'
 import { useTokens } from '@/api/hooks/useTokens'
+import { useRolesStore } from '@/app/store/roles-store'
 import { Amount } from '@/app/types'
 import { getDecimalOfShortToken } from '@/lib/utils'
 
@@ -12,6 +13,8 @@ export const DealAmountChange = () => {
   const { deal, refetchDeal } = useDeal()
 
   const { tokens } = useTokens()
+
+  const { iClient } = useRolesStore()
 
   if (!deal) {
     return null
@@ -43,6 +46,7 @@ export const DealAmountChange = () => {
       onSelect={handleSaveAmountOfDeal}
       feeDealid={deal.id}
       withFee
+      disabled={!iClient}
     />
   )
 }

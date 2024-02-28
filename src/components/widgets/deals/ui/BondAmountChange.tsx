@@ -3,8 +3,11 @@ import { parseUnits } from 'viem'
 import { api } from '@/api/client'
 import { useDeal } from '@/api/hooks/useDeal'
 import { useTokens } from '@/api/hooks/useTokens'
+import { PROMPTS } from '@/app/constants/prompts'
+import { useRolesStore } from '@/app/store/roles-store'
 import { Amount } from '@/app/types'
 import { getDecimalOfShortToken } from '@/lib/utils'
+import { useCustomPrompt } from '@/providers/DealChangeAlert'
 
 import { AmountChoice } from './AmountChoice'
 
@@ -15,6 +18,8 @@ export const BondAmountChange = ({
 }) => {
   const { refetchDeal, deal } = useDeal()
   const { tokens } = useTokens()
+  const { signedByChecker, signedByClient, signedByExecutor } = useRolesStore()
+  const { requestPrompt } = useCustomPrompt()
 
   if (!deal) {
     throw new Error('No deal')
@@ -26,6 +31,14 @@ export const BondAmountChange = ({
 
   const handleAmountSettingsSave = async (amount: Amount) => {
     try {
+      if ([signedByChecker, signedByClient, signedByExecutor].includes(true)) {
+        const res = await requestPrompt(PROMPTS.CONFIGN_UNSIGN)
+
+        if (!res) {
+          return
+        }
+      }
+
       const decimalAmount = parseUnits(
         amount.value,
         getDecimalOfShortToken(amount.token, tokens)

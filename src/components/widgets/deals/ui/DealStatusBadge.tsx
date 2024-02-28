@@ -88,8 +88,10 @@ export const DealStatusBadge = () => {
 
     if (typeof prepatedData === 'function') {
       return prepatedData({
-        // @ts-ignore
-        amount: formatUnits(deal.amount, deal.token?.decimals).toString(),
+        amount: formatUnits(
+          BigInt(deal.amount),
+          deal.token?.decimals
+        ).toString(),
         pKey: transformString(
           (deal.ownerRole === 'EXECUTOR'
             ? deal.ownerPublicKey
@@ -108,8 +110,7 @@ export const DealStatusBadge = () => {
     deal.ownerPublicKey,
     deal.ownerRole,
     deal.status,
-    // @ts-ignore
-    deal.token?.decimals
+    deal.token.decimals
   ])
 
   if (deal.status === 'NEW') {

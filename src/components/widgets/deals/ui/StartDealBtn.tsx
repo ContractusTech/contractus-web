@@ -1,4 +1,5 @@
 import { useWallet } from '@solana/wallet-adapter-react'
+import { toast } from 'react-toastify'
 import { toBytes } from 'viem'
 import { getWalletClient } from 'wagmi/actions'
 
@@ -8,7 +9,9 @@ import { useDeal } from '@/api/hooks/useDeal'
 import { useUser } from '@/api/hooks/useUser'
 import httpClient from '@/api/httpClient'
 import { ERRORS } from '@/app/constants/errors'
+import { useRolesStore } from '@/app/store/roles-store'
 import { useApprove } from '@/components/features/approve'
+import { TokenKey } from '@/components/features/approve/model/useApprove'
 import { Button } from '@/components/ui/button'
 import { useSolanaConnect } from '@/providers/SolanaProvider'
 
@@ -18,7 +21,10 @@ type StartDealBtnProps = {
 
 export const StartDealBtn = ({ disabled }: StartDealBtnProps) => {
   const { deal, refetchDeal } = useDeal()
-  const { approve } = useApprove()
+
+  const { iClient } = useRolesStore()
+
+  const { approve } = useApprove(deal?.token.code as TokenKey)
 
   const { user } = useUser()
 
@@ -38,7 +44,9 @@ export const StartDealBtn = ({ disabled }: StartDealBtnProps) => {
   }
 
   const evmSign = async (transaction: string, dealId: string) => {
-    await approve()
+    if (iClient) {
+      await approve()
+    }
 
     const walletClient = await getWalletClient()
 
@@ -59,32 +67,38 @@ export const StartDealBtn = ({ disabled }: StartDealBtnProps) => {
   }
 
   const handleSign = async () => {
-    if (!deal) {
-      throw new Error(ERRORS.DEAL_EXISTS)
-    }
-
-    const { data: tx } = await httpClient<Tx>({
-      url: `deals/${deal.id}/tx/DEAL_INIT?silent=0`,
-      method: 'GET'
-    })
-
-    if (!tx.transaction) {
-      throw new Error('No hash transaction')
-    }
-
-    switch (user?.blockchain) {
-      case 'bsc': {
-        await evmSign(tx.transaction, deal.id)
-        break
+    try {
+      if (!deal) {
+        throw new Error(ERRORS.DEAL_EXISTS)
       }
 
-      case 'solana': {
-        await solanaSign(tx.transaction)
-        break
+      const { data: tx } = await httpClient<Tx>({
+        url: `deals/${deal.id}/tx/DEAL_INIT?silent=0`,
+        method: 'GET'
+      })
+
+      if (!tx.transaction) {
+        throw new Error('No hash transaction')
+      }
+
+      switch (user?.blockchain) {
+        case 'bsc': {
+          await evmSign(tx.transaction, deal.id)
+          break
+        }
+
+        case 'solana': {
+          await solanaSign(tx.transaction)
+          break
+        }
+      }
+
+      await refetchDeal()
+    } catch (error: any) {
+      if (error?.response?.data?.error) {
+        toast(error?.response?.data?.error)
       }
     }
-
-    await refetchDeal()
   }
 
   return (

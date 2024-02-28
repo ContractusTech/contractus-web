@@ -3,14 +3,15 @@ import { Info } from 'lucide-react'
 
 type ToolTipProps = {
   content: string
+  children?: React.ReactNode
 }
 
-export const ToolTip = ({ content }: ToolTipProps) => {
+export const ToolTip = ({ content, children }: ToolTipProps) => {
   return (
     <Tooltip.Provider>
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
-          <Info className="cursor-pointer" size={18} />
+          {children ?? <Info className="cursor-pointer" size={18} />}
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content

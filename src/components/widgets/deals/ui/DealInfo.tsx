@@ -3,25 +3,44 @@ import { formatUnits } from 'viem'
 import { useDeal } from '@/api/hooks/useDeal'
 import { useUser } from '@/api/hooks/useUser'
 import httpClient from '@/api/httpClient'
+import { PROMPTS } from '@/app/constants/prompts'
 import { useRolesStore } from '@/app/store/roles-store'
 import { Deal } from '@/app/types'
 import Tag from '@/components/ui/tag'
 import { transformString } from '@/lib/utils'
+import { useCustomPrompt } from '@/providers/DealChangeAlert'
 
 import { DealAmountChange } from './DealAmountChange'
 import { PartnerEdit } from './PartnerEdit'
 
 export const DealInfo = () => {
   const { deal, refetchDeal } = useDeal()
-  const { iClient, clientAddress, iExecutor, executorPublicKey } =
-    useRolesStore()
+  const {
+    iClient,
+    clientAddress,
+    iExecutor,
+    executorPublicKey,
+    dealCanceled,
+    signedByChecker,
+    signedByClient,
+    signedByExecutor
+  } = useRolesStore()
   const { user } = useUser()
+  const { requestPrompt } = useCustomPrompt()
 
   if (!deal) {
     throw new Error('No deal')
   }
 
   const handleClientEdit = async (address: string) => {
+    if ([signedByChecker, signedByClient, signedByExecutor].includes(true)) {
+      const res = await requestPrompt(PROMPTS.CONFIGN_UNSIGN)
+
+      if (!res) {
+        return
+      }
+    }
+
     await httpClient<Deal>({
       url: `deals/${deal.id}/participate`,
       method: 'POST',
@@ -49,10 +68,12 @@ export const DealInfo = () => {
             {clientAddress ? transformString(clientAddress) : 'Empty'}
           </span>
 
-          {!iClient && (
+          {!dealCanceled && (
             <PartnerEdit
+              data-tooltip-id={!iClient ? 'only-client' : ''}
               triggerClassName="absolute right-[20px]"
               onSave={handleClientEdit}
+              disabled={!iClient}
             />
           )}
         </div>
@@ -72,9 +93,11 @@ export const DealInfo = () => {
             </div>
           </div>
 
-          <div className="absolute right-[20px] top-[20px] flex items-end">
-            <DealAmountChange />
-          </div>
+          {!dealCanceled && (
+            <div className="absolute right-[20px] top-[20px] flex items-end">
+              <DealAmountChange />
+            </div>
+          )}
         </div>
       </div>
 
@@ -94,8 +117,10 @@ export const DealInfo = () => {
           </span>
         </div>
 
-        {!iExecutor && (
+        {!dealCanceled && (
           <PartnerEdit
+            data-tooltip-id={!iClient ? 'only-client' : ''}
+            disabled={!iClient}
             triggerClassName="absolute right-[20px]"
             onSave={handleClientEdit}
           />

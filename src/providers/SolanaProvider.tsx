@@ -13,7 +13,7 @@ import React, {
 import { useUser } from '@/api/hooks/useUser'
 import { COOKIES } from '@/app/constants/cookies'
 import { LOCAL_STORAGE } from '@/app/constants/localStorage'
-import MESSAGES from '@/app/constants/web3'
+import { MESSAGES } from '@/app/constants/web3'
 import { useLogout } from '@/hooks/useLogout'
 import { generateBase64Token } from '@/lib/utils'
 

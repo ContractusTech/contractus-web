@@ -40,4 +40,5 @@ button:hover.rdp-nav_button {
 
 :root {
   --rdp-accent-color: #fff;
+  --toastify-color-progress-dark: #fff;
 }

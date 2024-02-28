@@ -12,11 +12,15 @@ type EditAddressButton = {
   triggerClassName?: string
   title?: string
   onSave?: (val: string) => void
+  'data-tooltip-id'?: string
+  disabled?: boolean
 }
 
 export const PartnerEdit = ({
   triggerClassName,
-  onSave
+  onSave,
+  'data-tooltip-id': toolTipId,
+  disabled
 }: EditAddressButton) => {
   const [open, setOpen] = useState(false)
 
@@ -36,7 +40,13 @@ export const PartnerEdit = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className={triggerClassName}>
-        <Button variant={'tertiary'}>Edit</Button>
+        <Button
+          variant={'tertiary'}
+          data-tooltip-id={toolTipId}
+          disabled={disabled}
+        >
+          Edit
+        </Button>
       </DialogTrigger>
       <DialogContent className="w-full max-w-[600px] rounded-[10px] bg-[#070708] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.85)]">
         <CreateDealHeader title={'Edit partner'} />

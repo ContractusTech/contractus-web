@@ -25,9 +25,9 @@ module.exports = {
   ],
 
   rules: {
-    'no-console': 'warn',
+    'no-console': 'off',
     curly: 'error',
-
+    'unicorn/better-regex': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',

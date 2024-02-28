@@ -1,10 +1,11 @@
 import { clsx } from 'clsx'
 import { useRouter } from 'next/navigation'
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { formatUnits } from 'viem'
 
 import { useUser } from '@/api/hooks/useUser'
 import { PAGES } from '@/app/constants/pages'
+import { getRoles } from '@/app/store/roles-store'
 import { Deal } from '@/app/types'
 import { ArrowLeftBottomCorner } from '@/assets/svg/ArrowLeftBottomCorner'
 import { formatNumber, getTimeUnitFromNow, transformString } from '@/lib/utils'
@@ -23,8 +24,9 @@ const DealCard: FC<Props> = ({ deal }) => {
 
   const isStatusNew = deal.status === 'NEW'
 
-  const clientAddress =
-    deal.ownerRole === 'CLIENT' ? deal.ownerPublicKey : deal.contractorPublicKey
+  const { iExecutor, clientAddress, executorPublicKey } = useMemo(() => {
+    return getRoles(deal, user!)
+  }, [deal, user])
 
   return (
     <div
@@ -73,10 +75,12 @@ const DealCard: FC<Props> = ({ deal }) => {
       </div>
       <div className="mt-auto">
         <p className="mb-2 text-[12px] font-medium leading-none text-secondary-text">
-          Client
+          {iExecutor ? 'Client' : 'Executor'}
         </p>
         <p className="text-[15px] font-medium leading-none">
-          {transformString(clientAddress ?? '')}
+          {transformString(
+            (iExecutor ? clientAddress : executorPublicKey) ?? 'Empty'
+          )}
         </p>
       </div>
     </div>

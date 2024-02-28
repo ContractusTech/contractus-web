@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
-import { useBalance } from '@/api/hooks/useBalance'
 import { useTokens } from '@/api/hooks/useTokens'
+import { useUser } from '@/api/hooks/useUser'
 import { useSelectedTokensStore } from '@/app/store/selectedTokensStore'
 import { TokenWithChecked } from '@/app/types'
 
@@ -9,38 +9,39 @@ type BalanceProviderProps = {
   children: React.ReactNode
 }
 
+const BSC_WRAP = ['BNB', 'WBNB']
+const SOL_WRAP = ['SOL', 'WSOL']
+
 export const BalanceProvider = (props: BalanceProviderProps) => {
   const { setSelectedTokens } = useSelectedTokensStore()
 
   const { tokens } = useTokens()
-  const { balance } = useBalance()
+  const { user } = useUser()
 
   const getInitialState = async () => {
-    if (tokens && balance) {
+    if (tokens) {
       const storedTokens = localStorage.getItem('selectedTokens')
       const fromLocalStore: TokenWithChecked[] = JSON.parse(
         storedTokens ?? '[]'
       )
 
-      if (balance.wrap) {
-        const withDisabledTokens: TokenWithChecked[] =
-          tokens.map(token => {
-            const disabled = balance.wrap?.includes(token.code)
-            const mustAutoEnabled = [...balance.wrap!, 'CTUS'].includes(
-              token.code
-            )
-            return {
-              ...token,
-              disabled,
-              checked:
-                fromLocalStore.find(
-                  storagedToken => storagedToken.code === token.code
-                )?.checked ?? mustAutoEnabled
-            }
-          }) ?? []
+      const balanceWrap = user?.blockchain === 'solana' ? SOL_WRAP : BSC_WRAP
+      const withDisabledTokens: TokenWithChecked[] =
+        tokens.map(token => {
+          const disabled = balanceWrap.includes(token.code)
+          const mustAutoEnabled = [...balanceWrap, 'CTUS'].includes(token.code)
 
-        setSelectedTokens(withDisabledTokens)
-      }
+          return {
+            ...token,
+            disabled,
+            checked:
+              fromLocalStore.find(
+                storagedToken => storagedToken.code === token.code
+              )?.checked ?? mustAutoEnabled
+          }
+        }) ?? []
+
+      setSelectedTokens(withDisabledTokens)
     }
   }
 

@@ -1,5 +1,6 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import dynamic from 'next/dynamic'
+import { useMemo, useState } from 'react'
 
 import { useDeals } from '@/api/hooks/useDeals'
 import { NextPageWithLayout } from '@/app/types'
@@ -19,8 +20,23 @@ const RootLayout = dynamic(() => import('../layouts/default'), {
 })
 
 const IndexPage: NextPageWithLayout = () => {
-  const { deals, refetchDeals } = useDeals()
+  const [current, setCurrent] = useState('Latest')
+  const { deals, refetchDeals } = useDeals({
+    // @ts-ignore
+    statuses: current !== 'Latest' ? [current] : []
+  })
   const [parent] = useAutoAnimate()
+
+  const list = useMemo(() => {
+    return [
+      'Latest',
+      'NEW',
+      'STARTED',
+      'FINISHED',
+      'CANCELED',
+      'REVOKED'
+    ].filter(listItem => listItem !== current)
+  }, [current])
 
   return (
     <>
@@ -35,7 +51,7 @@ const IndexPage: NextPageWithLayout = () => {
           <DropdownMenu>
             <DropdownMenuTrigger className="group">
               <h2 className="flex items-center gap-x-8 text-2xl font-medium leading-[1.2]">
-                Latest
+                {current}
                 <ChevronDownIcon
                   className="relative top-[1px] h-16 w-16 transition duration-200 group-data-[state=open]:rotate-180"
                   aria-hidden="true"
@@ -43,20 +59,30 @@ const IndexPage: NextPageWithLayout = () => {
               </h2>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-secondary">
-              <DropdownMenuItem>Not latest</DropdownMenuItem>
-              <DropdownMenuItem>In proccess</DropdownMenuItem>
-              <DropdownMenuItem>Others</DropdownMenuItem>
+              {list.map((item, i) => (
+                <DropdownMenuItem
+                  className="capitalize"
+                  onClick={() => setCurrent(item)}
+                  key={i}
+                >
+                  {item}
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
           <div>
             <CreateDealButton onSuccess={refetchDeals} />
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-8 md:grid-cols-2" ref={parent}>
-          {deals && deals.map(deal => <DealCard deal={deal} key={deal.id} />)}
-
-          {deals && deals.length === 0 && <EmptyPlaceholder />}
-        </div>
+        {deals && deals.length > 0 ? (
+          <div className="grid grid-cols-3 gap-8 md:grid-cols-2" ref={parent}>
+            {deals && deals.map(deal => <DealCard deal={deal} key={deal.id} />)}
+          </div>
+        ) : (
+          <div className="flex w-full justify-center">
+            <EmptyPlaceholder />
+          </div>
+        )}
       </section>
     </>
   )
