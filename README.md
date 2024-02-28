@@ -2,7 +2,7 @@
 
 Penning and signing contracts involving considerable sums is a tedious and lengthy process. Contractus facilitates contract signing by vastly accelerating the process and cutting down associated costs.
 
- - [`WepApp`](http://app.contractus.tech/)
+ - [`WepApp Beta`](http://beta.app.contractus.tech/)
  - [`Website`](http://contractus.tech/)
  - [`AppStore`](https://apps.apple.com/us/app/contractus-safe-deals/id6462698654)
  - *GooglePlay (Soon)*
