@@ -22,7 +22,7 @@ export const RoleSignatureView = () => {
         withChecker
           ? 'grid-cols-[1fr_1px_1fr_1px_1fr]'
           : 'grid-cols-[1fr_1px_1fr]'
-      }  rounded-[13px] border-[1px] border-[#2A2E37]`}
+      }  rounded-[20px] border-[1px] border-[#2A2E37]`}
     >
       <div className="relative flex w-full flex-col items-center justify-self-center p-[13px]">
         {iClient && <YTag />}

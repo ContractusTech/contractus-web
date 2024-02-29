@@ -47,7 +47,7 @@ export const CommentField = ({ type }: { type: 'result' | 'meta' }) => {
 
   return (
     <div
-      className={`relative flex h-full w-full justify-between overflow-hidden  rounded-[19px] border-[1px] border-[#262930] bg-secondary p-[20px]`}
+      className={`relative flex h-full w-full justify-between overflow-hidden  rounded-[19px] border-[1px] border-[#262930] bg-secondary p-[16px]`}
     >
       <div className="flex flex-col">
         <div className="flex items-center gap-[8px]">

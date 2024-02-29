@@ -66,7 +66,7 @@ export const FileList = ({ type }: { type: 'result' | 'meta' }) => {
           ))}
 
         {deal && (!deal[type] || deal[type]?.files.length === 0) && (
-          <div className="p-[16px] text-center text-[15px] text-[]">
+          <div className="p-[16px] text-left text-sm font-[400] text-[#656975]">
             The files will be available for viewing only to contract partners.
           </div>
         )}
