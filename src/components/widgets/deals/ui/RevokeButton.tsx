@@ -61,10 +61,6 @@ export const RevokeButton = () => {
           </div>
         </DialogContent>
       </Dialog>
-
-      <span className="text-center text-[13px] text-[#AD4C4C]">
-        You can cancel the deal before it starts.
-      </span>
     </div>
   )
 }
