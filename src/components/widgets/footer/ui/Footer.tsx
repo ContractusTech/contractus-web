@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { PAGES } from '@/app/constants/pages'
+import { MESSAGES } from '@/app/constants/web3'
 
 export const Footer = () => {
   return (
@@ -13,7 +14,11 @@ export const Footer = () => {
         <Link href={PAGES.TERMS}>Terms</Link>
         <Link href={PAGES.GITHUB}>Github</Link>
 
-        <span>v1.0.1</span>
+        <Link
+          href={PAGES.GITHUB + '/contractus-web/commit/' + MESSAGES.COMMIT_HASH}
+        >
+          #{MESSAGES.COMMIT_HASH}
+        </Link>
       </div>
     </footer>
   )

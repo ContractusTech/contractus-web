@@ -3,8 +3,8 @@ import { ENV } from '@/app/constants/environment'
 export const MESSAGES = {
   SIGN_MESSAGE: 'web-client',
   WC_ID: ENV.WC_ID,
-
-  CONTRACTOR_ADDRESS: ENV.CONTRACTOR_ADDRESS as `0x${string}`
+  CONTRACTOR_ADDRESS: ENV.CONTRACTOR_ADDRESS as `0x${string}`,
+  COMMIT_HASH: ENV.COMMIT_HASH.slice(0, 7)
 } as const
 
 export const BNB_TOKENS = {
