@@ -37,10 +37,6 @@ export const TokenSwapper = () => {
       })
   }, [user])
 
-  useEffect(() => {
-    console.log(balance)
-  }, [balance])
-
   if (!balance) {
     return null
   }
