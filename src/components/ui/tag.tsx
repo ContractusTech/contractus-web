@@ -1,5 +1,3 @@
-import { Check } from 'lucide-react'
-
 type Props = {
   children: React.ReactNode
   className?: string
