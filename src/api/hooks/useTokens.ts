@@ -11,7 +11,8 @@ export const TOKENS_UQ_KEY = 'tokens'
 export const useTokens = () => {
   const { data: tokens, isLoading: isTokensLoading } = useQuery({
     queryKey: [TOKENS_UQ_KEY],
-    queryFn: () => api.resources.tokensList() as unknown as Token[],
+    queryFn: () =>
+      api.resources.tokensList({ type: 'full' }) as unknown as Token[],
     enabled: !!getCookie(COOKIES.AUTH_TOKEN)
   })
 
