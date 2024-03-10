@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getCookie } from 'cookies-next'
+import { toast } from 'react-toastify'
 
 import { COOKIES } from '../constants/cookies'
 
@@ -11,4 +12,12 @@ axios.interceptors.request.use(config => {
   }
 
   return config
+})
+
+axios.interceptors.response.use(res => {
+  if (res.status === 500 || res.status === 400) {
+    toast('Error')
+  }
+
+  return res
 })

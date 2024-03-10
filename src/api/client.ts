@@ -1,4 +1,5 @@
 import { getCookie } from 'cookies-next'
+import { toast } from 'react-toastify'
 
 // import Cookies from 'js-cookie'
 import { COOKIES } from '@/app/constants/cookies'
@@ -19,3 +20,14 @@ api.instance.interceptors.request.use(config => {
 
   return config
 })
+
+api.instance.interceptors.response.use(
+  res => res,
+  err => {
+    const message = err?.response?.data?.error
+
+    if (message) {
+      toast.error(message)
+    }
+  }
+)
