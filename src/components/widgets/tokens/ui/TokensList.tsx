@@ -1,6 +1,7 @@
 import Image from 'next/image'
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 
+import { useBalance } from '@/api/hooks/useBalance'
 import { TokenWithChecked } from '@/app/types'
 import { FormItem } from '@/components/ui/form'
 import { Switch } from '@/components/ui/switch'
@@ -22,6 +23,14 @@ export const TokensList: FC<Props> = ({
     !multiple && onOneSelect(token)
   }
 
+  const { balance } = useBalance()
+
+  const avaliableTokens = useMemo(() => {
+    return balance?.tier === 'holder'
+      ? tokens.map(token => ({ ...token, disabled: !token.address }))
+      : tokens.map(token => ({ ...token, disabled: token.holderMode }))
+  }, [tokens, balance])
+
   const handleSelect = (val: boolean, token: TokenWithChecked) => {
     onSelect(
       tokens.map(selectedToken => ({
@@ -33,7 +42,7 @@ export const TokensList: FC<Props> = ({
 
   return (
     <div className="space-y-4">
-      {tokens.map(token => (
+      {avaliableTokens.map(token => (
         <FormItem
           className={`flex ${
             !token.disabled && 'cursor-pointer'
