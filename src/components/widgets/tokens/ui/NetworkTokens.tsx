@@ -5,6 +5,7 @@ import { SWAP_URLS } from '@/app/constants/swapUrls'
 import { BalanceType } from '@/app/types'
 import { SwapArrowIcon } from '@/assets/svg/SwapArrowIcon'
 import { Button } from '@/components/ui/button'
+import { getSpacedNumber } from '@/lib/utils'
 
 type NetworkTokensProps = {
   tokens: BalanceType['tokens'][number][]
@@ -40,12 +41,12 @@ export const NetworkTokens = ({ tokens }: NetworkTokensProps) => {
                   {token.amount.token.code}
                 </span>
                 <span className="text-normal text-base leading-none text-muted-foreground ">
-                  ${token.price.toFixed(1)}
+                  {getSpacedNumber(token.price)}
                 </span>
               </div>
               <div>
                 <span className="text-medium text-base leading-none text-muted-foreground ">
-                  {token.amount.uiValue.toFixed(1)}
+                  {getSpacedNumber(token.amount.uiValue)}
                 </span>
               </div>
             </div>

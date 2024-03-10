@@ -109,3 +109,9 @@ export const getDecimalOfShortToken = (
 
   return decimal
 }
+
+const NUMBER_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
+
+export const getSpacedNumber = (value: number) => {
+  return value.toFixed(1).replaceAll(NUMBER_REG_EXP, ' ')
+}
