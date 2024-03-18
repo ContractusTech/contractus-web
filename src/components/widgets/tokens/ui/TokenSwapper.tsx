@@ -1,4 +1,5 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { ChevronDownIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -22,6 +23,7 @@ export const TokenSwapper = () => {
   const { tokens } = useTokens()
   const { balance } = useBalance()
   const { user } = useUser()
+  const [tokensVisability, setTokenVisability] = useState(true)
 
   const [buyUrl, setBuyUrl] = useState('')
 
@@ -65,7 +67,18 @@ export const TokenSwapper = () => {
 
       <section className="mb-16 w-full border-t-[1px] border-[#262930] border-border">
         <div className="mb-6 flex items-center justify-between px-15 py-13">
-          <h2 className="typo-label">TOKENS</h2>
+          <div className="flex gap-[3px]">
+            <h2 className="typo-label">TOKENS</h2>
+            <button onClick={() => setTokenVisability(old => !old)}>
+              <ChevronDownIcon
+                color="#8e8e8e"
+                size={18}
+                className={`transition-all ${
+                  tokensVisability ? 'rotate-[0deg]' : 'rotate-[180deg]'
+                }`}
+              />
+            </button>
+          </div>
           {tokens && (
             <SelectTokens
               multiple
@@ -76,42 +89,46 @@ export const TokenSwapper = () => {
         </div>
 
         <div className="flex flex-col gap-[13px]" ref={parent}>
-          {(() => {
-            const CTUS = balance.tokens.find(
-              token => token.amount.token.code === 'CTUS'
-            )
+          {tokensVisability && (
+            <>
+              {(() => {
+                const CTUS = balance.tokens.find(
+                  token => token.amount.token.code === 'CTUS'
+                )
 
-            return CTUS ? (
-              <Token
-                reserve={CTUS.amount.uiValue}
-                value={CTUS.price}
-                tokenLabel={CTUS.amount.token.code}
+                return CTUS ? (
+                  <Token
+                    reserve={CTUS.amount.uiValue}
+                    value={CTUS.price}
+                    tokenLabel={CTUS.amount.token.code}
+                  />
+                ) : null
+              })()}
+
+              <NetworkTokens
+                tokens={
+                  balance?.tokens.filter(
+                    token => balance?.wrap.includes(token.amount.token.code)
+                  ) ?? []
+                }
               />
-            ) : null
-          })()}
 
-          <NetworkTokens
-            tokens={
-              balance?.tokens.filter(
-                token => balance?.wrap.includes(token.amount.token.code)
-              ) ?? []
-            }
-          />
-
-          {balance?.tokens
-            .filter(
-              token =>
-                token.amount.token.code !== 'CTUS' &&
-                !balance.wrap.includes(token.amount.token.code)
-            )
-            ?.map(token => (
-              <Token
-                key={token.amount.token.code}
-                tokenLabel={token.amount.token.code}
-                reserve={token.amount.uiValue}
-                value={token.price}
-              />
-            ))}
+              {balance?.tokens
+                .filter(
+                  token =>
+                    token.amount.token.code !== 'CTUS' &&
+                    !balance.wrap.includes(token.amount.token.code)
+                )
+                ?.map(token => (
+                  <Token
+                    key={token.amount.token.code}
+                    tokenLabel={token.amount.token.code}
+                    reserve={token.amount.uiValue}
+                    value={token.price}
+                  />
+                ))}
+            </>
+          )}
         </div>
       </section>
     </>
