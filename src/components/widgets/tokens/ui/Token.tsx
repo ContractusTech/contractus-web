@@ -15,7 +15,7 @@ export const Token = ({ reserve, tokenLabel, value }: TokenProps) => {
             {tokenLabel}
           </span>
           <span className="text-normal text-base leading-none text-muted-foreground ">
-            ${getSpacedNumber(value)}
+            ${value.toFixed(5)}
           </span>
         </div>
         <div>

@@ -41,12 +41,12 @@ export const NetworkTokens = ({ tokens }: NetworkTokensProps) => {
                   {token.amount.token.code}
                 </span>
                 <span className="text-normal text-base leading-none text-muted-foreground ">
-                  {getSpacedNumber(token.price)}
+                  ${getSpacedNumber(token.price)}
                 </span>
               </div>
               <div>
                 <span className="text-medium text-base leading-none text-muted-foreground ">
-                  {getSpacedNumber(token.amount.uiValue)}
+                  ${getSpacedNumber(token.amount.uiValue)}
                 </span>
               </div>
             </div>
