@@ -65,7 +65,7 @@ const IndexPage: NextPageWithLayout = () => {
                   onClick={() => setCurrent(item)}
                   key={i}
                 >
-                  {item}
+                  <span>{item.toLowerCase()}</span>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
