@@ -1,7 +1,7 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import * as Form from '@radix-ui/react-form'
 import { Menu } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { formatUnits } from 'viem'
 
@@ -13,6 +13,7 @@ import { Amount, DealFee, Token } from '@/app/types'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { Switch } from '@/components/ui/switch'
 import Tag from '@/components/ui/tag'
 import { getDecimalOfShortToken, getInnativeTokens } from '@/lib/utils'
 
@@ -48,6 +49,7 @@ export const AmountChoice = ({
   const [dialogOpened, setDialogOpened] = useState(false)
   const [fee, setFee] = useState<DealFee | null>(null)
   const [parent] = useAutoAnimate()
+  const [feeEnabled, setFeeEnabled] = useState(balance?.tier !== 'holder')
 
   if ((!defaultAmount && (!tokens || tokens.length === 0)) || !tokens) {
     throw new Error('Error on try set default token value on form')
@@ -89,25 +91,9 @@ export const AmountChoice = ({
     setValue('token', { address: token.address, code: token.code })
   }
 
-  const fetchFee = useCallback(async () => {
-    const amount = getValues()
-
-    if (feeDealid && withFee && amount) {
-      const fee = await api.deals.postDeals(feeDealid, {
-        type: checker ? 'CHECKER' : 'DEAL',
-        currency: 'USD',
-        amount: {
-          value: Number(!!amount.value ? amount.value : '0').toFixed(0),
-          token: amount.token
-        }
-      })
-
-      setFee(fee as unknown as DealFee)
-    }
-  }, [])
-
   const totalAmount = useMemo(() => {
     const numberAmount = Number.parseFloat(!!amountValue ? amountValue : '0')
+
     if (fee) {
       const numberFee = Number.parseFloat(getFeeString(fee))
       return numberAmount + numberFee
@@ -117,10 +103,28 @@ export const AmountChoice = ({
   }, [amountValue, fee])
 
   useEffect(() => {
+    const fetchFee = async () => {
+      const amount = getValues()
+
+      if (feeDealid && withFee && amount) {
+        const fee = await api.deals.postDeals(feeDealid, {
+          type: checker ? 'CHECKER' : 'DEAL',
+          currency: 'USD',
+          amount: {
+            value: Number(!!amount.value ? amount.value : '0').toFixed(0),
+            token: amount.token
+          },
+          allowHolderMode: feeEnabled
+        })
+
+        setFee(fee as unknown as DealFee)
+      }
+    }
+
     if (dialogOpened) {
       fetchFee()
     }
-  }, [dialogOpened, amountValue])
+  }, [dialogOpened, amountValue, feeEnabled])
 
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
@@ -178,25 +182,30 @@ export const AmountChoice = ({
                   {balance?.tier === 'basic' ? (
                     <Tag>Off</Tag>
                   ) : (
-                    <Tag type="owner">On</Tag>
+                    <Switch
+                      checked={feeEnabled}
+                      onCheckedChange={setFeeEnabled}
+                    />
                   )}
                 </div>
 
-                <div className="flex flex-col gap-[13px] border-t border-t-[#2A2E37] p-[18px]">
-                  <div className="flex items-center justify-between gap-[13px]">
-                    <span>Service fee</span>
+                {feeEnabled && (
+                  <div className="flex flex-col gap-[13px] border-t border-t-[#2A2E37] p-[18px]">
+                    <div className="flex items-center justify-between gap-[13px]">
+                      <span>Service fee</span>
 
-                    {fee.allowHolderMode ? (
-                      <Tag>Free</Tag>
-                    ) : (
-                      `${getFeeString(fee)} ${fee.feeAmount.token.code}`
-                    )}
+                      {fee.allowHolderMode ? (
+                        <Tag>Free</Tag>
+                      ) : (
+                        `${getFeeString(fee)} ${fee.feeAmount.token.code}`
+                      )}
+                    </div>
+                    <span>
+                      The fee is calculated from the amount of the transaction
+                      and the cost of the verfification service of result
+                    </span>
                   </div>
-                  <span>
-                    The fee is calculated from the amount of the transaction and
-                    the cost of the verfification service of result
-                  </span>
-                </div>
+                )}
               </div>
 
               <div className="flex justify-between gap-[13px]">
