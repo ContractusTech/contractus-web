@@ -181,6 +181,8 @@ export const AmountChoice = ({
                   <span>Holder mode</span>
                   {balance?.tier === 'basic' ? (
                     <Tag>Off</Tag>
+                  ) : checker ? (
+                    <Tag>On</Tag>
                   ) : (
                     <Switch
                       checked={feeEnabled}
